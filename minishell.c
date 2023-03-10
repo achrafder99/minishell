@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:49 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/10 21:18:43 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/10 23:13:43 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ void	parse_built_in(char *cmd)
     if(!ft_strcmp(command_line[0],"exit"))
         exit(EXIT_SUCCESS);
 	else if (!ft_strcmp(command_line[0], "echo"))
-	{
+	{   
+        if(command_line[1] == NULL)
+            write(1,"\n",1);
 		if (!ft_strcmp(command_line[1], "-n"))
 			print_string(command_line, 1);
 		else
@@ -104,8 +106,11 @@ void	parse_built_in(char *cmd)
 		free(pwd);
 	}
     else if(!ft_strcmp(command_line[0], "cd")){
-        if(!ft_strcmp(command_line[1], "~"))
-            chdir("/");
+        if(!ft_strcmp(command_line[1], "~") || command_line[1] == NULL){      
+            char *home_dir;
+            home_dir = ft_strjoin("/home/",getenv("USER"));
+            chdir(home_dir);
+        }
         else if(!access(command_line[1],F_OK))
             chdir(command_line[1]);
         else{
@@ -119,6 +124,25 @@ void	parse_built_in(char *cmd)
     }
 }
 
+int check_if_buillt_in(char *cmd)
+{
+    if(!ft_strcmp(cmd,"exit"))
+        return (1);
+    else if(!ft_strcmp(cmd,"echo"))
+        return (1);
+    else if(!ft_strcmp(cmd,"env"))
+        return (1);
+    else if(!ft_strcmp(cmd,"export"))
+        return (1);
+    else if(!ft_strcmp(cmd,"cd"))
+        return (1);
+    else if(!ft_strcmp(cmd,"unset"))
+        return (1);
+    else if(!ft_strcmp(cmd,"pwd"))
+        return (1);
+    return (0);
+}
+
 int	main(int c, char **argv, char **env)
 {
 	char *user_name;
@@ -126,9 +150,14 @@ int	main(int c, char **argv, char **env)
 	while (1)
 	{
 		char *input;
+        char **commands;
 		input = readline(user_name);
+        commands = ft_split(input,' ');
 		add_history(input);
-		parse_built_in(input);
+		if(check_if_buillt_in(commands[0]))
+            parse_built_in(input);
+        else 
+            printf("not a built in\n");
 		free(input);
 	}
 }

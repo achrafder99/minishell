@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:49 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/10 23:13:43 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/11 00:50:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ void	parse_built_in(char *cmd)
         exit(EXIT_SUCCESS);
 	else if (!ft_strcmp(command_line[0], "echo"))
 	{   
-        if(command_line[1] == NULL)
+        if(command_line[1] == NULL){
             write(1,"\n",1);
+            return;
+        }
 		if (!ft_strcmp(command_line[1], "-n"))
 			print_string(command_line, 1);
 		else
@@ -106,10 +108,18 @@ void	parse_built_in(char *cmd)
 		free(pwd);
 	}
     else if(!ft_strcmp(command_line[0], "cd")){
-        if(!ft_strcmp(command_line[1], "~") || command_line[1] == NULL){      
+        if(get_length(command_line) == 1)
+        {
             char *home_dir;
             home_dir = ft_strjoin("/home/",getenv("USER"));
             chdir(home_dir);
+            return;
+        }
+        else if(!ft_strcmp(command_line[1], "~")){      
+            char *home_dir;
+            home_dir = ft_strjoin("/home/",getenv("USER"));
+            chdir(home_dir);
+            return;
         }
         else if(!access(command_line[1],F_OK))
             chdir(command_line[1]);

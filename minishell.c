@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:49 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/11 00:50:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/11 02:05:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,36 @@ size_t	get_length(char **numbers)
 
 void	print_string(char **argument, int flag)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char **expend;
+	char	*value;
 
 	i = 1;
 	if (flag)
 		i = 2;
+	if (strchr(argument[i], '$'))
+	{
+		expend = ft_split(argument[i], '$');
+		int length;
+		length = get_length(expend);
+		if (length == 1)
+		{
+			value = getenv(expend[0]);
+			write(1, value, ft_strlen(value));
+			if (!flag)
+				write(1, "\n", 1);
+		}
+		else
+		{
+			value = getenv(expend[length]);
+			write(1, expend[0], ft_strlen(expend[0]));
+			write(1, value, ft_strlen(value));
+			if (!flag)
+				write(1, "\n", 1);
+		}
+		return ;
+	}
 	while (!ft_strcmp(argument[i], "-n"))
 		i++;
 	while (argument[i] != NULL)
@@ -70,17 +94,19 @@ void	parse_built_in(char *cmd)
 	char	*pwd;
 	int		how_many_argument;
 	char	*print_error;
-    t_env *env;
+	t_env	*env;
+	char *home_dir;
 
 	command_line = ft_split(cmd, 32);
-    if(!ft_strcmp(command_line[0],"exit"))
-        exit(EXIT_SUCCESS);
+	if (!ft_strcmp(command_line[0], "exit"))
+		exit(EXIT_SUCCESS);
 	else if (!ft_strcmp(command_line[0], "echo"))
-	{   
-        if(command_line[1] == NULL){
-            write(1,"\n",1);
-            return;
-        }
+	{
+		if (command_line[1] == NULL)
+		{
+			write(1, "\n", 1);
+			return ;
+		}
 		if (!ft_strcmp(command_line[1], "-n"))
 			print_string(command_line, 1);
 		else
@@ -93,8 +119,8 @@ void	parse_built_in(char *cmd)
 		if (how_many_argument > 1)
 		{
 			print_error = "too many arguments\n";
-            write(STDERR_FILENO, command_line[0], ft_strlen(command_line[0]));
-            write(1," :",2);
+			write(STDERR_FILENO, command_line[0], ft_strlen(command_line[0]));
+			write(1, " :", 2);
 			write(STDERR_FILENO, print_error, ft_strlen(print_error));
 			return ;
 		}
@@ -107,50 +133,68 @@ void	parse_built_in(char *cmd)
 			perror("");
 		free(pwd);
 	}
-    else if(!ft_strcmp(command_line[0], "cd")){
-        if(get_length(command_line) == 1)
-        {
-            char *home_dir;
-            home_dir = ft_strjoin("/home/",getenv("USER"));
-            chdir(home_dir);
-            return;
-        }
-        else if(!ft_strcmp(command_line[1], "~")){      
-            char *home_dir;
-            home_dir = ft_strjoin("/home/",getenv("USER"));
-            chdir(home_dir);
-            return;
-        }
-        else if(!access(command_line[1],F_OK))
-            chdir(command_line[1]);
-        else{
-            write(STDERR_FILENO,command_line[0],ft_strlen(command_line[0]));
-            write(2,": ",2);
-            write(2,"no such file or directory",ft_strlen("no such file or directory"));
-            write(2," :",2);
-            write(2,command_line[1],ft_strlen(command_line[1]));
-            write(2,"\n",1);
-        }
-    }
+	else if (!ft_strcmp(command_line[0], "cd"))
+	{
+		if (get_length(command_line) == 1)
+		{
+			home_dir = ft_strjoin("/home/", getenv("USER"));
+			chdir(home_dir);
+			return ;
+		}
+		else if (!ft_strcmp(command_line[1], "~"))
+		{
+			home_dir = ft_strjoin("/home/", getenv("USER"));
+			chdir(home_dir);
+			return ;
+		}
+		else if (!access(command_line[1], F_OK))
+			chdir(command_line[1]);
+		else
+		{
+			write(STDERR_FILENO, command_line[0], ft_strlen(command_line[0]));
+			write(2, ": ", 2);
+			write(2, "no such file or directory",
+					ft_strlen("no such file or directory"));
+			write(2, " :", 2);
+			write(2, command_line[1], ft_strlen(command_line[1]));
+			write(2, "\n", 1);
+		}
+	}
 }
 
-int check_if_buillt_in(char *cmd)
+int	check_if_buillt_in(char *cmd)
 {
-    if(!ft_strcmp(cmd,"exit"))
-        return (1);
-    else if(!ft_strcmp(cmd,"echo"))
-        return (1);
-    else if(!ft_strcmp(cmd,"env"))
-        return (1);
-    else if(!ft_strcmp(cmd,"export"))
-        return (1);
-    else if(!ft_strcmp(cmd,"cd"))
-        return (1);
-    else if(!ft_strcmp(cmd,"unset"))
-        return (1);
-    else if(!ft_strcmp(cmd,"pwd"))
-        return (1);
-    return (0);
+	if (!ft_strcmp(cmd, "exit"))
+		return (1);
+	else if (!ft_strcmp(cmd, "echo"))
+		return (1);
+	else if (!ft_strcmp(cmd, "env"))
+		return (1);
+	else if (!ft_strcmp(cmd, "export"))
+		return (1);
+	else if (!ft_strcmp(cmd, "cd"))
+		return (1);
+	else if (!ft_strcmp(cmd, "unset"))
+		return (1);
+	else if (!ft_strcmp(cmd, "pwd"))
+		return (1);
+	return (0);
+}
+
+void not_built_in(char *cmd)
+{
+	int pid = fork();
+	if (pid == 0) {
+		char *args[] = { "/usr/bin/", "-c", cmd, NULL };
+		char *env[] = { NULL };
+		execve("/bin/sh", args, env);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	} 
+	else if (pid < 0)
+		perror("fork");
+	else 
+		wait(NULL);
 }
 
 int	main(int c, char **argv, char **env)
@@ -160,14 +204,14 @@ int	main(int c, char **argv, char **env)
 	while (1)
 	{
 		char *input;
-        char **commands;
+		char **commands;
 		input = readline(user_name);
-        commands = ft_split(input,' ');
+		commands = ft_split(input, ' ');
 		add_history(input);
-		if(check_if_buillt_in(commands[0]))
-            parse_built_in(input);
-        else 
-            printf("not a built in\n");
+		if (check_if_buillt_in(commands[0]))
+			parse_built_in(input);
+		else
+			not_built_in(input);
 		free(input);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:49 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/11 02:05:14 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/11 17:54:18 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,12 @@ int	get_argument(char *input)
 	return (length);
 }
 
-void	parse_built_in(char *cmd)
+void	parse_built_in(char *cmd,char **env)
 {
 	char	**command_line;
 	char	*pwd;
 	int		how_many_argument;
 	char	*print_error;
-	t_env	*env;
 	char *home_dir;
 
 	command_line = ft_split(cmd, 32);
@@ -160,6 +159,11 @@ void	parse_built_in(char *cmd)
 			write(2, "\n", 1);
 		}
 	}
+	else if(!ft_strcmp(command_line[0], "export"))
+	{
+		if(get_length(command_line) == 1)
+			display_env(env);
+	}
 }
 
 int	check_if_buillt_in(char *cmd)
@@ -197,21 +201,72 @@ void not_built_in(char *cmd)
 		wait(NULL);
 }
 
+char * trim(char *s) {
+    int len = strlen(s);
+    char *start = s;
+    char *end = s + len - 1;
+	char *result;
+
+    while (isspace(*start)) {
+        start++;
+    }
+    while (end > start && isspace(*end)) {
+        end--;
+    }
+    *(end+1) = '\0';
+
+    if (start != s) {
+        memmove(s, start, (end - start) + 2);
+    }
+	return (strdup(s));
+}
+
+void start_redirections(char *cmd,char *tokens)
+{
+	char **files;
+	char **commands;
+	commands = ft_split(cmd,'>');
+	files = ft_split(tokens,'>');
+
+	int i;
+	int fd;
+	i = 0;
+	char *token = strtok(tokens, ">");
+
+    while (token != NULL) {
+		fd = open(trim(token), O_RDWR | O_CREAT , 0777);
+		if(fd == -1)
+		{
+			perror("");
+			return;
+		}
+		dup2(fd, STDOUT_FILENO);
+        token = strtok(NULL, ">");
+		close(fd);
+    }
+}
+
 int	main(int c, char **argv, char **env)
 {
 	char *user_name;
 	user_name = ft_strjoin(getenv("USER"), " ~$> ");
+	char *start;
 	while (1)
 	{
 		char *input;
 		char **commands;
 		input = readline(user_name);
 		commands = ft_split(input, ' ');
-		add_history(input);
-		if (check_if_buillt_in(commands[0]))
-			parse_built_in(input);
+		if(ft_strchr(input,'>'))
+		{
+			start = ft_strchr(input,'>');
+			start_redirections(input,start);
+		}
+		else if (check_if_buillt_in(commands[0]))
+			parse_built_in(input,env);
 		else
 			not_built_in(input);
 		free(input);
+		add_history(input);
 	}
 }

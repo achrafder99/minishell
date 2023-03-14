@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/13 23:27:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/14 00:20:51 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	display(t_tokens *token)
 		printf("%s ", node->token);
 		node = node->next;
 	}
-	printf("\n");
+	write(1,"\n",1);
 }
 
 int	main(int argc, char **argv, char **envp)

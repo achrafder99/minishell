@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/14 19:02:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/16 21:49:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	ft_put_special(char *string)
 	}
 }
 
-void	echo(t_tokens *tokens, char **env)
+void	echo(t_tokens *tokens)
 {
 	t_tokens *echo_command;
 	echo_command = tokens->next;

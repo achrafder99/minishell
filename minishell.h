@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/16 19:54:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/16 21:53:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,12 @@ void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_tokens **head, char *command, char *type);
-void				lexer(char *input, t_tokens**head);
-void				echo(t_tokens *tokens, char **env);
+void				lexer(char *input, t_tokens **head);
+void				echo(t_tokens *tokens);
 void				cd(t_tokens *tokens);
 void				pwd(t_tokens *tokens);
 int					get_size(t_tokens *tokens);
 void				exit_shell(void);
+void				parser(t_tokens *head);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 17:26:12 by adardour          #+#    #+#              #
-#    Updated: 2023/03/14 00:14:13 by adardour         ###   ########.fr        #
+#    Updated: 2023/03/16 15:13:57 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ EXECUTABLE= minishell
 SRCS = minishell.c ./utils/join.c ./utils/ft_strlen.c ./utils/ft_strcmp.c \
 ./utils/split.c ./utils/display_env.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/get_size.c \
 ./toknize/push_token.c \
-./parse/parse.c \
+./parse/lexer.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c
 
 CC		= cc

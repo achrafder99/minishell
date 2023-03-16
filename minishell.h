@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/14 00:19:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/16 19:54:29 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,16 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct t_type
+{
+	char			*type;
+}					t_type;
+
 typedef struct s_tokens
 {
 	char			*token;
 	struct s_tokens	*next;
+	struct t_type	type;
 }					t_tokens;
 
 typedef struct t_rowandcolumn
@@ -51,12 +57,12 @@ char				**ft_split(char const *s, char c);
 void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
-void				push(t_tokens **head, char *command);
-void				parse(char *input, t_tokens **head, char **env);
+void				push(t_tokens **head, char *command, char *type);
+void				lexer(char *input, t_tokens**head);
 void				echo(t_tokens *tokens, char **env);
 void				cd(t_tokens *tokens);
 void				pwd(t_tokens *tokens);
 int					get_size(t_tokens *tokens);
-void				exit_shell();
+void				exit_shell(void);
 
 #endif

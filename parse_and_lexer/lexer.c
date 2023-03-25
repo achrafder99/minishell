@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/24 21:03:26 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:32:19 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	lexer(char *input, t_tokens **head)
 	i = 1;
 	while (spliting[i] != NULL)
 	{
-		if (spliting[i][0] == '-')
+		if (spliting[i][0] == '-'){
 			push(head, spliting[i], "OPTION");
+		}
 		else if (spliting[i][0] == '|')
 		{
 			push(head, spliting[i], "PIPE");
@@ -61,9 +62,9 @@ void	lexer(char *input, t_tokens **head)
 				i++;
 			}
 		}
-		else if (spliting[i][0] == '>' || spliting[i][0] == '<')
+		else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
 		{
-			if (spliting[i][0] == '<')
+			if (!ft_strcmp(spliting[i],"<"))
 			{
 				push(head, spliting[i], "REDIRECT_in");
 				if (spliting[i + 1] != NULL)
@@ -72,9 +73,17 @@ void	lexer(char *input, t_tokens **head)
 					i++;
 				}
 			}
-			else
+			else if(!ft_strcmp(spliting[i],">"))
 			{
 				push(head, spliting[i], "REDIRECT_out");
+				if (spliting[i + 1] != NULL)
+				{
+					push(head, spliting[i + 1], "FILENAME");
+					i++;
+				}
+			}
+			else{
+				push(head, spliting[i], "APPEND_MODE");
 				if (spliting[i + 1] != NULL)
 				{
 					push(head, spliting[i + 1], "FILENAME");

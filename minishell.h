@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/25 01:19:04 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:21:28 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct t_command
     int argc;
     char *infile;
     char *outfile;
+	char *append_mode;
 } t_command;
 
 typedef struct t_piped{
@@ -91,5 +92,6 @@ void				pwd(t_tokens *tokens);
 int					get_size(t_tokens *tokens);
 void				exit_shell(void);
 void				parser(t_tokens *head);
+void				*ft_memcpy(void *dst, const void *src, size_t n);
 
 #endif

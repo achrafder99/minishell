@@ -6,11 +6,67 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/16 21:49:40 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:57:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void put(char *string){
+		int i;
+		i = 1;
+		while(string[i] != '\0'){
+				write(1,&string[i],1);
+				i++;
+		}
+}
+
+void ft_put_echo(t_tokens *tokens){
+	t_tokens *node;
+	node = tokens;
+	
+	while(node != NULL){
+			char *string;
+			string = node->token;
+			while (*string != '\\' && *string != '\0')
+			{
+					write(1,string,1);
+					string++;;
+			}
+			char **spliting;
+			spliting = ft_split(string,'\\');
+			int i;
+			i = 0;
+			while(spliting[i] != NULL){
+				if(spliting[i][0] == 'n')
+					write(1,"\n",1);
+				if(spliting[i][0] == 't')
+					write(1,"\t",1);
+				if(spliting[i][0] == 'b')
+					write(1,"\b",1);
+				if(spliting[i][0] == 'r')
+					write(1,"\r",1);
+				if(spliting[i][0] == 'f')
+					write(1,"\f",1);
+				if(spliting[i][0] == 'a')
+					write(1,"\a",1);
+				if(spliting[i][0] == '\\')
+					write(1,"\\",1);
+				if(spliting[i][0] == '\'')
+					write(1,"\'",1);
+				if(spliting[i][0] == '\"')
+					write(1,"\"",1);
+				if(spliting[i][0] == '\?')
+					write(1,"?",1);
+				if(spliting[i][0] == 'v')
+					write(1,"\v",1);
+				put(spliting[i]);
+				i++;
+			}	
+			node = node->next;
+			write(1," ",1);
+	}
+}
 
 int	get_length(char **commands)
 {
@@ -35,81 +91,22 @@ void	free_split(char **split)
 	free(split);
 }
 
-int	is_special_caractere(char *string)
-{
-	int	i;
-
-	i = 0;
-	while (string[i] != '\0')
-	{
-		if (string[i] == '$')
-		{
-			return (1);
-		}
-		if (string[i] == '\\')
-		{
-			if (string[i] == '\n')
-				return (1);
-			if (string[i] == '\r')
-				return (1);
-			if (string[i] == '\t')
-				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	ft_put_special(char *string)
-{
-	int		i;
-	char	**spliting;
-	char	*value;
-
-	i = 0;
-	if (ft_strchr(string, '$'))
-	{
-		while (*string != '$')
-		{
-			write(1, string, 1);
-			string++;
-		}
-		spliting = ft_split(string, '$');
-		while (*spliting != NULL)
-		{
-			value = getenv(*spliting);
-			if (!value)
-				write(1, "", 1);
-			else
-				write(1, value, ft_strlen(value));
-			spliting++;
-		}
-	}
-}
-
 void	echo(t_tokens *tokens)
 {
 	t_tokens *echo_command;
 	echo_command = tokens->next;
-
 	int flags;
+
 	flags = 0;
-	while (echo_command != NULL)
-	{
-		if (ft_strcmp(echo_command->token, "-n"))
-			break ;
-		flags = 1;
-		echo_command = echo_command->next;
+	if(echo_command == NULL)
+		return;
+	while ( !ft_strcmp(echo_command->token,"-n") ){
+				flags = 1;
+				echo_command = echo_command->next;
+				if(echo_command == NULL)
+						break;
 	}
-	while (echo_command != NULL)
-	{
-		if (is_special_caractere(echo_command->token))
-			ft_put_special(echo_command->token);
-		else
-			write(1, echo_command->token, ft_strlen(echo_command->token));
-		write(1, " ", 1);
-		echo_command = echo_command->next;
-	}
-	if (!flags)
-		write(1, "\n", 1);
+	ft_put_echo(echo_command);
+	if(!flags)
+		write(1,"\n",1);
 }

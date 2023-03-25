@@ -6,17 +6,45 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/16 21:53:12 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/24 21:03:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int check_quotes(char *input){
+	int i;
+	i = 0;
+	int single;
+	int double_q;
+	single  = 0;
+	double_q  = 0;
+	while (input[i] != '\0')
+	{
+		if((input[i] == '\'' || input[i] == '\"') && input[i - 1] != '\\'){
+			if(input[i] == '\'')
+					single++;
+			else
+				double_q++;
+		}
+		i++;
+	}
+	if(single % 2 != 0 || double_q % 2 != 0)
+			return (0);
+	return (1);
+}
 
 void	lexer(char *input, t_tokens **head)
 {
 	char	**spliting;
 	int		i;
 
+	if(!check_quotes(input)){
+		char *error;
+		error = "Syntax Error:  String must be Closed\n";
+		write(2,error,ft_strlen(error));
+		return;
+	}
 	spliting = ft_split(input, ' ');
 	push(head, spliting[0], "COMMAND");
 	i = 1;
@@ -61,4 +89,13 @@ void	lexer(char *input, t_tokens **head)
 		i++;
 	}
 	parser(*head);
+	i = 0;
+	while (spliting[i] != NULL)
+	{
+		free(spliting[i]);
+		i++;
+	}
+	free(spliting);
+	spliting = NULL;
+	
 }

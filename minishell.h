@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/16 21:53:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/25 01:19:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # define ANSI_COLOR_GREEN "\x1b[32m"
 # define ANSI_COLOR_RESET "\x1b[0m"
 # define MAX_PATH_LENGTH 1024
+
+
+#define BLUE "\033[38;2;105;210;231m"
+#define GREEN "\033[32m"
+#define RESET "\033[0m"
 
 # include <fcntl.h>
 # include <readline/history.h>
@@ -28,15 +33,36 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct s_ast_node
+{
+    char *value;
+    struct s_ast_node *left;
+    struct s_ast_node *right;
+} t_ast_node;
+
+typedef struct t_command
+{
+    char *name;
+    char **args;
+    int argc;
+    char *infile;
+    char *outfile;
+} t_command;
+
+typedef struct t_piped{
+	t_command *command;
+	int number_of_commands;
+}	t_piped;
+
 typedef struct t_type
 {
 	char			*type;
 }					t_type;
 
-typedef struct s_tokens
+typedef struct t_tokens
 {
 	char			*token;
-	struct s_tokens	*next;
+	struct t_tokens	*next;
 	struct t_type	type;
 }					t_tokens;
 

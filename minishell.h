@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 00:49:22 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 04:59:52 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,7 @@ void				exit_shell(void);
 void				parser(t_tokens *head);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 char				*ft_strstr(const char *haystack, const char *needle);
+void 				handle_signals(int sign);
+char				*cut_string(char *s);
 
 #endif

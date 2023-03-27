@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 00:50:03 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 04:59:18 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ void execute_pipe(t_piped *pipe) {
     printf("Number of commands: %d\n", pipe->number_of_commands);
     for (int i = 0; i < pipe->number_of_commands; i++) {
         printf("Command (%d): %s\n", i, pipe->command[i].name);
+        printf("infile (%d): %s\n", i, pipe->command[i].infile);
+        printf("append_mode (%d): %s\n", i, pipe->command[i].append_mode);
+        printf("outfile (%d): %s\n", i, pipe->command[i].outfile);
     }
 }
 
@@ -227,7 +230,7 @@ void parser(t_tokens *tokens){
         ft_memcpy(new_args, command->args, (command->argc - 1) * sizeof(char*));
         free(command->args);
     }
-    new_args[command->argc - 1] = node->token;
+    new_args[command->argc - 1] = cut_string(node->token);
     new_args[command->argc] = NULL;
     command->args = new_args;
 }	

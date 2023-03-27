@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/26 22:00:32 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 05:01:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	lexer(char *input, t_tokens **head)
 		write(2,error,ft_strlen(error));
 		return;
 	}
-	push(head, spliting[0], "COMMAND");
+	push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "COMMAND");
 	i = 1;
 	while (spliting[i] != NULL)
 	{
@@ -160,7 +160,7 @@ void	lexer(char *input, t_tokens **head)
 		else if (spliting[i][0] == '$')
 			push(head, spliting[i], "ENV");
 		else
-			push(head, spliting[i], "ARG");
+			push(head, ft_strtrim(spliting[i],"\'\""), "ARG");
 		i++;
 	}
 	parser(*head);

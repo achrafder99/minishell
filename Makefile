@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/03/26 04:45:36 by adardour         ###   ########.fr        #
+#    Updated: 2023/03/27 05:00:10 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NC=\033[0m
 NAME = minishell
 EXECUTABLE= minishell
 
-SRCS = minishell.c ./utils/join.c ./utils/ft_strlen.c ./utils/ft_strcmp.c \
+SRCS = minishell.c handle_signals.c cut_string.c ./utils/join.c ./utils/ft_strlen.c ./utils/ft_strcmp.c \
 ./utils/split.c ./utils/display_env.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
 ./toknize/push_token.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c\

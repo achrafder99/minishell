@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 01:07:24 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:49:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char *display_name(){
     
-    char    *username;
-    char    *full_username;
-    char    *temp;
+    char	*username;
+    char	*full_username;
+    char	*temp;
 
     username = ft_strjoin(getenv("USER"), "@:");
     temp = username;
@@ -48,32 +48,35 @@ char *get_input() {
     return input;
 }
 
-void process_input(char *input) {
-    
-    if (input == NULL) {
-        write(1, " ", 1);
-        write(1, "exit\n", 5);
-        exit(1);
-    }
-    else if (strlen(input) == 0) {
-        printf("here\n");
-        free(input);
-        input = NULL;
-        return;
-    }
-    t_tokens *head = NULL;
-    add_history(input);
-    lexer(input, &head);
-    free(input);
-    input = NULL;
+void process_input(char *input,t_info *info) {
+	
+	if (input == NULL) {
+		write(1, " ", 1);
+		write(1, "exit\n", 5);
+		exit(1);
+	}
+	else if (strlen(input) == 0) {
+		printf("here\n");
+		free(input);
+		input = NULL;
+		return;
+	}
+	t_tokens *head = NULL;
+	add_history(input);
+	lexer(input, &head,info);
+	free(input);
+	input = NULL;
 }
 
 int main(int argc, char **argv, char **envp) { 
+	
+	signal(SIGINT, handle_signals);
+	t_info info;
 
-    signal(SIGINT, handle_signals);
-    while (1) {
-        char *input = get_input();
-        process_input(input);
-    }
-    return 0;
+	char *input;	
+	while (1) {
+		input	= get_input();
+		process_input(input, &info);
+	}
+	return	(0);
 }

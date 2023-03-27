@@ -6,22 +6,11 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 04:59:18 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:00:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static int	check_is_built_in(char *cmd)
-{
-	if (!ft_strcmp(cmd, "cd"))
-		return (1);
-	else if (!ft_strcmp(cmd, "pwd"))
-		return (1);
-	else if (!ft_strcmp(cmd, "echo"))
-		return (1);
-	return (0);
-}
 
 void free_things(char **spliting){
 	int i;
@@ -72,87 +61,9 @@ void execute_pipe(t_piped *pipe) {
     }
 }
 
-void execute_built_in(t_command *cmd){
-	if(!ft_strcmp(cmd->name,"cd"))
-		cd(cmd);
-	else if(!ft_strcmp(cmd->name,"pwd")){
-		pwd(cmd);
-	}
-}
-
-char **get_argv(t_command *command,int number_arg){
-	char **argv;
-
-	argv = malloc(sizeof(char*) * number_arg + 2);
-	argv[0] = command->name;
-	int i;
-	i = 1;
-	int j;
-	j = 0;
-	while (i <= number_arg)
-	{
-		argv[i] = command->args[j];
-		i++;
-		j++;
-	}
-	argv[i] = NULL;
-	return (argv);
-}
-
-void simple_command(t_command *command) {
-	
-	if(check_is_built_in(command->name)){
-		execute_built_in(command);
-		return;
-	}
-	pid_t fid;
-	char *cmd;
-	char **argv;
-	int i = 0;
-	char **spliting;
-	spliting = ft_split(getenv("PATH"),':');
-	i = 0;
-	while (spliting[i] != NULL)
-	{
-		cmd = ft_strjoin(spliting[i],"/");
-		if(access(ft_strjoin(cmd,command->name),X_OK) == 0){
-			cmd = ft_strjoin(cmd,command->name);
-			break;
-		}
-		i++;
-	}
-	fid = fork();
-	if(fid == -1){
-		printf("Error\n");
-		return;
-	}
-	if(fid == 0){
-		argv = get_argv(command,command->argc);
-		execve(cmd,argv,NULL);
-	}
-	else
-		wait(NULL);
-	i = 0;
-	while (spliting[i] != NULL)
-	{
-		free(spliting[i]);
-		i++;
-	}
-	free(spliting[i]);
-	free(spliting);
-	spliting = NULL;
-	i = 0;
-	while (i < command->argc)
-	{
-		free(command->args[i]);
-		i++;
-	}
-	free(command->args);
-	command->args = NULL;
-}
-
-void parser(t_tokens *tokens){
+void parser(t_tokens *tokens,t_info *info){
 	t_tokens *node;
+	
 	node = tokens;
 	int pipe;
 	pipe = 0;
@@ -266,9 +177,8 @@ void parser(t_tokens *tokens){
     node = node->next;    
 }
 	if (command != NULL) {
-        if (!pipe_line) {
+        if (!pipe_line) 
 			simple_command(command);
-		}
         else {
             pipe_line->number_of_commands++;
             t_command* new_commands = (t_command*) malloc(pipe_line->number_of_commands * sizeof(t_command));

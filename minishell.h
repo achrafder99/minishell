@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 04:59:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:50:16 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+typedef struct t_info{
+    char *pwd;
+    int status_code;
+
+}   t_info;
 
 typedef struct s_ast_node
 {
@@ -85,16 +91,22 @@ void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_tokens **head, char *command, char *type);
-void				lexer(char *input, t_tokens **head);
+void				lexer(char *input, t_tokens **head,t_info *info);
 void				echo(t_tokens *tokens);
 void				cd(t_command *cmd);
 void				pwd(t_command *cmd);
 int					get_size(t_tokens *tokens);
 void				exit_shell(void);
-void				parser(t_tokens *head);
+void 				parser(t_tokens *tokens,t_info *info);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 char				*ft_strstr(const char *haystack, const char *needle);
 void 				handle_signals(int sign);
 char				*cut_string(char *s);
-
+void				simple_command(t_command *command);
+void				execute_built_in(t_command *cmd);
+char 				**get_argv(t_command *command,int number_arg);
+int					is_redirect(t_command *command);
+int					check_is_built_in(char *cmd);
+char				*new_str(char *str,int count);
+int					includes(char car);
 #endif

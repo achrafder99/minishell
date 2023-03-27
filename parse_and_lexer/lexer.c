@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 05:01:21 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:55:34 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ int check_quotes(char *input){
 	return (1);
 }
 
-int includes(char car){
-	char *dd[] = {"|",">","<",NULL};
-	int i;
-	i = 0;
-	if(car == '|' || car == '>' || car == '<')
-		return (1);
-	i++;
-	return (0);
-}
-
 int check_is_space(char *input){
 	int i;
 	i = 0;
@@ -51,46 +41,22 @@ int check_is_space(char *input){
 	count = 0;
 	while (input[i] != '\0')
 	{
-		if(includes(input[i])){
+		if(includes(input[i]) && input[i + 1] != '>'){
 			if(input[i + 1] != ' ' || input[i - 1] != ' ')
 				count++;
+		}
+		else{
+			if(input[i + 1] == '>'){
+				count++;
+				i += 2;
+			}
 		}
 		i++;
 	}
 	return (count);
 }
 
-char *new_str(char *str,int count){
-	int i;
-	i = 0;
-
-	int j;
-	j = 0;
-	
-	char *new_str;
-	int length = ft_strlen(str) + count * 2;
-	new_str = malloc(length + 1);
-	while (i < length - 1)
-	{
-		if(includes(str[i])){
-			if(includes(str[i])){
-				new_str[j] = ' ';
-				j++;
-				new_str[j] = str[i];
-				j++;
-				new_str[j] = ' ';
-			}
-		}
-		else
-			new_str[j] = str[i];
-		i++;
-		j++;
-	}
-
-	return (new_str);
-}
-
-void	lexer(char *input, t_tokens **head)
+void	lexer(char *input, t_tokens **head,t_info *info)
 {
 	char	**spliting;
 	int		i;
@@ -100,7 +66,6 @@ void	lexer(char *input, t_tokens **head)
 	str = NULL;
 	if(check_is_space(input)){
 		str = new_str(input,check_is_space(input));
-		printf("%s\n",str);
 	}
 	if(str)
 		spliting = ft_split(str, ' ');
@@ -128,7 +93,7 @@ void	lexer(char *input, t_tokens **head)
 				i++;
 			}
 		}
-		else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
+		else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],"<<") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
 		{
 			if (!ft_strcmp(spliting[i],"<"))
 			{
@@ -148,7 +113,7 @@ void	lexer(char *input, t_tokens **head)
 					i++;
 				}
 			}
-			else{
+			else if(!ft_strcmp(spliting[i],">>")){
 				push(head, spliting[i], "APPEND_MODE");
 				if (spliting[i + 1] != NULL)
 				{
@@ -163,7 +128,7 @@ void	lexer(char *input, t_tokens **head)
 			push(head, ft_strtrim(spliting[i],"\'\""), "ARG");
 		i++;
 	}
-	parser(*head);
+	parser(*head,info);
 	i = 0;
 	while (spliting[i] != NULL)
 	{

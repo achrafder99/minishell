@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 16:28:19 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 00:49:06 by adardour         ###   ########.fr       */
+/*   Created: 2023/03/26 04:43:29 by adardour          #+#    #+#             */
+/*   Updated: 2023/03/26 04:44:25 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	pwd(t_command *cmd)
+char	*ft_strstr(const char *haystack, const char *needle)
 {
-	char *buf;
-	char *err;
-	char **command_line;
-	char *pwd;
-	int how_many_argument;
-	char *print_error;
+	size_t	i;
+	size_t	j;
 
-	pwd = malloc(MAX_PATH_LENGTH);
-	if (pwd == NULL)
-		return ;
-	if (getcwd(pwd, MAX_PATH_LENGTH) == NULL)
-		return ;
-	if (cmd->argc >= 1)
+	if ((haystack == NULL || needle == NULL))
+		return (NULL);
+	i = 0;
+	j = 0;
+	if (ft_strlen(needle) == 0)
+		return ((char *)haystack);
+	while (haystack[i] != '\0')
 	{
-		char *error;
-		error = "pwd: too many arguments\n";
-		write(2, error, ft_strlen(error));
-		return ;
+		j = 0;
+		while (haystack[i + j] == needle[j])
+		{
+			j++;
+			if (needle[j] == '\0')
+				return ((char *)haystack + i);
+		}
+		i++;
 	}
-	write(1, pwd, ft_strlen(pwd));
-	write(1, "\n", 1);
-	free(pwd);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/25 17:32:19 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/26 22:00:32 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,84 @@ int check_quotes(char *input){
 	return (1);
 }
 
+int includes(char car){
+	char *dd[] = {"|",">","<",NULL};
+	int i;
+	i = 0;
+	if(car == '|' || car == '>' || car == '<')
+		return (1);
+	i++;
+	return (0);
+}
+
+int check_is_space(char *input){
+	int i;
+	i = 0;
+	int count;
+	count = 0;
+	while (input[i] != '\0')
+	{
+		if(includes(input[i])){
+			if(input[i + 1] != ' ' || input[i - 1] != ' ')
+				count++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+char *new_str(char *str,int count){
+	int i;
+	i = 0;
+
+	int j;
+	j = 0;
+	
+	char *new_str;
+	int length = ft_strlen(str) + count * 2;
+	new_str = malloc(length + 1);
+	while (i < length - 1)
+	{
+		if(includes(str[i])){
+			if(includes(str[i])){
+				new_str[j] = ' ';
+				j++;
+				new_str[j] = str[i];
+				j++;
+				new_str[j] = ' ';
+			}
+		}
+		else
+			new_str[j] = str[i];
+		i++;
+		j++;
+	}
+
+	return (new_str);
+}
+
 void	lexer(char *input, t_tokens **head)
 {
 	char	**spliting;
 	int		i;
+	int 	flags;
+	char 	*str;
 
+	str = NULL;
+	if(check_is_space(input)){
+		str = new_str(input,check_is_space(input));
+		printf("%s\n",str);
+	}
+	if(str)
+		spliting = ft_split(str, ' ');
+	else
+		spliting = ft_split(input, ' ');
 	if(!check_quotes(input)){
 		char *error;
 		error = "Syntax Error:  String must be Closed\n";
 		write(2,error,ft_strlen(error));
 		return;
 	}
-	spliting = ft_split(input, ' ');
 	push(head, spliting[0], "COMMAND");
 	i = 1;
 	while (spliting[i] != NULL)
@@ -106,5 +172,4 @@ void	lexer(char *input, t_tokens **head)
 	}
 	free(spliting);
 	spliting = NULL;
-	
 }

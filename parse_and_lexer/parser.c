@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/25 17:58:18 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:50:03 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,16 @@ static int	check_is_built_in(char *cmd)
 	return (0);
 }
 
-char **get_full_args(t_tokens *tokens,char *start){
-	char **full_args;
-
-	t_tokens *nodes;
-	nodes = tokens;
-	printf("Start :%s\n",start);
-	while (nodes != NULL){
-		printf("%s\n",nodes->token);
-		nodes = nodes->next;
+void free_things(char **spliting){
+	int i;
+	i = 0;
+	while (spliting[i])
+	{
+		free(spliting[i]);
+		i++;
 	}
-	// while ((!ft_strcmp(nodes->type.type,"OPTION") || !ft_strcmp(nodes->type.type,"ARG")) && (nodes != NULL))
-	// {
-	// 	printf("%s\n",nodes->token);
-	// 	nodes = nodes->next;
-	// }
-	return (full_args);
+	free(spliting);
+	spliting = NULL;
 }
 
 int check_command(char *command){
@@ -46,15 +40,25 @@ int check_command(char *command){
 	char *path;
 	path = getenv("PATH");
 	char **spliting;
+	char *full_command;
 	spliting = ft_split(path,':');
 	int i;
 	i = 0;
 	while (spliting[i] != NULL)
 	{
-		if(!access(ft_strjoin(spliting[i],ft_strjoin("/",command)),X_OK))
+		full_command = ft_strjoin(spliting[i],ft_strjoin("/",command));
+		if(!access(full_command,X_OK)){
+			free_things(spliting);
+			spliting = NULL;
+			free(full_command);
+			full_command = NULL;
 			return (1);
+		}
 		i++;
 	}
+	free_things(spliting);
+	free(full_command);
+	spliting = NULL;
 	return (0);
 }
 
@@ -65,25 +69,86 @@ void execute_pipe(t_piped *pipe) {
     }
 }
 
-void simple_command(t_command *command) {
-    printf("Name  of commands: %s\n", command->name);
-	int i;
-	i = 0;
-	printf("Args :");
-	while (i < command->argc)
-	{
-			printf("%s ",command->args[i]);
-	 		i++;
+void execute_built_in(t_command *cmd){
+	if(!ft_strcmp(cmd->name,"cd"))
+		cd(cmd);
+	else if(!ft_strcmp(cmd->name,"pwd")){
+		pwd(cmd);
 	}
-	printf("\n");
-    printf("Infile of commands: %s\n", command->infile);
-    printf("Outfile of commands: %s\n", command->outfile);
-    printf("Append file of commands: %s\n", command->append_mode);
 }
 
+char **get_argv(t_command *command,int number_arg){
+	char **argv;
+
+	argv = malloc(sizeof(char*) * number_arg + 2);
+	argv[0] = command->name;
+	int i;
+	i = 1;
+	int j;
+	j = 0;
+	while (i <= number_arg)
+	{
+		argv[i] = command->args[j];
+		i++;
+		j++;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
+
+void simple_command(t_command *command) {
+	
+	if(check_is_built_in(command->name)){
+		execute_built_in(command);
+		return;
+	}
+	pid_t fid;
+	char *cmd;
+	char **argv;
+	int i = 0;
+	char **spliting;
+	spliting = ft_split(getenv("PATH"),':');
+	i = 0;
+	while (spliting[i] != NULL)
+	{
+		cmd = ft_strjoin(spliting[i],"/");
+		if(access(ft_strjoin(cmd,command->name),X_OK) == 0){
+			cmd = ft_strjoin(cmd,command->name);
+			break;
+		}
+		i++;
+	}
+	fid = fork();
+	if(fid == -1){
+		printf("Error\n");
+		return;
+	}
+	if(fid == 0){
+		argv = get_argv(command,command->argc);
+		execve(cmd,argv,NULL);
+	}
+	else
+		wait(NULL);
+	i = 0;
+	while (spliting[i] != NULL)
+	{
+		free(spliting[i]);
+		i++;
+	}
+	free(spliting[i]);
+	free(spliting);
+	spliting = NULL;
+	i = 0;
+	while (i < command->argc)
+	{
+		free(command->args[i]);
+		i++;
+	}
+	free(command->args);
+	command->args = NULL;
+}
 
 void parser(t_tokens *tokens){
-
 	t_tokens *node;
 	node = tokens;
 	int pipe;
@@ -105,7 +170,7 @@ void parser(t_tokens *tokens){
 				return;
 			}
 		}
-		else if(!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out")){
+		else if(!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE")){
 			if(!ft_strcmp(node->type.type,"REDIRECT_out")){
 				if(node->next == NULL){
 					char *error;
@@ -115,6 +180,14 @@ void parser(t_tokens *tokens){
 				}
 			}
 			else if(!ft_strcmp(node->type.type,"REDIRECT_in")){
+				if(node->next == NULL){
+					char *error;
+					error = "tash: syntax error near unexpected token `newline'\n",
+					write(2,error,ft_strlen(error));
+					return;
+				}
+			}
+			else{
 				if(node->next == NULL){
 					char *error;
 					error = "tash: syntax error near unexpected token `newline'\n",
@@ -148,15 +221,16 @@ void parser(t_tokens *tokens){
         }
     }
 	else if (!ft_strcmp(node->type.type,"OPTION") || !ft_strcmp(node->type.type,"ARG")) {
-		command->argc += 1;
-		char** new_args = (char**) malloc(command->argc * sizeof(char*));
-		if (command->args) {
-			ft_memcpy(new_args, command->args, (command->argc - 1) * sizeof(char*));
-			free(command->args);
-		}
-		new_args[command->argc - 1 ] = node->token;
-		command->args = new_args;
-	}
+    command->argc += 1;
+    char** new_args = (char**) malloc((command->argc + 1) * sizeof(char*));
+    if (command->args) {
+        ft_memcpy(new_args, command->args, (command->argc - 1) * sizeof(char*));
+        free(command->args);
+    }
+    new_args[command->argc - 1] = node->token;
+    new_args[command->argc] = NULL;
+    command->args = new_args;
+}	
     else if (!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE")) {
         if (!ft_strcmp(node->type.type,"REDIRECT_in"))
             command->infile = node->next->token;
@@ -189,8 +263,9 @@ void parser(t_tokens *tokens){
     node = node->next;    
 }
 	if (command != NULL) {
-        if (!pipe_line) 
-            simple_command(command);
+        if (!pipe_line) {
+			simple_command(command);
+		}
         else {
             pipe_line->number_of_commands++;
             t_command* new_commands = (t_command*) malloc(pipe_line->number_of_commands * sizeof(t_command));

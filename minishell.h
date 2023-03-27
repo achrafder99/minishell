@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/25 17:21:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:49:22 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,12 @@ char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_tokens **head, char *command, char *type);
 void				lexer(char *input, t_tokens **head);
 void				echo(t_tokens *tokens);
-void				cd(t_tokens *tokens);
-void				pwd(t_tokens *tokens);
+void				cd(t_command *cmd);
+void				pwd(t_command *cmd);
 int					get_size(t_tokens *tokens);
 void				exit_shell(void);
 void				parser(t_tokens *head);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
+char				*ft_strstr(const char *haystack, const char *needle);
 
 #endif

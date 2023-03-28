@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/28 00:40:20 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/28 03:46:42 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void execute_pipe(t_piped *pipe) {
 }
 
 void parser(t_tokens *tokens,t_info *info){
-	t_tokens *node;
 	
+	t_tokens *node;
 	node = tokens;
 	int pipe;
 	pipe = 0;
@@ -84,7 +84,7 @@ void parser(t_tokens *tokens,t_info *info){
 				return;
 			}
 		}
-		else if(!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE")){
+		else if(!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE") || !ft_strcmp(node->type.type,"HEREDOC")){
 			if(!ft_strcmp(node->type.type,"REDIRECT_out")){
 				if(node->next == NULL){
 					char *error;
@@ -94,6 +94,14 @@ void parser(t_tokens *tokens,t_info *info){
 				}
 			}
 			else if(!ft_strcmp(node->type.type,"REDIRECT_in")){
+				if(node->next == NULL){
+					char *error;
+					error = "tash: syntax error near unexpected token `newline'\n",
+					write(2,error,ft_strlen(error));
+					return;
+				}
+			}
+			else if(!ft_strcmp(node->type.type,"APPEND_MODE")){
 				if(node->next == NULL){
 					char *error;
 					error = "tash: syntax error near unexpected token `newline'\n",

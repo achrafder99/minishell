@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/28 02:22:12 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/28 03:47:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,29 @@ void simple_command(t_command *command) {
         flags = 1;
     }
     if (command->heredoc) {
-        int fd;
-        fd = fork();
+        
         int fdd;
-        if(fd == 0){
-            char *line;
+        char *line;
+        write(1,"heredoc> ",9);
+        line = get_next_line(0);
+        line[ft_strlen(line) - 1] = '\0'; 
+        fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
+        write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
+        while (1) {
+            fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
             write(1,"heredoc> ",9);
             line = get_next_line(0);
             line[ft_strlen(line) - 1] = '\0'; 
-            fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
+            if(!ft_strcmp(line,command->heredoc))
+                break;
             write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-            while (1) {
-                fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
-                write(1,"heredoc> ",9);
-                line = get_next_line(0);
-                line[ft_strlen(line) - 1] = '\0'; 
-                if(!ft_strcmp(line,command->heredoc))
-                    break;
-                write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-                close(fdd);
-            }
-            unlink("/tmp/heredoc");
-            display_heredoc(fdd);
             close(fdd);
         }
-        else
-            wait(NULL);
+        unlink("/tmp/heredoc");
+        if(!command->name)
+            display_heredoc(fdd);
+        close(fdd);
     }
-    return;
     if(is_redirect(command)){
         if(command->outfile)
             fd = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);

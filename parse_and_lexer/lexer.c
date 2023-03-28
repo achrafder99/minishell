@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 23:46:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/28 03:45:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 	char 	*str;
 
 	str = NULL;
-	if(check_is_space(input)){
+	if(check_is_space(input))
 		str = new_str(input,check_is_space(input));
-	}
 	if(str)
 		spliting = ft_split(str, ' ');
 	else
@@ -77,8 +76,11 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 		write(2,error,ft_strlen(error));
 		return;
 	}
-	push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "COMMAND");
-	i = 1;
+	i = 0;
+	if(ft_strcmp(spliting[0],"<<") != 0 && ft_strcmp(spliting[0],">>") != 0 && ft_strcmp(spliting[0],">") && ft_strcmp(spliting[0],"<")){
+		push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "COMMAND");
+		i = 1;
+	}
 	while (spliting[i] != NULL)
 	{
 		if (spliting[i][0] == '-'){

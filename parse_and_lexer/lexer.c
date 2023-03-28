@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 21:55:34 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:46:41 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,14 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 				if (spliting[i + 1] != NULL)
 				{
 					push(head, spliting[i + 1], "FILENAME");
+					i++;
+				}
+			}
+			else{
+				push(head, spliting[i], "HEREDOC");
+				if (spliting[i + 1] != NULL)
+				{
+					push(head, spliting[i + 1], "END_HEREDOC");
 					i++;
 				}
 			}

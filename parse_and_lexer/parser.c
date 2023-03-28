@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 22:00:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/28 00:40:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void parser(t_tokens *tokens,t_info *info){
 	node = tokens;
 	while (node) {
     if (!ft_strcmp(node->type.type,"COMMAND")) {
-        if (check_command(node->token) || check_is_built_in(node->token)) {
+        if (check_command(node->token) || check_is_built_in(node->token) || access(node->token,F_OK) != -1 || !ft_strcmp(node->token,"<<")) {
             command = (t_command*) malloc(sizeof(t_command));
             command->name = node->token;
             command->argc = 0;
@@ -127,6 +127,7 @@ void parser(t_tokens *tokens,t_info *info){
             command->infile = NULL;
             command->outfile = NULL;
             command->append_mode = NULL;
+            command->heredoc = NULL;
         }
         else {
             char *error = ft_strjoin(node->token, " :Command not found\n");
@@ -145,13 +146,15 @@ void parser(t_tokens *tokens,t_info *info){
     new_args[command->argc] = NULL;
     command->args = new_args;
 }	
-    else if (!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE")) {
+    else if (!ft_strcmp(node->type.type,"REDIRECT_in") || !ft_strcmp(node->type.type,"REDIRECT_out") || !ft_strcmp(node->type.type,"APPEND_MODE") || !ft_strcmp(node->type.type,"HEREDOC")) {
         if (!ft_strcmp(node->type.type,"REDIRECT_in"))
             command->infile = node->next->token;
         else if(!ft_strcmp(node->type.type,"REDIRECT_out"))
             command->outfile = node->next->token;
-		else
+		else if(!ft_strcmp(node->type.type,"APPEND_MODE"))
 			command->append_mode = node->next->token;
+		else
+			command->heredoc = node->next->token;
     }
     else if (!ft_strcmp(node->type.type,"PIPE")) {
 		pipe = 1;
@@ -177,8 +180,10 @@ void parser(t_tokens *tokens,t_info *info){
     node = node->next;    
 }
 	if (command != NULL) {
-        if (!pipe_line) 
+        if (!pipe_line) {
 			simple_command(command);
+			return;
+		}
         else {
             pipe_line->number_of_commands++;
             t_command* new_commands = (t_command*) malloc(pipe_line->number_of_commands * sizeof(t_command));

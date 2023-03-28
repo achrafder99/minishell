@@ -3,5 +3,8 @@
         "activityBar.background": "#123417",
         "titleBar.activeBackground": "#1A4920",
         "titleBar.activeForeground": "#F5FCF6"
+    },
+    "files.associations": {
+        "get_next_line.h": "c"
     }
 }

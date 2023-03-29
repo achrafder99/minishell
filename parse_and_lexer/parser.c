@@ -6,60 +6,11 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:33:53 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 02:47:53 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void free_things(char **spliting){
-	int i;
-	i = 0;
-	while (spliting[i])
-	{
-		free(spliting[i]);
-		i++;
-	}
-	free(spliting);
-	spliting = NULL;
-}
-
-int check_command(char *command){
-
-	char *path;
-	path = getenv("PATH");
-	char **spliting;
-	char *full_command;
-	spliting = ft_split(path,':');
-	int i;
-	i = 0;
-	while (spliting[i] != NULL)
-	{
-		full_command = ft_strjoin(spliting[i],ft_strjoin("/",command));
-		if(!access(full_command,X_OK)){
-			free_things(spliting);
-			spliting = NULL;
-			free(full_command);
-			full_command = NULL;
-			return (1);
-		}
-		i++;
-	}
-	free_things(spliting);
-	free(full_command);
-	spliting = NULL;
-	return (0);
-}
-
-void execute_pipe(t_piped *pipe) {
-    printf("Number of commands: %d\n", pipe->number_of_commands);
-    for (int i = 0; i < pipe->number_of_commands; i++) {
-        printf("Command (%d): %s\n", i, pipe->command[i].name);
-        printf("infile (%d): %s\n", i, pipe->command[i].infile);
-        printf("append_mode (%d): %s\n", i, pipe->command[i].append_mode);
-        printf("outfile (%d): %s\n", i, pipe->command[i].outfile);
-    }
-}
 
 void parser(t_tokens *tokens,t_info *info){
 	

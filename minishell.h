@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:34:12 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 02:48:16 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,4 +120,7 @@ int					check_is_built_in(char *cmd);
 char				*new_str(char *str,int count);
 int					includes(char car);
 int					handle_errors(t_tokens *tokens);
+void				free_things(char **spliting);
+int					check_command(char *command);
+void				execute_pipe(t_piped *pipe);
 #endif

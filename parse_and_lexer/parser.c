@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 22:01:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 23:02:10 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void parser(t_components *tokens,t_info *info){
 	// 	node = node->next;
 	// }
 	// return;
+
 
 	int dd;
 	dd = 0;

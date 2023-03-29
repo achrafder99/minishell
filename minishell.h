@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 17:22:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 23:04:57 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "./utils/get_next_line/get_next_line.h"
 
 typedef struct t_heredoc{
 	char *end;
@@ -126,4 +125,5 @@ int					check_command(char *command);
 void				execute_pipe(t_piped *pipe);
 int 				check_is_space(char *input);
 int 				check_quotes(char *input);
+size_t				ft_strlen(const char *s);
 #endif

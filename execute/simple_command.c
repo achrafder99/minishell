@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 22:43:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 23:06:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ extern char **environ;
 // printf("Heredoc  :%s\n",command->heredoc);
 // return;
 
-void display_heredoc(int fd){
+// void display_heredoc(int fd){
     
-    char *line;
-    line = get_next_line(fd);
-    while (line != NULL)
-    {
-        write(1,line,ft_strlen(line));
-        line = get_next_line(fd);
-    }
-}
+//     char *line;
+//     line = get_next_line(fd);
+//     while (line != NULL)
+//     {
+//         write(1,line,ft_strlen(line));
+//         line = get_next_line(fd);
+//     }
+// }
 
 char    *to_lower(char *input){
     int i;
@@ -79,29 +79,29 @@ void simple_command(t_command *command) {
         flags = 1;
     }
     if (command->heredoc) {
-        int fdd;
-        char *line;
-        write(1,"heredoc> ",9);
-        line = get_next_line(0);
-        line[ft_strlen(line) - 1] = '\0'; 
-        fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
-        write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-        while (1) {
-            fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
-            write(1,"heredoc> ",9);
-            line = get_next_line(0);
-            line[ft_strlen(line) - 1] = '\0'; 
-            if(!ft_strcmp(line,command->end_heredoc)){
-                break;
-                write(1,"out\n",4);
-            }
-            write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-            close(fdd);
-        }
-        unlink("/tmp/heredoc");
-        if(!ft_strcmp(command->name,"<<"))
-            display_heredoc(fdd);
-        close(fdd);
+        // int fdd;
+        // char *line;
+        // write(1,"heredoc> ",9);
+        // line = get_next_line(0);
+        // line[ft_strlen(line) - 1] = '\0'; 
+        // fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
+        // write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
+        // while (1) {
+        //     fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
+        //     write(1,"heredoc> ",9);
+        //     line = get_next_line(0);
+        //     line[ft_strlen(line) - 1] = '\0'; 
+        //     if(!ft_strcmp(line,command->end_heredoc)){
+        //         break;
+        //         write(1,"out\n",4);
+        //     }
+        //     write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
+        //     close(fdd);
+        // }
+        // unlink("/tmp/heredoc");
+        // if(!ft_strcmp(command->name,"<<"))
+        //     display_heredoc(fdd);
+        // close(fdd);
     }
     if(is_redirect(command)){
         if(command->outfile)

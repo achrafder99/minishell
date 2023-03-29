@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:48:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:22:29 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_ast_node
     struct s_ast_node *right;
 } t_ast_node;
 
+
 typedef struct t_command
 {
     char *name;
@@ -77,12 +78,12 @@ typedef struct t_type
 	char			*type;
 }					t_type;
 
-typedef struct t_tokens
+typedef struct t_components
 {
 	char			*token;
-	struct t_tokens	*next;
+	struct t_components	*next;
 	struct t_type	type;
-}					t_tokens;
+}					t_components;
 
 typedef struct t_rowandcolumn
 {
@@ -100,14 +101,14 @@ char				**ft_split(char const *s, char c);
 void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
-void				push(t_tokens **head, char *command, char *type);
-void				lexer(char *input, t_tokens **head,t_info *info);
-void				echo(t_tokens *tokens);
+void				push(t_components **head, char *command, char *type);
+void				lexer(char *input, t_components **head,t_info *info);
+void				echo(t_components *tokens);
 void				cd(t_command *cmd);
 void				pwd(t_command *cmd);
-int					get_size(t_tokens *tokens);
+int					get_size(t_components *tokens);
 void				exit_shell(void);
-void 				parser(t_tokens *tokens,t_info *info);
+void 				parser(t_components *tokens,t_info *info);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 char				*ft_strstr(const char *haystack, const char *needle);
 void 				handle_signals(int sign);
@@ -119,8 +120,10 @@ int					is_redirect(t_command *command);
 int					check_is_built_in(char *cmd);
 char				*new_str(char *str,int count);
 int					includes(char car);
-int					handle_errors(t_tokens *tokens);
+int					handle_errors(t_components *tokens);
 void				free_things(char **spliting);
 int					check_command(char *command);
 void				execute_pipe(t_piped *pipe);
+int 				check_is_space(char *input);
+int 				check_quotes(char *input);
 #endif

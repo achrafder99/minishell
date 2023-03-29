@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/21 18:57:17 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:22:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void put(char *string){
 		}
 }
 
-void ft_put_echo(t_tokens *tokens){
-	t_tokens *node;
+void ft_put_echo(t_components *tokens){
+	t_components *node;
 	node = tokens;
 	
 	while(node != NULL){
@@ -91,9 +91,9 @@ void	free_split(char **split)
 	free(split);
 }
 
-void	echo(t_tokens *tokens)
+void	echo(t_components *tokens)
 {
-	t_tokens *echo_command;
+	t_components *echo_command;
 	echo_command = tokens->next;
 	int flags;
 

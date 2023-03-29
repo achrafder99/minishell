@@ -6,57 +6,13 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 01:09:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 21:25:18 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_quotes(char *input){
-	int i;
-	i = 0;
-	int single;
-	int double_q;
-	single  = 0;
-	double_q  = 0;
-	while (input[i] != '\0')
-	{
-		if((input[i] == '\'' || input[i] == '\"') && input[i - 1] != '\\'){
-			if(input[i] == '\'')
-					single++;
-			else
-				double_q++;
-		}
-		i++;
-	}
-	if(single % 2 != 0 || double_q % 2 != 0)
-			return (0);
-	return (1);
-}
-
-int check_is_space(char *input){
-	int i;
-	i = 0;
-	int count;
-	count = 0;
-	while (input[i] != '\0')
-	{
-		if(includes(input[i]) && input[i + 1] != '>'){
-			if(input[i + 1] != ' ' || input[i - 1] != ' ')
-				count++;
-		}
-		else{
-			if(input[i + 1] == '>'){
-				count++;
-				i += 2;
-			}
-		}
-		i++;
-	}
-	return (count);
-}
-
-void	lexer(char *input, t_tokens **head,t_info *info)
+void	lexer(char *input, t_components **head,t_info *info)
 {
 	char	**spliting;
 	int		i;
@@ -77,82 +33,14 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 		return;
 	}
 	i = 0;
-	if(!ft_strcmp(spliting[0],"<<") || !ft_strcmp(spliting[0],">>") || !ft_strcmp(spliting[0],">") || !ft_strcmp(spliting[0],"<")){
-		if(!ft_strcmp(spliting[0],"<<")){
-			int j;
-			j = 1;
-			push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "HEREDOC");
-			if(spliting[1] != NULL){
-				push(head, cut_string(ft_strtrim(spliting[1],"\'\"")), "END_HEREDOC");
-				j++;
-			}
-			if(spliting[2] != NULL){
-				push(head, cut_string(ft_strtrim(spliting[2],"\'\"")), "COMMAND");
-				j++;
-			}
-			while (spliting[j] != NULL)
-			{
-				if(spliting[j][0] == '-')
-					push(head, spliting[j], "OPTION");
-				else if(spliting[j][0] == '|'){
-					push(head, spliting[j], "PIPE");
-					if (spliting[j + 1] != NULL)
-					{
-						push(head, spliting[j + 1], "COMMAND");
-						j++;
-					}
-				}
-				else if(!ft_strcmp(spliting[j],"<<") \
-				|| !ft_strcmp(spliting[j],">>") \
-				|| !ft_strcmp(spliting[j],"<<") \
-				|| !ft_strcmp(spliting[j],">") \
-				|| !ft_strcmp(spliting[j],"<")){
-					if(!ft_strcmp(spliting[j],"<<")){
-						push(head, spliting[j], "HEREDOC");
-						if (spliting[j + 1] != NULL)
-						{
-							push(head, spliting[j + 1], "END_HEREDOC");
-							j++;
-						}
-					}
-					else if (!ft_strcmp(spliting[j],"<"))
-					{
-						push(head, spliting[j], "REDIRECT_in");
-						if (spliting[j + 1] != NULL)
-						{
-							push(head, spliting[j + 1], "FILENAME");
-							j++;
-						}
-					}
-
-					else if(!ft_strcmp(spliting[j],">"))
-					{
-						push(head, spliting[j], "REDIRECT_out");
-						if (spliting[i + 1] != NULL)
-						{
-							push(head, spliting[j + 1], "FILENAME");
-							j++;
-						}
-					}
-					else{
-						push(head, spliting[j], "APPEND_MODE");
-						if (spliting[j + 1] != NULL)
-						{
-							push(head, spliting[j + 1], "FILENAME");
-							j++;
-						}
-					}
-				}
-				else
-					push(head, ft_strtrim(spliting[j],"\'\""), "ARG");
-				j++;
-			}
-		}
+	if(!ft_strcmp(spliting[0],"<<") \
+	|| !ft_strcmp(spliting[0],">>") \
+	|| !ft_strcmp(spliting[0],">") \
+	|| !ft_strcmp(spliting[0],"<")){
+		
 	}
-	// parser(*head,info);
-
 	else{
-		push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "COMMAND");
+		push(head, spliting[0], "COMMAND");
 		i = 1;
 		while (spliting[i] != NULL)
 		{
@@ -167,7 +55,10 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 					i++;
 				}
 			}
-			else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],"<<") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
+			else if (!ft_strcmp(spliting[i],">>") \
+			|| !ft_strcmp(spliting[i],"<<") 
+			|| !ft_strcmp(spliting[i],">") 
+			|| !ft_strcmp(spliting[i],"<"))
 			{
 				if (!ft_strcmp(spliting[i],"<"))
 				{
@@ -205,7 +96,7 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 				}
 			}
 			else
-				push(head, ft_strtrim(spliting[i],"\'\""), "ARG");
+				push(head, spliting[i], "ARG");
 			i++;
 			}
 	}

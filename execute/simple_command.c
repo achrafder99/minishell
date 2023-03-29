@@ -6,11 +6,13 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 01:05:21 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 22:43:41 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+extern char **environ;
 
 // printf("Command name :%s\n",command->name);
 // printf("Args :");
@@ -54,19 +56,19 @@ char    *to_lower(char *input){
 }
 
 void simple_command(t_command *command) {
-    printf("Command name :%s\n",command->name);
-    printf("Args :");
-    // printf("%s ",command->args[0]);
-    // printf("%s ",command->args[1]);
-    // printf("%s ",command->args[2]);
-    printf("\n");
-    printf("infile  :%s\n",command->infile);
-    printf("outfile  :%s\n",command->outfile);
-    printf("argc  :%d\n",command->argc);
-    printf("append_mode  :%s\n",command->append_mode);
-    printf("Heredoc  :%s\n",command->heredoc);
-    printf("end  :%s\n",command->end_heredoc);
-    return;
+    // printf("Command name :%s\n",command->name);
+    // printf("Args :");
+    // // printf("%s ",command->args[0]);
+    // // printf("%s ",command->args[1]);
+    // // printf("%s ",command->args[2]);
+    // printf("\n");
+    // printf("infile  :%s\n",command->infile);
+    // printf("outfile  :%s\n",command->outfile);
+    // printf("argc  :%d\n",command->argc);
+    // printf("append_mode  :%s\n",command->append_mode);
+    // printf("Heredoc  :%s\n",command->heredoc);
+    // printf("end  :%s\n",command->end_heredoc);
+    // return;
     // return;
     int flags;
     flags = 0;
@@ -145,9 +147,9 @@ void simple_command(t_command *command) {
     if(fid == 0){
         argv = get_argv(command,command->argc);
         if(exec)
-            execve(cmd,argv,NULL);
+            execve(cmd,argv,environ);
         else
-            execve(command->name,argv,NULL);
+            execve(command->name,argv,environ);
     }
     else
         wait(NULL);

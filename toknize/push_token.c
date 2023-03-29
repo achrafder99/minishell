@@ -6,18 +6,18 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:01:20 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/16 19:54:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:22:42 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	push(t_tokens **head, char *command,char *type_command)
+void	push(t_components **head, char *command,char *type_command)
 {
-	t_tokens	*new_node;
-	t_tokens	*current_node;
+	t_components	*new_node;
+	t_components	*current_node;
 
-	new_node = (t_tokens *)malloc(sizeof(t_tokens));
+	new_node = (t_components *)malloc(sizeof(t_components));
 	if (new_node == NULL)
 	{
 		fprintf(stderr, "Memory allocation failed");

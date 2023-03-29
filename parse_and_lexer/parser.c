@@ -6,21 +6,30 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:47:53 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 22:01:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void parser(t_tokens *tokens,t_info *info){
-	
+void parser(t_components *tokens,t_info *info){
+
+	t_components *node;
+	node = tokens;
+	// while (node != NULL)
+	// {
+	// 	printf("Token (%s) Type (%s)\n",node->token,node->type.type);
+	// 	node = node->next;
+	// }
+	// return;
+
 	int dd;
 	dd = 0;
 	int pipe;
 	pipe = 0;
 	if(handle_errors(tokens))
 		return;
-	t_tokens *node;
+
 	node = tokens;
 	t_command *command;
 	t_piped *pipe_line;
@@ -108,6 +117,7 @@ void parser(t_tokens *tokens,t_info *info){
 					memcpy(new_commands, pipe_line->command, (pipe_line->number_of_commands-1) * sizeof(t_command));
 					free(pipe_line->command);
 				}
+				
 				new_commands[pipe_line->number_of_commands - 1] = *command;
 				pipe_line->command = new_commands;
 			}

@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/03/29 02:48:33 by adardour         ###   ########.fr        #
+#    Updated: 2023/03/29 02:53:57 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ includes.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c \
 ./execute/simple_command.c ./execute/execute_built_in.c \
 ./free/free_things.c \
-./check/check_command.c \
+./check/check_command.c ./check/check_is_space.c ./check/check_quotes.c \
 ./execute/execute_pipe.c
 
 CC		= cc

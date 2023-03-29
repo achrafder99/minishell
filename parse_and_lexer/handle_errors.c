@@ -6,15 +6,15 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:31:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:35:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:23:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int handle_errors(t_tokens *tokens){
+int handle_errors(t_components *tokens){
 
-    t_tokens *node;
+    t_components *node;
     node = tokens;
     while(node != NULL){
 		if(node == NULL)

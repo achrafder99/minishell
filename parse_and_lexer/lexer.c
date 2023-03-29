@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/28 03:45:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 01:09:07 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,66 +77,137 @@ void	lexer(char *input, t_tokens **head,t_info *info)
 		return;
 	}
 	i = 0;
-	if(ft_strcmp(spliting[0],"<<") != 0 && ft_strcmp(spliting[0],">>") != 0 && ft_strcmp(spliting[0],">") && ft_strcmp(spliting[0],"<")){
+	if(!ft_strcmp(spliting[0],"<<") || !ft_strcmp(spliting[0],">>") || !ft_strcmp(spliting[0],">") || !ft_strcmp(spliting[0],"<")){
+		if(!ft_strcmp(spliting[0],"<<")){
+			int j;
+			j = 1;
+			push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "HEREDOC");
+			if(spliting[1] != NULL){
+				push(head, cut_string(ft_strtrim(spliting[1],"\'\"")), "END_HEREDOC");
+				j++;
+			}
+			if(spliting[2] != NULL){
+				push(head, cut_string(ft_strtrim(spliting[2],"\'\"")), "COMMAND");
+				j++;
+			}
+			while (spliting[j] != NULL)
+			{
+				if(spliting[j][0] == '-')
+					push(head, spliting[j], "OPTION");
+				else if(spliting[j][0] == '|'){
+					push(head, spliting[j], "PIPE");
+					if (spliting[j + 1] != NULL)
+					{
+						push(head, spliting[j + 1], "COMMAND");
+						j++;
+					}
+				}
+				else if(!ft_strcmp(spliting[j],"<<") \
+				|| !ft_strcmp(spliting[j],">>") \
+				|| !ft_strcmp(spliting[j],"<<") \
+				|| !ft_strcmp(spliting[j],">") \
+				|| !ft_strcmp(spliting[j],"<")){
+					if(!ft_strcmp(spliting[j],"<<")){
+						push(head, spliting[j], "HEREDOC");
+						if (spliting[j + 1] != NULL)
+						{
+							push(head, spliting[j + 1], "END_HEREDOC");
+							j++;
+						}
+					}
+					else if (!ft_strcmp(spliting[j],"<"))
+					{
+						push(head, spliting[j], "REDIRECT_in");
+						if (spliting[j + 1] != NULL)
+						{
+							push(head, spliting[j + 1], "FILENAME");
+							j++;
+						}
+					}
+
+					else if(!ft_strcmp(spliting[j],">"))
+					{
+						push(head, spliting[j], "REDIRECT_out");
+						if (spliting[i + 1] != NULL)
+						{
+							push(head, spliting[j + 1], "FILENAME");
+							j++;
+						}
+					}
+					else{
+						push(head, spliting[j], "APPEND_MODE");
+						if (spliting[j + 1] != NULL)
+						{
+							push(head, spliting[j + 1], "FILENAME");
+							j++;
+						}
+					}
+				}
+				else
+					push(head, ft_strtrim(spliting[j],"\'\""), "ARG");
+				j++;
+			}
+		}
+	}
+	// parser(*head,info);
+
+	else{
 		push(head, cut_string(ft_strtrim(spliting[0],"\'\"")), "COMMAND");
 		i = 1;
-	}
-	while (spliting[i] != NULL)
-	{
-		if (spliting[i][0] == '-'){
-			push(head, spliting[i], "OPTION");
-		}
-		else if (spliting[i][0] == '|')
+		while (spliting[i] != NULL)
 		{
-			push(head, spliting[i], "PIPE");
-			if (spliting[i + 1] != NULL)
+			if (spliting[i][0] == '-')
+				push(head, spliting[i], "OPTION");
+			else if (spliting[i][0] == '|')
 			{
-				push(head, spliting[i + 1], "COMMAND");
-				i++;
+				push(head, spliting[i], "PIPE");
+				if (spliting[i + 1] != NULL)
+				{
+					push(head, spliting[i + 1], "COMMAND");
+					i++;
+				}
 			}
-		}
-		else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],"<<") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
-		{
-			if (!ft_strcmp(spliting[i],"<"))
+			else if (!ft_strcmp(spliting[i],">>") || !ft_strcmp(spliting[i],"<<") || !ft_strcmp(spliting[i],">") || !ft_strcmp(spliting[i],"<"))
 			{
-				push(head, spliting[i], "REDIRECT_in");
-				if (spliting[i + 1] != NULL)
+				if (!ft_strcmp(spliting[i],"<"))
 				{
-					push(head, spliting[i + 1], "FILENAME");
-					i++;
+					push(head, spliting[i], "REDIRECT_in");
+					if (spliting[i + 1] != NULL)
+					{
+						push(head, spliting[i + 1], "FILENAME");
+						i++;
+					}
+				}
+				else if(!ft_strcmp(spliting[i],">"))
+				{
+					push(head, spliting[i], "REDIRECT_out");
+					if (spliting[i + 1] != NULL)
+					{
+						push(head, spliting[i + 1], "FILENAME");
+						i++;
+					}
+				}
+				else if(!ft_strcmp(spliting[i],">>")){
+					push(head, spliting[i], "APPEND_MODE");
+					if (spliting[i + 1] != NULL)
+					{
+						push(head, spliting[i + 1], "FILENAME");
+						i++;
+					}
+				}
+				else{
+					push(head, spliting[i], "HEREDOC");
+					if (spliting[i + 1] != NULL)
+					{
+						push(head, spliting[i + 1], "END_HEREDOC");
+						i++;
+					}
 				}
 			}
-			else if(!ft_strcmp(spliting[i],">"))
-			{
-				push(head, spliting[i], "REDIRECT_out");
-				if (spliting[i + 1] != NULL)
-				{
-					push(head, spliting[i + 1], "FILENAME");
-					i++;
-				}
+			else
+				push(head, ft_strtrim(spliting[i],"\'\""), "ARG");
+			i++;
 			}
-			else if(!ft_strcmp(spliting[i],">>")){
-				push(head, spliting[i], "APPEND_MODE");
-				if (spliting[i + 1] != NULL)
-				{
-					push(head, spliting[i + 1], "FILENAME");
-					i++;
-				}
-			}
-			else{
-				push(head, spliting[i], "HEREDOC");
-				if (spliting[i + 1] != NULL)
-				{
-					push(head, spliting[i + 1], "END_HEREDOC");
-					i++;
-				}
-			}
-		}
-		else if (spliting[i][0] == '$')
-			push(head, spliting[i], "ENV");
-		else
-			push(head, ft_strtrim(spliting[i],"\'\""), "ARG");
-		i++;
 	}
 	parser(*head,info);
 	i = 0;

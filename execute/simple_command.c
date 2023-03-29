@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/28 03:47:00 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 01:05:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,48 @@ void display_heredoc(int fd){
     }
 }
 
+char    *to_lower(char *input){
+    int i;
+    i = 0;
+
+    char *str;
+    str = malloc(ft_strlen(input) + 1);
+    while (input[i] != '\0')
+    {
+        if(input[i] >= 65 && input[i] <= 90)
+            str[i] = input[i] + 32;
+        else
+            str[i] = input[i];
+        i++;
+    }
+    str[i] = '\0';
+    return (str);
+}
+
 void simple_command(t_command *command) {
+    printf("Command name :%s\n",command->name);
+    printf("Args :");
+    // printf("%s ",command->args[0]);
+    // printf("%s ",command->args[1]);
+    // printf("%s ",command->args[2]);
+    printf("\n");
+    printf("infile  :%s\n",command->infile);
+    printf("outfile  :%s\n",command->outfile);
+    printf("argc  :%d\n",command->argc);
+    printf("append_mode  :%s\n",command->append_mode);
+    printf("Heredoc  :%s\n",command->heredoc);
+    printf("end  :%s\n",command->end_heredoc);
+    return;
+    // return;
     int flags;
     flags = 0;
     int fd;
-    if(check_is_built_in(command->name)){
+    if(check_is_built_in(to_lower(command->name))){
+        command->name = to_lower(command->name);
         execute_built_in(command);
         flags = 1;
     }
     if (command->heredoc) {
-        
         int fdd;
         char *line;
         write(1,"heredoc> ",9);
@@ -57,13 +89,15 @@ void simple_command(t_command *command) {
             write(1,"heredoc> ",9);
             line = get_next_line(0);
             line[ft_strlen(line) - 1] = '\0'; 
-            if(!ft_strcmp(line,command->heredoc))
+            if(!ft_strcmp(line,command->end_heredoc)){
                 break;
+                write(1,"out\n",4);
+            }
             write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
             close(fdd);
         }
         unlink("/tmp/heredoc");
-        if(!command->name)
+        if(!ft_strcmp(command->name,"<<"))
             display_heredoc(fdd);
         close(fdd);
     }

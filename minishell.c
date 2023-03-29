@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 16:49:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 00:52:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ char *display_name(){
     return (dd);  
 }
 
+char *lowercase(char *input){
+    int i;
+    i = 0;
+    while (input[i])
+    {
+        if(input[i] >= 65 && input[i] <= 90)
+            input[i] = input[i] + 32; 
+        i++;
+    }
+    return (input);
+}
 
 char *get_input() {
     
@@ -45,7 +56,7 @@ char *get_input() {
     input = readline(tt);
     free(full_username);
     full_username = NULL;
-    return input;
+    return (input);
 }
 
 void process_input(char *input,t_info *info) {

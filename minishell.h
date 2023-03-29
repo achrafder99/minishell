@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/28 01:22:11 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/29 02:34:12 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@
 # include <unistd.h>
 # include "./utils/get_next_line/get_next_line.h"
 
+typedef struct t_heredoc{
+	char *end;
+    char *cmd;
+	char **args;
+}   t_heredoc;
+
+
 typedef struct t_info{
     char *pwd;
     int status_code;
@@ -56,6 +63,8 @@ typedef struct t_command
     char *outfile;
 	char *append_mode;
 	char *heredoc;
+	char *end_heredoc;
+	t_heredoc *here_doc;
 } t_command;
 
 typedef struct t_piped{
@@ -86,7 +95,6 @@ typedef struct t_rowandcolumn
 }					t_rowsandcolumns;
 
 char				*ft_strjoin(char const *s1, char const *s2);
-// size_t				ft_strlen(const char *s);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
 void				display_env(char **env);
@@ -111,4 +119,5 @@ int					is_redirect(t_command *command);
 int					check_is_built_in(char *cmd);
 char				*new_str(char *str,int count);
 int					includes(char car);
+int					handle_errors(t_tokens *tokens);
 #endif

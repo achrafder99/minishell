@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/03/28 01:22:20 by adardour         ###   ########.fr        #
+#    Updated: 2023/03/29 02:34:53 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ includes.c \
 ./utils/get_next_line/get_next_line.c ./utils/get_next_line/get_next_line_utils.c \
 ./utils/split.c ./utils/display_env.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
 ./toknize/push_token.c \
-./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c \
+./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c \
 ./execute/simple_command.c ./execute/execute_built_in.c
 

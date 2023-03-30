@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:31:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 17:23:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/30 01:49:11 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ int handle_errors(t_components *tokens){
 		}
 		node = node->next;
 	}
+	// free_node(node);
     return (0);
 }

@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_things.c                                      :+:      :+:    :+:   */
+/*   free_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 02:38:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 04:03:59 by adardour         ###   ########.fr       */
+/*   Created: 2023/03/30 00:09:25 by adardour          #+#    #+#             */
+/*   Updated: 2023/03/30 01:05:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void free_things(char **spliting){
-	int i;
-	i = 0;
-	if(spliting == NULL)
-		return;
-	while (spliting[i])
-	{
-		free(spliting[i]);
-		i++;
-	}
-	free(spliting);
-	spliting = NULL;
+void free_node(t_components *head){
+    t_components *node;
+    node = head;
+    while (node != NULL)
+    {
+        free(node->token);
+        free(node->type.type);
+        free(node);
+        node->token = NULL;
+        node->type.type = NULL;
+        node = node->next;
+    }
+    free(node);
+    node = NULL;
 }

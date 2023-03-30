@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 21:25:18 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/30 01:13:03 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,9 @@ void	lexer(char *input, t_components **head,t_info *info)
 			}
 	}
 	parser(*head,info);
-	i = 0;
-	while (spliting[i] != NULL)
-	{
-		free(spliting[i]);
-		i++;
-	}
-	free(spliting);
-	spliting = NULL;
+	free_things(spliting);
+	free_node(*head);
+	head = NULL;
+	free(str);
+	str = NULL;
 }

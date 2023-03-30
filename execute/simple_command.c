@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 23:06:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/30 04:03:44 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,16 @@ extern char **environ;
 //     }
 // }
 
-char    *to_lower(char *input){
+char *to_lower(char *input){
     int i;
     i = 0;
 
     char *str;
     str = malloc(ft_strlen(input) + 1);
+    if(!str){
+        return (NULL);
+        exit(1);
+    }
     while (input[i] != '\0')
     {
         if(input[i] >= 65 && input[i] <= 90)
@@ -55,53 +59,45 @@ char    *to_lower(char *input){
     return (str);
 }
 
+// return;
+// printf("Command name :%s\n",command->name);
+// printf("Args :");
+// // printf("%s ",command->args[0]);
+// // printf("%s ",command->args[1]);
+// // printf("%s ",command->args[2]);
+// printf("\n");
+// printf("infile  :%s\n",command->infile);
+// printf("outfile  :%s\n",command->outfile);
+// printf("argc  :%d\n",command->argc);
+// printf("append_mode  :%s\n",command->append_mode);
+// printf("Heredoc  :%s\n",command->heredoc);
+// printf("end  :%s\n",command->end_heredoc);
+// return;
+// return;
+
+
+// void free_command(t_command *command){
+//     free(command->name);
+// }
+
 void simple_command(t_command *command) {
-    // printf("Command name :%s\n",command->name);
-    // printf("Args :");
-    // // printf("%s ",command->args[0]);
-    // // printf("%s ",command->args[1]);
-    // // printf("%s ",command->args[2]);
-    // printf("\n");
-    // printf("infile  :%s\n",command->infile);
-    // printf("outfile  :%s\n",command->outfile);
-    // printf("argc  :%d\n",command->argc);
-    // printf("append_mode  :%s\n",command->append_mode);
-    // printf("Heredoc  :%s\n",command->heredoc);
-    // printf("end  :%s\n",command->end_heredoc);
-    // return;
-    // return;
+    
     int flags;
     flags = 0;
+    
     int fd;
-    if(check_is_built_in(to_lower(command->name))){
-        command->name = to_lower(command->name);
+    char *str;
+    
+    str = to_lower(command->name);
+    if(check_is_built_in(str)){
+        char *lower;
+        lower = to_lower(command->name);
+        command->name = lower;
+        free(lower);
         execute_built_in(command);
         flags = 1;
-    }
-    if (command->heredoc) {
-        // int fdd;
-        // char *line;
-        // write(1,"heredoc> ",9);
-        // line = get_next_line(0);
-        // line[ft_strlen(line) - 1] = '\0'; 
-        // fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
-        // write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-        // while (1) {
-        //     fdd = open("/tmp/heredoc",O_RDWR | O_CREAT | O_APPEND,0777);
-        //     write(1,"heredoc> ",9);
-        //     line = get_next_line(0);
-        //     line[ft_strlen(line) - 1] = '\0'; 
-        //     if(!ft_strcmp(line,command->end_heredoc)){
-        //         break;
-        //         write(1,"out\n",4);
-        //     }
-        //     write(fdd,ft_strjoin(line,"\n"),ft_strlen(line) + 1);
-        //     close(fdd);
-        // }
-        // unlink("/tmp/heredoc");
-        // if(!ft_strcmp(command->name,"<<"))
-        //     display_heredoc(fdd);
-        // close(fdd);
+        free(str);
+        return;
     }
     if(is_redirect(command)){
         if(command->outfile)
@@ -129,14 +125,19 @@ void simple_command(t_command *command) {
     exec = 0;
     spliting = ft_split(getenv("PATH"),':');
     i = 0;
+    char *join;
     while (spliting[i] != NULL)
     {
         cmd = ft_strjoin(spliting[i],"/");
-        if(access(ft_strjoin(cmd,command->name),X_OK) == 0){
-            cmd = ft_strjoin(cmd,command->name);
+        join = ft_strjoin(cmd,command->name);
+        if(!access(join,X_OK)){
+            free(cmd);
+            cmd = join;
             exec = 1;
             break;
         }
+        free(join);
+        free(cmd);
         i++;
     }
     fid = fork();
@@ -153,22 +154,9 @@ void simple_command(t_command *command) {
     }
     else
         wait(NULL);
-    i = 0;
-    while (spliting[i] != NULL)
-    {
-        free(spliting[i]);
-        i++;
-    }
-	dup2(STDIN_FILENO, 1);
-    free(spliting[i]);
-    free(spliting);
-    spliting = NULL;
-    i = 0;
-    while (i < command->argc)
-    {
-        free(command->args[i]);
-        i++;
-    }
-    free(command->args);
-    command->args = NULL;
+        free_things(spliting);
+        free(cmd);
+        free(str);
+	    dup2(STDIN_FILENO, 1);
+        free_things(command->args);
 }

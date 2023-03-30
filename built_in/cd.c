@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:34:12 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 00:47:17 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/30 02:31:55 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	cd(t_command *cmd)
 	if(cmd->argc == 0 || !ft_strcmp(cmd->args[0], "~")){
 		home_dir = ft_strjoin("/Users/", getenv("USER"));
 		chdir(home_dir);
+		free(home_dir);
 		return;
 	}
 	else if(access(cmd->args[0],F_OK) != -1){

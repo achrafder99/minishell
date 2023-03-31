@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 20:24:40 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 20:26:20 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:49:46 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	check_is_built_in(char *cmd)
 	else if (!ft_strcmp(cmd, "pwd"))
 		return (1);
 	else if (!ft_strcmp(cmd, "echo"))
+		return (1);
+	else if(!ft_strcmp(cmd,"export"))
 		return (1);
 	return (0);
 }

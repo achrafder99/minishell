@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 01:09:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/31 00:34:53 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,9 @@ void	process_input(char *input, t_info *info)
 		exit(1);
 	}
 	else if (strlen(input) == 0)
-	{
 		return ;
-	}
 	head = NULL;
+	// head = (t_components*)malloc(sizeof(t_components));
 	add_history(input);
 	lexer(input, &head, info);
 }

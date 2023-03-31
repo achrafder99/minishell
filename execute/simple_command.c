@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 04:03:44 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/31 05:05:13 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,6 @@ char *to_lower(char *input){
 // return;
 // printf("Command name :%s\n",command->name);
 // printf("Args :");
-// // printf("%s ",command->args[0]);
-// // printf("%s ",command->args[1]);
-// // printf("%s ",command->args[2]);
 // printf("\n");
 // printf("infile  :%s\n",command->infile);
 // printf("outfile  :%s\n",command->outfile);
@@ -82,6 +79,16 @@ char *to_lower(char *input){
 
 void simple_command(t_command *command) {
     
+    // printf("Command name :%s\n",command->name);
+    // printf("Args :");
+    // printf("\n");
+    // printf("infile  :%s\n",command->infile);
+    // printf("outfile  :%s\n",command->outfile);
+    // printf("argc  :%d\n",command->argc);
+    // printf("append_mode  :%s\n",command->append_mode);
+    // printf("Heredoc  :%s\n",command->heredoc);
+    // printf("end  :%s\n",command->end_heredoc);
+    // return;
     int flags;
     flags = 0;
     
@@ -154,9 +161,9 @@ void simple_command(t_command *command) {
     }
     else
         wait(NULL);
-        free_things(spliting);
         free(cmd);
+        free_things(spliting);
         free(str);
 	    dup2(STDIN_FILENO, 1);
-        free_things(command->args);
+        free(command);
 }

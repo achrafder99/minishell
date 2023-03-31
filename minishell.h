@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 00:11:09 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/30 17:57:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,5 @@ int 				check_is_space(char *input);
 int 				check_quotes(char *input);
 size_t				ft_strlen(const char *s);
 void 				free_node(t_components *head);
+void				*ft_memcpy(void *dst, const void *src, size_t n);
 #endif

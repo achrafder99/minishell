@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/31 05:05:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/03/31 05:09:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void simple_command(t_command *command) {
     // printf("Heredoc  :%s\n",command->heredoc);
     // printf("end  :%s\n",command->end_heredoc);
     // return;
+    return;
     int flags;
     flags = 0;
     
@@ -165,5 +166,6 @@ void simple_command(t_command *command) {
         free_things(spliting);
         free(str);
 	    dup2(STDIN_FILENO, 1);
+        free_things(argv);
         free(command);
 }

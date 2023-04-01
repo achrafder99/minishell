@@ -6,66 +6,103 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 17:22:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/01 21:23:30 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void put(char *string){
-		int i;
-		i = 1;
-		while(string[i] != '\0'){
-				write(1,&string[i],1);
-				i++;
+void print_env(char *string){
+	
+	int i;
+	while (*string != '\0' && *string != '$')
+	{
+		if(*string == '\\'){
+			string++;
+            if(*string == '\'')
+                write(1, "\'", 1);
+            else if(*string == '\"')
+                write(1, "\"", 1);
+            else if(*string == '$')
+                write(1, "$", 1);
+            else if(*string == ';')
+                write(1, ";", 1);
+            else if(*string == '|')
+                write(1, "|", 1);
+            else if(*string == '<')
+                write(1, "<", 1);
+            else if(*string == '>')
+                write(1, ">", 1);
+            else if(*string == '&')
+                write(1, "&", 1);
+			else
+				write(1,string,1);
+        }
+		else
+			write(1,string,1);
+		string++;
+	}
+	char **spliting;
+	char *value;
+	spliting = ft_split(string,'$');
+	i = 0;
+	while (spliting[i] != NULL) {
+		if(spliting[i][0] == '?'){
+			write(1,"0",1);
+			int j;
+			j = 1;
+			while (spliting[i][j] != '\0')
+			{
+				write(1,&spliting[i][j],1);
+				j++;
+			}
 		}
+		value = getenv(spliting[i]);
+		if (!value) 
+			write(1,"",1);
+		else
+			write(1, value, ft_strlen(value));
+		i++;
+	}
 }
 
-void ft_put_echo(t_components *tokens){
-	t_components *node;
-	node = tokens;
-	
-	while(node != NULL){
-			char *string;
-			string = node->token;
-			while (*string != '\\' && *string != '\0')
-			{
-					write(1,string,1);
-					string++;;
-			}
-			char **spliting;
-			spliting = ft_split(string,'\\');
-			int i;
-			i = 0;
-			while(spliting[i] != NULL){
-				if(spliting[i][0] == 'n')
-					write(1,"\n",1);
-				if(spliting[i][0] == 't')
-					write(1,"\t",1);
-				if(spliting[i][0] == 'b')
-					write(1,"\b",1);
-				if(spliting[i][0] == 'r')
-					write(1,"\r",1);
-				if(spliting[i][0] == 'f')
-					write(1,"\f",1);
-				if(spliting[i][0] == 'a')
-					write(1,"\a",1);
-				if(spliting[i][0] == '\\')
-					write(1,"\\",1);
-				if(spliting[i][0] == '\'')
-					write(1,"\'",1);
-				if(spliting[i][0] == '\"')
-					write(1,"\"",1);
-				if(spliting[i][0] == '\?')
-					write(1,"?",1);
-				if(spliting[i][0] == 'v')
-					write(1,"\v",1);
-				put(spliting[i]);
-				i++;
-			}	
-			node = node->next;
-			write(1," ",1);
-	}
+void put(char *string){
+		int i;
+		i = 0;
+		while(string[i] != '\0'){
+			write(1,&string[i],1);
+			i++;
+		}
+		write(1," ",1);
+}
+
+void ft_put_echo(char *string){    
+    while(*string != '\0'){
+        if(*string == '\\'){
+            string++;
+            if(*string == '\'')
+                write(1, "\'", 1);
+            else if(*string == '\"')
+                write(1, "\"", 1);
+            else if(*string == '$')
+                write(1, "$", 1);
+            else if(*string == ';')
+                write(1, ";", 1);
+            else if(*string == '|')
+                write(1, "|", 1);
+            else if(*string == '<')
+                write(1, "<", 1);
+            else if(*string == '>')
+                write(1, ">", 1);
+            else if(*string == '&')
+                write(1, "&", 1);
+            else
+                write(1,string,1);
+        }
+        else
+            write(1,string,1);
+        string++;
+    }
 }
 
 int	get_length(char **commands)
@@ -91,22 +128,29 @@ void	free_split(char **split)
 	free(split);
 }
 
-void	echo(t_components *tokens)
-{
-	t_components *echo_command;
-	echo_command = tokens->next;
-	int flags;
+void echo(t_command *cmd) {
 
-	flags = 0;
-	if(echo_command == NULL)
-		return;
-	while ( !ft_strcmp(echo_command->token,"-n") ){
-				flags = 1;
-				echo_command = echo_command->next;
-				if(echo_command == NULL)
-						break;
-	}
-	ft_put_echo(echo_command);
-	if(!flags)
-		write(1,"\n",1);
+    int i = 0;
+    int flags = 0;
+    if (cmd->argc == 0) {
+        write(1, "\n", 1);
+        return;
+    }
+    while (cmd->args[i] != NULL && !ft_strcmp(cmd->args[i], "-n")) {
+        flags = 1;
+        i++;
+    }
+    while (cmd->args[i] != NULL) {
+        if(ft_strchr(cmd->args[i],'$')){
+			print_env(cmd->args[i]);
+			write(1," ",1);
+		}
+		else{
+			ft_put_echo(cmd->args[i]);
+			write(1," ",1);
+		}
+        i++;
+    }
+    if (!flags) 
+        write(1, "\n", 1);
 }

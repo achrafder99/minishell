@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/31 05:11:26 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*display_name(void)
 	if (temp == NULL)
 	{
 		write(2, "Could not get username", ft_strlen("Could not get username"));
-		exit(EXIT_FAILURE);
 	}
 	dd = ft_strjoin(temp, " > ");
 	return (dd);
@@ -74,7 +73,6 @@ void	process_input(char *input, t_info *info)
 	else if (strlen(input) == 0)
 		return ;
 	head = NULL;
-	// head = (t_components*)malloc(sizeof(t_components));
 	add_history(input);
 	lexer(input, &head, info);
 }

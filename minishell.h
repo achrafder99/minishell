@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 17:57:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/01 21:42:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
 void				lexer(char *input, t_components **head,t_info *info);
-void				echo(t_components *tokens);
+void				echo(t_command *cmd);
 void				cd(t_command *cmd);
 void				pwd(t_command *cmd);
 int					get_size(t_components *tokens);
@@ -128,4 +128,5 @@ int 				check_quotes(char *input);
 size_t				ft_strlen(const char *s);
 void 				free_node(t_components *head);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
+int 				check_option(t_components  *node);
 #endif

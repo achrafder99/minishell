@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/31 05:05:19 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/01 21:41:34 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void parser(t_components *tokens,t_info *info){
 	node = tokens;
 	char** new_args;
 	char *cut_str;
+	if(check_option(node))
+		return;
 	while (node != NULL) {
 		cut_str = cut_string(node->token);
 		if (!ft_strcmp(node->type.type,"COMMAND")) {

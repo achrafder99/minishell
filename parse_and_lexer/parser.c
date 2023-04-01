@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 21:41:34 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/01 22:22:16 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void parser(t_components *tokens,t_info *info){
 	t_components *node;
 	node = tokens;
 	
+	int fd;
 	t_command* new_commands;
 	int dd;
 	dd = 0;
@@ -82,10 +83,21 @@ void parser(t_components *tokens,t_info *info){
 		|| !ft_strcmp(node->type.type,"REDIRECT_out") \
 		|| !ft_strcmp(node->type.type,"APPEND_MODE") \
 		|| !ft_strcmp(node->type.type,"HEREDOC")) {
-			if (!ft_strcmp(node->type.type,"REDIRECT_in"))
+			if (!ft_strcmp(node->type.type,"REDIRECT_in")){
 				command->infile = node->next->token;
-			else if(!ft_strcmp(node->type.type,"REDIRECT_out"))
+				fd = open(command->infile, O_RDONLY,0777);
+				if(fd == -1){
+					char *error;
+					error = ": No such file or directory\n";
+					write(2,command->infile,ft_strlen(command->infile));
+					write(2,error,ft_strlen(error));
+					return;
+				}
+			}
+			else if(!ft_strcmp(node->type.type,"REDIRECT_out")){
 				command->outfile = cut_string(node->next->token);
+				fd = open(command->outfile, O_CREAT,0777);
+			}
 			else if(!ft_strcmp(node->type.type,"APPEND_MODE"))
 				command->append_mode = node->next->token;
 			else{
@@ -129,6 +141,7 @@ void parser(t_components *tokens,t_info *info){
 			simple_command(command);
 			if(command->argc > 0)
 				free_things(command->args);
+			close(fd);
 			return;
 		}
         else {

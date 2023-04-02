@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 21:42:47 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/02 04:57:58 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,10 @@ size_t				ft_strlen(const char *s);
 void 				free_node(t_components *head);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 int 				check_option(t_components  *node);
+void 				in(char **spliting,int *i,t_components **head);
+void 				out(char **spliting,int *i,t_components **head);
+void 				append_mode(char **spliting,int *i,t_components **head);
+void 				here_doc(char **spliting,int *i,t_components **head);
+void				redirect_componenets(char** spliting, int* i, t_components** head);
+void				push_component(t_components **head, char *type, char **spliting, int *i);
 #endif

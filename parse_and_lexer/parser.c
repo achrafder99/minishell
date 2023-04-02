@@ -6,17 +6,17 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 22:22:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/02 04:36:43 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void parser(t_components *tokens,t_info *info){
-	
+
 	t_components *node;
 	node = tokens;
-	
+		
 	int fd;
 	t_command* new_commands;
 	int dd;
@@ -85,7 +85,7 @@ void parser(t_components *tokens,t_info *info){
 		|| !ft_strcmp(node->type.type,"HEREDOC")) {
 			if (!ft_strcmp(node->type.type,"REDIRECT_in")){
 				command->infile = node->next->token;
-				fd = open(command->infile, O_RDONLY,0777);
+				fd = open(command->infile, O_RDONLY,0777);				
 				if(fd == -1){
 					char *error;
 					error = ": No such file or directory\n";
@@ -93,13 +93,18 @@ void parser(t_components *tokens,t_info *info){
 					write(2,error,ft_strlen(error));
 					return;
 				}
+				close(fd);
 			}
 			else if(!ft_strcmp(node->type.type,"REDIRECT_out")){
 				command->outfile = cut_string(node->next->token);
-				fd = open(command->outfile, O_CREAT,0777);
+				fd = open(command->outfile,O_RDONLY | O_CREAT,0777);
+				close(fd);
 			}
-			else if(!ft_strcmp(node->type.type,"APPEND_MODE"))
+			else if(!ft_strcmp(node->type.type,"APPEND_MODE")){
 				command->append_mode = node->next->token;
+				fd = open(command->append_mode,O_CREAT,0777);
+				close(fd);
+			}
 			else{
 				command->heredoc = cut_str;
 				command->end_heredoc = node->next->token;
@@ -141,7 +146,6 @@ void parser(t_components *tokens,t_info *info){
 			simple_command(command);
 			if(command->argc > 0)
 				free_things(command->args);
-			close(fd);
 			return;
 		}
         else {

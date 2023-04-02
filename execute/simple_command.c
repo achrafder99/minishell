@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 20:58:46 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/02 04:48:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,17 @@ char *to_lower(char *input){
 }
 
 void simple_command(t_command *command) {
-    
+
     int i;
     i = 0;
     
     int flags;
     int redirect_out;
+    int redirect_in;
+    int append;
     redirect_out = 0;
+    redirect_in = 0;
+    append = 0;
     flags = 0;
     
     int fd;
@@ -54,15 +58,22 @@ void simple_command(t_command *command) {
     if(check_is_built_in(command->name))
         flags = 1;
     if(is_redirect(command)){
-        if(command->outfile)
+        if(command->outfile){
             fd = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);
-        else if(command->append_mode)
+            redirect_out = 1;
+        }
+        else if(command->append_mode){
             fd = open(command->append_mode,O_WRONLY | O_CREAT | O_APPEND,0777);
+            append = 1;
+        }
+        else if(command->infile){
+            fd = open(command->infile,O_RDONLY,0777);
+            redirect_in = 1;
+        }
         if(fd == -1){
             perror("");
             exit(1);
         }
-        redirect_out = 1;
     }
     pid_t fid;
     char *cmd;
@@ -92,9 +103,16 @@ void simple_command(t_command *command) {
         return;
     }
     if(fid == 0){
-        if (redirect_out)
+        if (redirect_out || append)
         { 
             if(dup2(fd,STDOUT_FILENO) == -1){
+                perror("error occurred.");
+                exit(1);
+            }
+            close(fd);
+        }
+        else if(redirect_in){
+            if(dup2(fd,STDIN_FILENO) == -1){
                 perror("error occurred.");
                 exit(1);
             }

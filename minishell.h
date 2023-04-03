@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:57:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/03 04:39:27 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct t_rowandcolumn
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
-void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
@@ -135,4 +134,10 @@ void 				append_mode(char **spliting,int *i,t_components **head);
 void 				here_doc(char **spliting,int *i,t_components **head);
 void				redirect_componenets(char** spliting, int* i, t_components** head);
 void				push_component(t_components **head, char *type, char **spliting, int *i);
+int					check_is_redirection(char *symbol);
+void 				piped(t_piped *pipe_line,t_command *command);
+int 				check_type(char *type);
+t_command			*init_command(t_command *command,char *cut_str);
+char 				**add_args(t_command *command,char *cut_str);
+int 				open_in(t_command *command,char *infile);
 #endif

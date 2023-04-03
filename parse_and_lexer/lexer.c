@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:58:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/03 05:08:57 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,6 @@ void	push_component(t_components **head, char *type, char **spliting, int *i)
 		here_doc(spliting, i, head);
 }
 
-int	check_is_redirection(char *symbol)
-{
-	return (!ft_strcmp(symbol, "<<")
-		|| !ft_strcmp(symbol, ">>")
-		|| !ft_strcmp(symbol, "<")
-		|| !ft_strcmp(symbol, ">"));
-}
-
 void	lexer(char *input, t_components **head, t_info *info)
 {
 	char	**spliting;
@@ -72,19 +64,59 @@ void	lexer(char *input, t_components **head, t_info *info)
 	spliting = split_input(input);
 	if (!spliting)
 		return ;
-	push(head, spliting[0], "COMMAND");
-	i = 1;
-	while (spliting[i] != NULL)
-	{
-		if (spliting[i][0] == '-')
-			push(head, spliting[i], "OPTION");
-		else if (spliting[i][0] == '|')
-			push_component(head, "PIPE", spliting, &i);
-		else if (check_is_redirection(spliting[i]))
-			redirect_componenets(spliting, &i, head);
-		else
-			push(head, spliting[i], "ARG");
-		i++;
+	if(!ft_strcmp(spliting[0],"<<") || check_is_redirection(spliting[0])){
+		if(!ft_strcmp(spliting[0],"<<")){
+			push(head, spliting[0], "HEREDOC");
+			if(spliting[1] != NULL)
+				push(head, spliting[1], "END_HEREDOC");
+			else if(spliting[2] != NULL)
+				push(head, spliting[2], "COMMAND");
+			i = 3;
+			while (spliting[i] != NULL)
+			{
+				if(spliting[i][0] == '|')
+					push_component(head, "PIPE", spliting, &i);
+				else if(check_is_redirection(spliting[i]))
+					redirect_componenets(spliting, &i, head);
+				else
+					push(head, spliting[i], "ARG");
+				i++;
+			}
+		}
+		else if (!ft_strcmp(spliting[0],">")){
+			push(head, spliting[0], "REDIRECT_out");
+			if(spliting[1] != NULL)
+				push(head, spliting[1], "FILENAME");
+			if(spliting[2] != NULL)
+				push(head, spliting[2], "COMMAND");
+			i = 3;
+			while (spliting[i] != NULL)
+			{
+				if(spliting[i][0] == '|')
+					push_component(head, "PIPE", spliting, &i);
+				else if(check_is_redirection(spliting[i]))
+					redirect_componenets(spliting, &i, head);
+				else
+					push(head, spliting[i], "ARG");
+				i++;
+			}
+		}
+	}
+	else{
+		push(head, spliting[0], "COMMAND");
+		i = 1;
+		while (spliting[i] != NULL)
+		{
+			if (spliting[i][0] == '-')
+				push(head, spliting[i], "OPTION");
+			else if (spliting[i][0] == '|')
+				push_component(head, "PIPE", spliting, &i);
+			else if (check_is_redirection(spliting[i]))
+				redirect_componenets(spliting, &i, head);
+			else
+				push(head, spliting[i], "ARG");
+			i++;
+		}
 	}
 	free_things(spliting);
 	parser(*head, info);

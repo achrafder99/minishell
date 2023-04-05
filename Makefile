@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/02 04:44:16 by adardour         ###   ########.fr        #
+#    Updated: 2023/04/04 22:50:29 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,18 @@ EXECUTABLE= minishell
 SRCS = minishell.c handle_signals.c cut_string.c is_redirect.c check_is_built_in.c new_string.c \
 includes.c \
 ./get_argv.c ./utils/join.c  ./utils/ft_strcmp.c \
-./utils/split.c ./utils/display_env.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/ft_strlen.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
+./utils/split.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/ft_strlen.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
 ./toknize/push_token.c \
 ./parse_and_lexer/redirection.c ./parse_and_lexer/redirect_componenets.c \
-./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c \
+./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c ./parse_and_lexer/piped.c ./parse_and_lexer/init_command.c \
+./parse_and_lexer/add_args.c ./parse_and_lexer/open_fd.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c \
 ./execute/simple_command.c ./execute/execute_built_in.c \
 ./free/free_things.c ./free/free_node.c \
 ./check/check_command.c ./check/check_is_space.c ./check/check_quotes.c ./check/check_option.c \
-./execute/execute_pipe.c
+./check/check_redirection.c ./check/check_type.c \
+./execute/execute_pipe.c \
+./linked_list/add_front.c ./linked_list/delete_node_by_type.c
 
 CC		= cc
 RM		= rm -rf

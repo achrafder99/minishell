@@ -6,58 +6,62 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 21:59:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/03 06:14:11 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-char *new_str(char *str,int count){
-    int i;
-    i = 0;
+void	add_space_after1(char *new_str, int *i, int *j)
+{
+	new_str[(*j)++] = ' ';
+	new_str[(*j)++] = '>';
+	new_str[(*j)++] = '>';
+	new_str[(*j)++] = ' ';
+	(*i)++;
+}
 
-    int j;
-    j = 0;
-    
-    char *new_str;
-    int length = ft_strlen(str) + count * 2;
-    new_str = malloc(length + 1);
-    while (i < length - 1)
-    {
-        if(str[i] == '>' && str[i + 1] == '>'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-		else if(str[i] == '<' && str[i + 1] == '<'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-        else{
-			if(includes(str[i])){
-                new_str[j] = ' ';
-                j++;
-                new_str[j] = str[i];
-                j++;
-                new_str[j] = ' ';
-            }
+void	add_space_after2(char *new_str, int *i, int *j)
+{
+	new_str[(*j)++] = ' ';
+	new_str[(*j)++] = '<';
+	new_str[(*j)++] = '<';
+	new_str[(*j)++] = ' ';
+	(*i)++;
+}
+
+void	add_space_after3(char *new_str, int i, int *j, char *str)
+{
+	new_str[(*j)++] = ' ';
+	new_str[(*j)++] = str[i];
+	new_str[(*j)++] = ' ';
+}
+
+char	*new_str(char *str, int count)
+{
+	int		i;
+	int		j;
+	int		length;
+	char	*new_str;
+
+	i = -1;
+	j = 0;
+	length = ft_strlen(str) + count * 2;
+	new_str = (char *)malloc(length + 1);
+	while (i++ < length - 1)
+	{
+		if (str[i] == '>' && str[i + 1] == '>')
+			add_space_after1(new_str, &i, &j);
+		else if (str[i] == '<' && str[i + 1] == '<')
+			add_space_after2(new_str, &i, &j);
+		else
+		{
+			if (includes(str[i]))
+				add_space_after3(new_str, i, &j, str);
 			else
-				new_str[j] = str[i];
+				new_str[j++] = str[i];
 		}
-        i++;
-        j++;
-    }
-
-    return (new_str);
+	}
+	new_str[j] = '\0';
+	return (new_str);
 }

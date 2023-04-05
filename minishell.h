@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:57:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:48:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-typedef struct t_heredoc{
-	char *end;
-    char *cmd;
-	char **args;
-}   t_heredoc;
-
 
 typedef struct t_info{
     char *pwd;
@@ -64,7 +58,6 @@ typedef struct t_command
 	char *append_mode;
 	char *heredoc;
 	char *end_heredoc;
-	t_heredoc *here_doc;
 } t_command;
 
 typedef struct t_piped{
@@ -97,7 +90,6 @@ typedef struct t_rowandcolumn
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
-void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
@@ -135,4 +127,12 @@ void 				append_mode(char **spliting,int *i,t_components **head);
 void 				here_doc(char **spliting,int *i,t_components **head);
 void				redirect_componenets(char** spliting, int* i, t_components** head);
 void				push_component(t_components **head, char *type, char **spliting, int *i);
+int					check_is_redirection(char *symbol);
+void 				piped(t_piped *pipe_line,t_command *command);
+int 				check_type(char *type);
+t_command			*init_command(t_command *command,char *cut_str);
+char 				**add_args(t_command *command,char *cut_str);
+int 				open_in(t_command *command,char *infile);
+void				ft_lstadd_front(t_components **lst, t_components *new);
+void 				delete_node_by_type(t_components **head, char *type);
 #endif

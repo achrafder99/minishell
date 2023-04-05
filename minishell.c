@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/04 02:56:43 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ char	*get_input(void)
 	input = NULL;
 	full_username = display_name();
 	tt = ft_strjoin(full_username, "");
-	free(full_username);
+	// free(full_username);
 	full_username = NULL;
 	input = readline(tt);
-	free(tt);
+	// free(tt);
 	return (input);
 }
 
@@ -87,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input = get_input();
 		process_input(input, &info);
-		free(input);
+		// free(input);
 		input = NULL;
 	}
 	return (0);

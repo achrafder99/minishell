@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:48:20 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/04 02:00:03 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/05 01:15:44 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char *to_lower(char *input){
     return (str);
 }
 
-void simple_command(t_command *command) {
-
+void simple_command(t_command *command)
+{
     int i;
     i = 0;
     
@@ -55,6 +55,13 @@ void simple_command(t_command *command) {
 
     int fd1;
     str = to_lower(command->name);
+    if(!check_command(command->name))
+    {
+        printf("tsh: ");
+        printf("%s: ",command->name);
+        printf("command not found\n");
+        return;
+    }
     if(check_is_built_in(command->name))
         flags = 1;
     if(is_redirect(command)){
@@ -90,7 +97,6 @@ void simple_command(t_command *command) {
         cmd = ft_strjoin(spliting[i],"/");
         join = ft_strjoin(cmd,command->name);
         if(!access(join,X_OK)){
-            free(cmd);
             cmd = join;
             exec = 1;
             break;
@@ -123,18 +129,17 @@ void simple_command(t_command *command) {
             command->name = str;
             execute_built_in(command);
             exit(0);
-            free(str);
         }
         else
         {
             argv = get_argv(command,command->argc);
             if(exec)
                 execve(cmd,argv,environ);
-            else
+            else{
                 execve(command->name,argv,environ);
+            }
         }
     }
     else
         wait(NULL);
-        free(command);
 }

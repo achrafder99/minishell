@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_signals.c                                   :+:      :+:    :+:   */
+/*   check_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 01:03:07 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/03 18:08:47 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/03 04:40:46 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/03 04:41:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../minishell.h"
 
-void    handle_signals(int sign)
-{
-    char    *username;
-    char    *full_username;
-
-    username = ft_strjoin(getenv("USER"), "@:");
-    full_username = ft_strjoin(username, "user > ");
-    if (sign == SIGINT)
-    {
-        write(1, "\n",1 );
-        write(1, full_username, ft_strlen(full_username));
-    }
-    free(username);
-    free(full_username);
+int check_type(char *type){
+    return (
+    !ft_strcmp(type,"REDIRECT_in") 
+    || !ft_strcmp(type,"REDIRECT_out")
+    || !ft_strcmp(type,"APPEND_MODE")
+    || !ft_strcmp(type,"HEREDOC"));
 }

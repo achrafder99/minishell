@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*   init_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/04 01:59:31 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/03 04:41:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void execute_built_in(t_command *cmd){
-	
-	if(!ft_strcmp(cmd->name,"cd"))
-		cd(cmd);
-	else if(!ft_strcmp(cmd->name,"pwd"))
-		pwd(cmd);
-	else if(!ft_strcmp(cmd->name,"echo"))
-		echo(cmd);
-	// else if(!ft_strcmp(cmd->name,"export"))
-	// 	export(cmd);
+t_command   *init_command(t_command *command,char *cut_str)
+{
+    command = (t_command*) malloc(sizeof(t_command));
+    if(!command){
+        return (NULL);
+        exit(1);
+    }
+    command->name = cut_str;
+    command->argc = 0;
+    command->args = NULL;
+    command->infile = NULL;
+    command->outfile = NULL;
+    command->append_mode = NULL;
+    command->heredoc = NULL;
+    command->end_heredoc = NULL;
+    return (command);
 }

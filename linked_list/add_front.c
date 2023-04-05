@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_signals.c                                   :+:      :+:    :+:   */
+/*   add_front.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 01:03:07 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/03 18:08:47 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/04 22:47:39 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/04 22:47:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../minishell.h"
 
-void    handle_signals(int sign)
+void	ft_lstadd_front(t_components **lst, t_components *new)
 {
-    char    *username;
-    char    *full_username;
-
-    username = ft_strjoin(getenv("USER"), "@:");
-    full_username = ft_strjoin(username, "user > ");
-    if (sign == SIGINT)
-    {
-        write(1, "\n",1 );
-        write(1, full_username, ft_strlen(full_username));
-    }
-    free(username);
-    free(full_username);
+	new->next = *lst;
+	*lst = new;
 }

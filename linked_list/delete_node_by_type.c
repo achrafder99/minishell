@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*   delete_node_by_type.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/04 01:59:31 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/04 22:48:13 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/04 22:49:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void execute_built_in(t_command *cmd){
-	
-	if(!ft_strcmp(cmd->name,"cd"))
-		cd(cmd);
-	else if(!ft_strcmp(cmd->name,"pwd"))
-		pwd(cmd);
-	else if(!ft_strcmp(cmd->name,"echo"))
-		echo(cmd);
-	// else if(!ft_strcmp(cmd->name,"export"))
-	// 	export(cmd);
+void delete_node_by_type(t_components **head, char *type) 
+{
+    t_components *prev;
+    t_components *curr;
+    
+    prev = NULL;
+    curr = *head;
+
+    while (curr != NULL && strcmp(curr->type.type, type) != 0)
+    {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr == NULL)
+        return;
+
+    if (prev == NULL) 
+        *head = curr->next;
+    else 
+        prev->next = curr->next;
+    free(curr);
 }

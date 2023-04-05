@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 01:26:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 20:48:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,14 @@ int check_is_command(t_components *tokens)
 
 void parser(t_components *tokens,t_info *info)
 {   
+    return;
     t_components *node;
     node = tokens;
     // while (node != NULL) 
-    //     {
-    //         printf("Token (%s) Type (%s)\n",node->token,node->type.type);
-    //         node = node->next;
-    //     }
+    // {
+    //     printf("Token (%s) Type (%s)\n",node->token,node->type.type);
+    //     node = node->next;
+    // }
     // return;
     int fd;
     t_command* command = NULL;
@@ -166,7 +167,7 @@ void parser(t_components *tokens,t_info *info)
                 close(fd);
             } 
         }
-        else if(!ft_strcmp(tokens->type.type,"REDIRECT_in"))
+        if(!ft_strcmp(tokens->type.type,"REDIRECT_in"))
         {
             fd = open(tokens->next->token,O_RDONLY,0777);
             if(fd == -1){
@@ -176,7 +177,7 @@ void parser(t_components *tokens,t_info *info)
             }
             close(fd);
         }
-        else if(!ft_strcmp(tokens->type.type,"APPEND_MODE"))
+        if(!ft_strcmp(tokens->type.type,"APPEND_MODE"))
         {
             while (node != NULL)
             {

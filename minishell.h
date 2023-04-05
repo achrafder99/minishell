@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/04 22:48:40 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 20:20:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct t_fds
+{
+    int fd_in;
+	int fd_out;
+	int fd_append;
+
+}   t_fds;
 
 typedef struct t_info{
     char *pwd;

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 01:29:24 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 05:43:13 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ void	lexer(char *input, t_components **head, t_info *info)
 	spliting = split_input(input);
 	if (!spliting)
 		return ;
-
 	if(!ft_strcmp(spliting[0],"<<") || check_is_redirection(spliting[0]))
 	{
+		printf("Here1\n");
 		int flags;
 		flags = 0;
 		if(!ft_strcmp(spliting[0],"<<"))
@@ -120,6 +120,7 @@ void	lexer(char *input, t_components **head, t_info *info)
 		}
 		else if (!ft_strcmp(spliting[0],"<"))
 		{
+			printf("Here3\n");
 			push(head, spliting[0], "REDIRECT_in");
 			i = 1;
 			if(spliting[1] != NULL && ft_strcmp(spliting[1],">"))
@@ -158,6 +159,7 @@ void	lexer(char *input, t_components **head, t_info *info)
 		}
 		else if (!ft_strcmp(spliting[0],">>"))
 		{
+			printf("Here4\n");
 			push(head, spliting[0], "APPEND_MODE");
 			i = 1;
 			if(spliting[1] != NULL && ft_strcmp(spliting[1],">>")){

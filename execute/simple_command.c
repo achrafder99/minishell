@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 02:00:03 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 01:15:44 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/05 20:41:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,13 @@ char *to_lower(char *input){
 
 void simple_command(t_command *command)
 {
+    t_fds fds;
+    // printf("Command name :%s\n",command->name);
+    // printf("outfile name :%s\n",command->outfile);
+    // printf("infile name :%s\n",command->infile);
+    // return;
     int i;
     i = 0;
-    
     int flags;
     int redirect_out;
     int redirect_in;
@@ -64,24 +68,24 @@ void simple_command(t_command *command)
     }
     if(check_is_built_in(command->name))
         flags = 1;
-    if(is_redirect(command)){
-        if(command->outfile){
-            fd = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);
+    if(is_redirect(command))
+    {
+        if(command->outfile)
+        {
+            fds.fd_out = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);
             redirect_out = 1;
         }
-        else if(command->append_mode){
-            fd = open(command->append_mode,O_WRONLY | O_CREAT | O_APPEND,0777);
-            append = 1;
-        }
-        else if(command->infile){
-            fd = open(command->infile,O_RDONLY,0777);
+        if(command->infile){
+            fds.fd_in = open(command->infile,O_RDONLY,0777);
             redirect_in = 1;
         }
-        if(fd == -1){
-            perror("");
-            exit(1);
+        if(command->append_mode)
+        {
+            fds.fd_append = open(command->append_mode,O_WRONLY | O_CREAT | O_APPEND,0777);
+            append = 1;
         }
     }
+    
     pid_t fid;
     char *cmd;
     char **argv;
@@ -108,21 +112,35 @@ void simple_command(t_command *command)
         printf("Error\n");
         return;
     }
-    if(fid == 0){
+    if(fid == 0)
+    {
+        if(redirect_in){
+            if(dup2(fds.fd_in,STDIN_FILENO) == -1)
+            {
+                perror("error occurred.");
+                exit(1);
+            }
+            close(fds.fd_in);
+        }
         if (redirect_out || append)
         { 
-            if(dup2(fd,STDOUT_FILENO) == -1){
-                perror("error occurred.");
-                exit(1);
+            if(redirect_out)
+            {
+                if(dup2(fds.fd_out,STDOUT_FILENO) == -1)
+                {
+                    perror("error occurred.");
+                    exit(1);
+                }
+                close(fds.fd_out);
             }
-            close(fd);
-        }
-        else if(redirect_in){
-            if(dup2(fd,STDIN_FILENO) == -1){
-                perror("error occurred.");
-                exit(1);
+            else{
+                if(dup2(fds.fd_append,STDOUT_FILENO) == -1)
+                {
+                    perror("error occurred.");
+                    exit(1);
+                }
+                close(fds.fd_append);
             }
-            close(fd);
         }
         if (flags)
         {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:57:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 18:14:47 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,17 @@ typedef struct t_rowandcolumn
 	int				length;
 }					t_rowsandcolumns;
 
+typedef struct s_node
+{
+    char   *data;
+    struct s_node *next;
+}t_node;
+
+typedef struct s_lst
+{
+    t_node *top;
+}t_lst;
+
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
@@ -101,19 +112,19 @@ void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
-void				lexer(char *input, t_components **head,t_info *info);
+void				lexer(char *input, t_components **head,t_info *info, t_lst *env, t_lst *exp);
 void				echo(t_command *cmd);
 void				cd(t_command *cmd);
 void				pwd(t_command *cmd);
 int					get_size(t_components *tokens);
 void				exit_shell(void);
-void 				parser(t_components *tokens,t_info *info);
+void 				parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 char				*ft_strstr(const char *haystack, const char *needle);
 void 				handle_signals(int sign);
 char				*cut_string(char *s);
-void				simple_command(t_command *command);
-void				execute_built_in(t_command *cmd);
+void				simple_command(t_command *command, t_lst *env, t_lst *exp);
+void				execute_built_in(t_command *cmd, t_lst *env, t_lst *exp);
 char 				**get_argv(t_command *command,int number_arg);
 int					is_redirect(t_command *command);
 int					check_is_built_in(char *cmd);
@@ -135,4 +146,16 @@ void 				append_mode(char **spliting,int *i,t_components **head);
 void 				here_doc(char **spliting,int *i,t_components **head);
 void				redirect_componenets(char** spliting, int* i, t_components** head);
 void				push_component(t_components **head, char *type, char **spliting, int *i);
+void    push_list(t_lst *lst, char **env);
+t_node	*ft_new_node(char *content);
+void	ft_lstadd_back(t_lst *lst, t_node *new);
+t_node	*ft_lstlast(t_lst *lst);
+t_lst	*creat_list();
+t_lst	*get_export_env(char **env);
+int	get_env_size(char **env);
+void	ft_export(t_command *cmd, t_lst *lst);
+t_lst *sort_env(char **env);
+void    ft_env(char **env);
+t_lst   *get_env(char **env);
+t_lst   *get_env(char **env);
 #endif

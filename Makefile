@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
+#    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/02 04:44:16 by adardour         ###   ########.fr        #
+#    Updated: 2023/04/05 15:20:35 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ includes.c \
 ./toknize/push_token.c \
 ./parse_and_lexer/redirection.c ./parse_and_lexer/redirect_componenets.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c \
-./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c \
+./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/export.c ./built_in/ft_env.c ./built_in/env_utils.c\
 ./execute/simple_command.c ./execute/execute_built_in.c \
 ./free/free_things.c ./free/free_node.c \
 ./check/check_command.c ./check/check_is_space.c ./check/check_quotes.c ./check/check_option.c \

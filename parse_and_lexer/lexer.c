@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:58:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 18:09:18 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	check_is_redirection(char *symbol)
 		|| !ft_strcmp(symbol, ">"));
 }
 
-void	lexer(char *input, t_components **head, t_info *info)
+void	lexer(char *input, t_components **head, t_info *info, t_lst *env, t_lst *exp)
 {
 	char	**spliting;
 	int		i;
@@ -87,7 +87,7 @@ void	lexer(char *input, t_components **head, t_info *info)
 		i++;
 	}
 	free_things(spliting);
-	parser(*head, info);
+	parser(*head, info, env, exp);
 	free_node(*head);
 	*head = NULL;
 }

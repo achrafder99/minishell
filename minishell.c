@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 18:18:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_input(void)
 	return (input);
 }
 
-void	process_input(char *input, t_info *info)
+void	process_input(char *input, t_info *info, t_lst *env, t_lst *exp)
 {
 	t_components	*head;
 
@@ -74,19 +74,23 @@ void	process_input(char *input, t_info *info)
 		return ;
 	head = NULL;
 	add_history(input);
-	lexer(input, &head, info);
+	lexer(input, &head, info, env, exp);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_info	info;
 	char	*input;
+	t_lst	*env;
+	t_lst	*exp;
 
+	env = get_env(envp);
+	exp = get_export_env(envp);
 	signal(SIGINT, handle_signals);
 	while (1)
 	{
 		input = get_input();
-		process_input(input, &info);
+		process_input(input, &info, env, exp);
 		free(input);
 		input = NULL;
 	}

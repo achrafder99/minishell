@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:48:20 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 19:37:17 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char *to_lower(char *input){
     return (str);
 }
 
-void simple_command(t_command *command) {
+void simple_command(t_command *command, t_lst *env, t_lst *exp) {
 
     int i;
     i = 0;
@@ -56,7 +56,12 @@ void simple_command(t_command *command) {
     int fd1;
     str = to_lower(command->name);
     if(check_is_built_in(command->name))
-        flags = 1;
+    {
+        execute_built_in(command, env, exp);
+        return ;
+    }
+        // flags = 1;
+        
     if(is_redirect(command)){
         if(command->outfile){
             fd = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);
@@ -121,7 +126,7 @@ void simple_command(t_command *command) {
         if (flags)
         {
             command->name = str;
-            execute_built_in(command);
+            execute_built_in(command, env, exp);
             exit(0);
             free(str);
         }

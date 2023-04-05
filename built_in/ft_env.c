@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 19:57:24 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 18:13:44 by aalami           ###   ########.fr       */
+/*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
+/*   Updated: 2023/04/05 15:02:26 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void execute_built_in(t_command *cmd, t_lst *env, t_lst *exp){
-	
-	if(!ft_strcmp(cmd->name,"cd"))
-		cd(cmd);
-	else if(!ft_strcmp(cmd->name,"pwd"))
-		pwd(cmd);
-	else if(!ft_strcmp(cmd->name,"echo"))
-		echo(cmd);
-	else if(!ft_strcmp(cmd->name,"export"))
-		ft_export(cmd, exp);
+t_lst   *get_env(char **env)
+{
+	t_lst   *env_lst;
+
+	env_lst = creat_list();
+	push_list(env_lst, env);
+	return (env_lst);
+}
+
+void    ft_env(char **env)
+{
+   t_lst	*env_lst;
+	t_node *tmp;
+
+	env_lst = get_env(env);
+	tmp = env_lst->top;
+	while (tmp)
+	{
+		printf("%s\n",tmp->data);
+		tmp = tmp->next;
+	}
 }

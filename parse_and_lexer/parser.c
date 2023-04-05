@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:36:43 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/05 18:10:00 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void parser(t_components *tokens,t_info *info){
+void parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp){
 
 	t_components *node;
 	node = tokens;
@@ -143,7 +143,7 @@ void parser(t_components *tokens,t_info *info){
 	}
 	if (command != NULL) {
         if (!pipe_line) {
-			simple_command(command);
+			simple_command(command, env, exp);
 			if(command->argc > 0)
 				free_things(command->args);
 			return;

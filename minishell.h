@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 18:14:47 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:26:50 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,15 @@ typedef struct t_rowandcolumn
 
 typedef struct s_node
 {
-    char   *data;
+    char   *key;
+    char   *value;
     struct s_node *next;
 }t_node;
 
 typedef struct s_lst
 {
     t_node *top;
+	int	flag;
 }t_lst;
 
 char				*ft_strjoin(char const *s1, char const *s2);
@@ -147,7 +149,7 @@ void 				here_doc(char **spliting,int *i,t_components **head);
 void				redirect_componenets(char** spliting, int* i, t_components** head);
 void				push_component(t_components **head, char *type, char **spliting, int *i);
 void    push_list(t_lst *lst, char **env);
-t_node	*ft_new_node(char *content);
+t_node	*ft_new_node(char *key, char *value);
 void	ft_lstadd_back(t_lst *lst, t_node *new);
 t_node	*ft_lstlast(t_lst *lst);
 t_lst	*creat_list();
@@ -155,7 +157,8 @@ t_lst	*get_export_env(char **env);
 int	get_env_size(char **env);
 void	ft_export(t_command *cmd, t_lst *lst);
 t_lst *sort_env(char **env);
-void    ft_env(char **env);
+void    ft_env(t_lst *env_lst);
 t_lst   *get_env(char **env);
 t_lst   *get_env(char **env);
+char	*get_value(char *str);
 #endif

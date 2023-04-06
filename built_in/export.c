@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/05 19:46:48 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:44:45 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,46 +82,107 @@ t_lst *sort_env(char **env)
 	push_list(exp, env);
     return (exp);
 }
+int	if_key_exist(char *key, t_lst *lst)
+{
+	t_node	*tmp;
+
+	tmp = lst->top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+			return(1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+void	update_value(char **split, t_lst *lst, char *str)
+{
+	t_node	*tmp;
+
+	tmp = lst->top;
+	while (tmp)
+	{
+		if (!ft_strcmp(split[0],tmp->key))
+			break;
+		tmp = tmp->next;
+	}
+	if (str)
+		tmp->value = strdup(get_value(str));
+	else
+		tmp->value = strdup("\0");
+}
 void	add_key_with_value(t_lst *lst, char *str)
 {
-	char	*ptr;
+	char	**split;
 	t_node *new;
 
-	ptr = ft_strjoin("declare -x ","\"");
-	ptr = ft_strjoin(ptr, str);
-	ptr = ft_strjoin(ptr, "\"");
-	new = ft_new_node(ptr);
+	split = ft_split(str, '=');
+	if (if_key_exist(split[0], lst))
+		update_value(split, lst, str);
+	else
+		new = ft_new_node(split[0],get_value(str));
 	ft_lstadd_back(lst, new);
+}
+void	add_key_with_no_value(t_lst *lst, char *str)
+{
+	char	**split;
+	t_node	*new;
+
+	split = ft_split(str, '=');
+	if (if_key_exist(split[0], lst))
+		update_value(split, lst, NULL);
+	else
+		new = ft_new_node(split[0],"\0");
+	ft_lstadd_back(lst, new);
+}
+void	add_key(t_lst *exp, char *str)
+{
+	t_node	*new;
+	if (!if_key_exist(str, exp))
+	{	
+		new = ft_new_node(str, NULL);
+		ft_lstadd_back(exp, new);
+	}
 }
 void	if_valid_identifier(char **arg, t_lst *exp)
 {
 	int	i;
 	int	j;
-printf("RRR");
+	int invalid;
+
 	i = 0;
 	while (arg[i])
 	{
 		j = 0;
-		while (arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122)
-				j++;
-		if(arg[i][j] == '=' && j!=0)
+		invalid = 0;
+		while (arg[i][j])
 		{
-			if (arg[i][j + 1])
-			{	add_key_with_value(exp, arg[i]);
-				return;}
-			// {
-			// 	printf("this is value :%s\n", arg[i] + j + 1);
-			// 	return;
-			// }
-		}
+			while ((arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122) || (arg[i][j] >= 65 && arg[i][j] <= 90))
+				j++;
+			if(arg[i][j] == '=' && j!=0)
+			{
+				if (arg[i][j + 1])
+					add_key_with_value(exp, arg[i]);
+					
+				else
+					add_key_with_no_value(exp, arg[i]);
+				j += ft_strlen(arg[i] + j + 1);
+			}
 			
-		else if(arg[i][j] == '\0')
-			printf("key with no value\n");
-		else
-			printf("bash: export: '%s': not a valid identifier\n", arg[i]);
+			else if(arg[i][j] == '\0')
+			{
+				add_key(exp, arg[i]);
+				break;
+			}
+			else
+				invalid ++;
+			j++;
 		}
+		if (invalid != 0)
+			printf("bash: export: '%s': not a valid identifier\n", arg[i]);
 		i++;
 	}
+}
 
 
 // void	export_variable(t_command *cmd)
@@ -136,12 +197,18 @@ void	ft_export(t_command *cmd, t_lst *lst)
 		if_valid_identifier(cmd->args, lst);
    else
    {
-   tmp = lst->top;
-	while (tmp)
-	{
-		printf ("%s\n",tmp->data);
-		tmp = tmp->next;
-	}
+   	tmp = lst->top;
+		while (tmp)
+		{
+			if (tmp->value == NULL)
+			{
+				if (!lst->flag)
+					printf ("declare -x %s\n",tmp->key);
+			}
+			else	
+				printf ("declare -x %s=\"%s\"\n",tmp->key, tmp->value);
+			tmp = tmp->next;
+		}
    }
 	// else
 	// {

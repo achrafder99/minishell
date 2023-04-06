@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/05 15:02:26 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:27:30 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,18 @@ t_lst   *get_env(char **env)
 
 	env_lst = creat_list();
 	push_list(env_lst, env);
+	env_lst->flag = 0;
 	return (env_lst);
 }
 
-void    ft_env(char **env)
+void    ft_env(t_lst *env_lst)
 {
-   t_lst	*env_lst;
 	t_node *tmp;
 
-	env_lst = get_env(env);
 	tmp = env_lst->top;
 	while (tmp)
 	{
-		printf("%s\n",tmp->data);
+		printf("%s=%s\n",tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 19:37:17 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:51:03 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,14 @@ void simple_command(t_command *command, t_lst *env, t_lst *exp) {
         }
         i++;
     }
+    exp->flag = 1;
     fid = fork();
     if(fid == -1){
         printf("Error\n");
         return;
     }
     if(fid == 0){
+        
         if (redirect_out || append)
         { 
             if(dup2(fd,STDOUT_FILENO) == -1){

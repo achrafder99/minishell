@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/05 18:18:41 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:44:34 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ t_lst	*get_export_env(char **env)
 	ret = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
 	while (env[i])
 	{
-			ret[i] = ft_strjoin("declare -x ",env[i]);
+			ret[i] = strdup(env[i]);
 		i++;
 	}
 	ret[i] = NULL;
 	exp = sort_env(ret);
+	exp->flag = 0;
 	return (exp);
 }
 t_lst	*creat_list()
@@ -68,27 +69,50 @@ void	ft_lstadd_back(t_lst *lst, t_node *new)
 	tmp->next = new;
 	new->next = 0;
 }
-t_node	*ft_new_node(char *content)
+
+t_node	*ft_new_node(char *key, char *value)
 {
 	t_node	*node;
 
 	node = malloc(sizeof(t_node));
 	if (!(node))
 		return (0);
-	node->data = strdup(content);
+	node->key = strdup(key);
+	if (!value)
+		node->value = NULL;
+	else
+		node->value = strdup(value);
 	node->next = NULL;
 	return (node);
+}
+char	*get_value(char *str)
+{
+	int i;
+
+	i = 0;
+	while(str)
+	{
+		if (str[i] == '=')
+			return (str + i + 1);
+		i++;
+	}
+	return (0);
 }
 void    push_list(t_lst *lst, char **env)
 {
     int i;
     t_node *tmp;
+	char **split;
     
     i = 0;
     while (env[i])
     {
-        tmp = ft_new_node(env[i]);
-        ft_lstadd_back(lst, tmp);
-        i++;
+		split = ft_split(env[i],'=');
+		if (split[2])
+        	tmp = ft_new_node(split[0], get_value(env[i]));
+		else
+      	tmp = ft_new_node(split[0], split[1]);
+      ft_lstadd_back(lst, tmp);
+      i++;
     }
 }

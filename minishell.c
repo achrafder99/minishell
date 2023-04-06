@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 18:18:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/06 22:08:35 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	t_lst	*env;
 	t_lst	*exp;
-
 	env = get_env(envp);
 	exp = get_export_env(envp);
+	printf("%d\n",exp->flag);
 	signal(SIGINT, handle_signals);
 	while (1)
 	{

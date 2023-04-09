@@ -6,12 +6,12 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/06 22:08:35 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:43:20 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+int child;
 char	*display_name(void)
 {
 	char	*username;
@@ -60,7 +60,7 @@ char	*get_input(void)
 	return (input);
 }
 
-void	process_input(char *input, t_info *info, t_lst *env, t_lst *exp)
+void	process_input(char *input, t_info *info, t_lst *env, t_lst *exp, int child)
 {
 	t_components	*head;
 
@@ -74,7 +74,7 @@ void	process_input(char *input, t_info *info, t_lst *env, t_lst *exp)
 		return ;
 	head = NULL;
 	add_history(input);
-	lexer(input, &head, info, env, exp);
+	lexer(input, &head, info, env, exp, child);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -85,12 +85,12 @@ int	main(int argc, char **argv, char **envp)
 	t_lst	*exp;
 	env = get_env(envp);
 	exp = get_export_env(envp);
-	printf("%d\n",exp->flag);
+	printf("%d\n",child);
 	signal(SIGINT, handle_signals);
 	while (1)
 	{
 		input = get_input();
-		process_input(input, &info, env, exp);
+		process_input(input, &info, env, exp,child);
 		free(input);
 		input = NULL;
 	}

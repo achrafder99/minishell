@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/06 21:26:50 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:45:18 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,18 +114,18 @@ void				display_env(char **env);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
-void				lexer(char *input, t_components **head,t_info *info, t_lst *env, t_lst *exp);
+void				lexer(char *input, t_components **head,t_info *info, t_lst *env, t_lst *exp, int child);
 void				echo(t_command *cmd);
 void				cd(t_command *cmd);
 void				pwd(t_command *cmd);
 int					get_size(t_components *tokens);
 void				exit_shell(void);
-void 				parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp);
+void 				parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp, int child);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 char				*ft_strstr(const char *haystack, const char *needle);
 void 				handle_signals(int sign);
 char				*cut_string(char *s);
-void				simple_command(t_command *command, t_lst *env, t_lst *exp);
+void				simple_command(t_command *command, t_lst *env, t_lst *exp, int child);
 void				execute_built_in(t_command *cmd, t_lst *env, t_lst *exp);
 char 				**get_argv(t_command *command,int number_arg);
 int					is_redirect(t_command *command);

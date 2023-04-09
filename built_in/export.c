@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/06 21:44:45 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/09 02:45:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,45 +95,65 @@ int	if_key_exist(char *key, t_lst *lst)
 	}
 	return (0);
 }
-void	update_value(char **split, t_lst *lst, char *str)
+void	update_value(char **split, t_lst *lst, char *str, int flag)
 {
 	t_node	*tmp;
 
 	tmp = lst->top;
+	if (flag)
+		split[0] = ft_strtrim(split[0], "+");
 	while (tmp)
 	{
 		if (!ft_strcmp(split[0],tmp->key))
 			break;
 		tmp = tmp->next;
 	}
-	if (str)
-		tmp->value = strdup(get_value(str));
+	if (str && flag)
+			tmp->value = ft_strjoin(tmp->value, get_value(str));
+	else if (str && !flag)
+	{
+			tmp->value = strdup(get_value(str));}
 	else
 		tmp->value = strdup("\0");
 }
-void	add_key_with_value(t_lst *lst, char *str)
+void	add_key_with_value(t_lst *lst, char *str, char **split)
 {
-	char	**split;
 	t_node *new;
+	int	flag;
 
-	split = ft_split(str, '=');
+	flag = 0;
+	if (ft_strchr(split[0], '+'))
+	{
+		split[0] = ft_strtrim(split[0], "+");
+		flag = 1;
+	}
 	if (if_key_exist(split[0], lst))
-		update_value(split, lst, str);
+		update_value(split, lst, str, flag);
 	else
+	{
 		new = ft_new_node(split[0],get_value(str));
-	ft_lstadd_back(lst, new);
+		ft_lstadd_back(lst, new);
+	}
 }
-void	add_key_with_no_value(t_lst *lst, char *str)
-{
-	char	**split;
-	t_node	*new;
 
-	split = ft_split(str, '=');
+void	add_key_with_no_value(t_lst *lst, char *str, char **split)
+{
+	t_node	*new;
+	int	flag;
+
+	flag = 0;
+	if (ft_strchr(split[0], '+'))
+	{
+		split[0] = ft_strtrim(split[0], "+");
+		flag = 1;
+	}
 	if (if_key_exist(split[0], lst))
-		update_value(split, lst, NULL);
+		update_value(split, lst, NULL, flag);
 	else
-		new = ft_new_node(split[0],"\0");
-	ft_lstadd_back(lst, new);
+		{
+			new = ft_new_node(split[0],"\0");
+			ft_lstadd_back(lst, new);
+		}
 }
 void	add_key(t_lst *exp, char *str)
 {
@@ -144,17 +164,39 @@ void	add_key(t_lst *exp, char *str)
 		ft_lstadd_back(exp, new);
 	}
 }
+void	append_value(t_lst *lst, char *str, char **split)
+{
+	t_node	*new;
+
+	// split[0] = ft_strtrim(split[0], "+");
+	if (if_key_exist(ft_strtrim(split[0], "+"), lst))
+	{
+		if (split[1])
+			update_value(split, lst, str, 1);
+		// else
+		// 	add_key(lst, str);
+	}
+	else
+	{
+		if (!split[1])
+			add_key_with_no_value(lst, str, split);
+		else
+			add_key_with_value(lst, str, split);
+	}
+}
 void	if_valid_identifier(char **arg, t_lst *exp)
 {
 	int	i;
 	int	j;
 	int invalid;
+	char	**split;
 
 	i = 0;
 	while (arg[i])
 	{
 		j = 0;
 		invalid = 0;
+		split = ft_split(arg[i], '=');
 		while (arg[i][j])
 		{
 			while ((arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122) || (arg[i][j] >= 65 && arg[i][j] <= 90))
@@ -162,20 +204,29 @@ void	if_valid_identifier(char **arg, t_lst *exp)
 			if(arg[i][j] == '=' && j!=0)
 			{
 				if (arg[i][j + 1])
-					add_key_with_value(exp, arg[i]);
+					add_key_with_value(exp, arg[i], split);
 					
 				else
-					add_key_with_no_value(exp, arg[i]);
-				j += ft_strlen(arg[i] + j + 1);
+					add_key_with_no_value(exp, arg[i], split);
+				break;
+				// printf("%d\n", j);
 			}
-			
+			else if (arg[i][j] == '+' && arg[i][j + 1] == '=' && j!=0)
+			{
+				append_value(exp, arg[i], split);
+				break;
+				// j += ft_strlen(arg[i] + j + 2);
+			}
 			else if(arg[i][j] == '\0')
 			{
 				add_key(exp, arg[i]);
 				break;
 			}
 			else
+			{
 				invalid ++;
+				break;
+			}
 			j++;
 		}
 		if (invalid != 0)

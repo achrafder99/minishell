@@ -6,13 +6,13 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:52:46 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 18:10:00 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:44:54 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp){
+void parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp, int child){
 
 	t_components *node;
 	node = tokens;
@@ -143,7 +143,7 @@ void parser(t_components *tokens,t_info *info, t_lst *env, t_lst *exp){
 	}
 	if (command != NULL) {
         if (!pipe_line) {
-			simple_command(command, env, exp);
+			simple_command(command, env, exp, child);
 			if(command->argc > 0)
 				free_things(command->args);
 			return;

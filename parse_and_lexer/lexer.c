@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/05 18:09:18 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:44:05 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	check_is_redirection(char *symbol)
 		|| !ft_strcmp(symbol, ">"));
 }
 
-void	lexer(char *input, t_components **head, t_info *info, t_lst *env, t_lst *exp)
+void	lexer(char *input, t_components **head, t_info *info, t_lst *env, t_lst *exp, int child)
 {
 	char	**spliting;
 	int		i;
@@ -87,7 +87,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_lst *env, t_lst *ex
 		i++;
 	}
 	free_things(spliting);
-	parser(*head, info, env, exp);
+	parser(*head, info, env, exp, child);
 	free_node(*head);
 	*head = NULL;
 }

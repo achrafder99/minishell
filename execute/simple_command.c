@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/06 21:51:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:47:18 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char *to_lower(char *input){
     return (str);
 }
 
-void simple_command(t_command *command, t_lst *env, t_lst *exp) {
+void simple_command(t_command *command, t_lst *env, t_lst *exp, int child) {
 
     int i;
     i = 0;
@@ -102,8 +102,9 @@ void simple_command(t_command *command, t_lst *env, t_lst *exp) {
         }
         i++;
     }
-    exp->flag = 1;
+    // exp->flag = 1;
     fid = fork();
+        child = 1;
     if(fid == -1){
         printf("Error\n");
         return;

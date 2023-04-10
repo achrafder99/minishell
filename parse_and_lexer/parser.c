@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 02:49:20 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:45:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	without_command(t_components *node, t_info *info)
 	{
 		if (node->next == NULL)
 			break ;
+		if (!ft_strcmp(node->type.type, "HEREDOC"))
+			open_heredoc(node->next->token);
 		info->status_code = open_fds(node->type.type, node->next->token, &fd);
 		close(fd);
 		node = node->next;
@@ -82,6 +84,7 @@ void	parser(t_components *tokens, t_info *info, char **env)
 	t_components	*node;
 	t_command		*command;
 	t_piped			*pipe_line;
+
 
 	node = tokens;
 	if (handle_errors(tokens))
@@ -95,7 +98,11 @@ void	parser(t_components *tokens, t_info *info, char **env)
 		while (node != NULL)
 		{
 			if (ft_strcmp(node->type.type, "PIPE"))
-				handle_command(node, &command, info);
+			{
+				if (!ft_strcmp(handle_command(node, \
+					&command, info), "ERROR_OPEN"))
+					return ;
+			}
 			else
 				handle_pipe(node, &pipe_line, &command);
 			node = node->next;

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 21:54:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 07:05:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ int	check_command(char *command)
 	while (spliting[i] != NULL)
 	{
 		if (from_path(spliting[i], command))
+		{
+			free_things(spliting);
 			return (1);
+		}
 		i++;
 	}
 	free_things(spliting);

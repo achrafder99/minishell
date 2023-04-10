@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_command.c                                     :+:      :+:    :+:   */
+/*   open_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 07:16:10 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/10 20:27:55 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/10 20:41:16 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_command	*init_command(t_command *command, char *cut_str)
+void	open_heredoc(char *end)
 {
-	command = (t_command *) malloc(sizeof(t_command));
-	if (!command)
+	char	*read_the_line;
+	int		fd;
+
+	while (1)
 	{
-		return (NULL);
-		exit(1);
+		read_the_line = readline("> ");
+		fd = open("/tmp/heredoc", O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (fd == -1)
+		{
+			perror("");
+			return ;
+		}
+		if (!strncmp(end, read_the_line, ft_strlen(read_the_line) - 1))
+			break ;
+		write(fd, read_the_line, ft_strlen(read_the_line));
+		write(fd, "\n", 1);
 	}
-	command->name = cut_str;
-	command->argc = 0;
-	command->args = NULL;
-	command->infile = NULL;
-	command->outfile = NULL;
-	command->append_mode = NULL;
-	command->heredoc = NULL;
-	command->end_heredoc = NULL;
-	command->last = NULL;
-	return (command);
+	unlink("/tmp/heredoc");
+	close(fd);
 }

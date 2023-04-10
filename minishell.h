@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 02:35:08 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:28:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,5 @@ int				number_of_star(char **argv);
 int				matched_file(char *pattern);
 void			print_env(char *string, t_info *info);
 void			ft_put_echo(char *string);
+void			open_heredoc(char *end);
 #endif

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 22:05:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:27:29 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_append(t_command **command, int *fd, t_components *node)
 	(*command)->last->type = ft_strdup(node->type.type);
 }
 
-void	handle_redirect(t_command **command, \
+int	handle_redirect(t_command **command, \
 t_components *node, int *fd, t_info *info)
 {
 	if ((*command)->last == NULL)
@@ -33,10 +33,7 @@ t_components *node, int *fd, t_info *info)
 	if (!ft_strcmp(node->type.type, "REDIRECT_in"))
 	{
 		if (open_in(*command, node->next->token) == 1)
-		{
-			info->status_code = 1;
-			return ;
-		}
+			return (info->status_code = 1);
 		(*command)->last->last_file = ft_strdup(node->next->token);
 		(*command)->last->type = ft_strdup(node->type.type);
 	}
@@ -48,6 +45,7 @@ t_components *node, int *fd, t_info *info)
 		(*command)->last->last_file = ft_strdup(node->next->token);
 		(*command)->last->type = ft_strdup(node->type.type);
 	}
+	return (0);
 }
 
 char	*handle_command(t_components *node, t_command **command, t_info *info)
@@ -65,11 +63,13 @@ char	*handle_command(t_components *node, t_command **command, t_info *info)
 	else if (check_type(node->type.type))
 	{
 		if (ft_strcmp(node->token, "<") || ft_strcmp(node->token, ">"))
-			handle_redirect(command, node, &fd, info);
+			if (handle_redirect(command, node, &fd, info) == 1)
+				return ("ERROR_OPEN");
 		if (!ft_strcmp(node->token, ">>"))
 			handle_append(command, &fd, node);
 		if (!ft_strcmp(node->type.type, "HEREDOC"))
 		{
+			open_heredoc(node->next->token);
 			(*command)->heredoc = cut_str;
 			(*command)->end_heredoc = ft_strdup(node->next->token);
 		}

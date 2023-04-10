@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:31:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 20:31:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:25:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ int	handle_redirect_errors(t_components *node)
 	if (!ft_strcmp(node->type.type, "REDIRECT_in")
 		|| !ft_strcmp(node->type.type, "REDIRECT_out")
 		|| !ft_strcmp(node->type.type, "APPEND_MODE")
-		|| !ft_strcmp(node->type.type, "HEREDOC"))
+		|| !ft_strcmp(node->type.type, "HEREDOC") 
+		|| !ft_strcmp(node->type.type, "PIPE"))
 	{
-		if (node->next == NULL)
+		if (node->next == NULL || !ft_strcmp(node->next->token, ">>") \
+		|| !ft_strcmp(node->next->token, "<<") \
+		|| !ft_strcmp(node->next->token, ">") \
+		|| !ft_strcmp(node->next->token,"<") \
+		|| !ft_strcmp(node->next->token, "|"))
 		{
 			error = "tsh: syntax error near unexpected token `newline'\n";
 			write(2, error, ft_strlen(error));

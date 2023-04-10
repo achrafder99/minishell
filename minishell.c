@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 06:18:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:57:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	fflush(stdout);
 }
 
 char	*display_name(void)
@@ -61,24 +62,29 @@ void	process_input(char *input, char **env)
 		exit(1);
 	if (input == NULL)
 	{
-		write(1, " ", 1);
+		write(1, "", 1);
 		write(1, "exit\n", 5);
 		exit(0);
 	}
 	else if (strlen(input) == 0)
+	{
+		free(info);
 		return ;
+	}
 	head = NULL;
 	add_history(input);
 	lexer(input, &head, info, env);
 	printf("%d\n", info->status_code);
 	free_node(head);
 	head = NULL;
+	free(info);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 
+	rl_catch_signals = 0;
 	signal(SIGINT, sigint_handler);
 	while (1)
 	{

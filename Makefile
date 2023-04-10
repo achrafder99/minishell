@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/10 06:07:59 by adardour         ###   ########.fr        #
+#    Updated: 2023/04/10 20:29:12 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ includes.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c ./parse_and_lexer/piped.c ./parse_and_lexer/init_command.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/add_args.c ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
-./parse_and_lexer/handle_pipe.c \
+./parse_and_lexer/handle_pipe.c ./parse_and_lexer/open_heredoc.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c \
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/open_file.c ./execute/get_cmd.c \
 ./execute/start_redirection.c \

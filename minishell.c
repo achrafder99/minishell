@@ -6,11 +6,19 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 04:52:48 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 06:18:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	sigint_handler(int sig)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 char	*display_name(void)
 {
@@ -71,6 +79,7 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
 		input = get_input();

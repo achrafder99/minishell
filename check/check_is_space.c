@@ -6,29 +6,42 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:51:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 02:51:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:46:12 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_is_space(char *input){
-	int i;
+void	update_input(char *input, int *i, int *count)
+{
+	if (input[*i + 1] == '>')
+	{
+		(*count)++;
+		(*i) += 2;
+	}
+	else if (input[*i + 1] == '<')
+	{
+		(*count)++;
+		(*i) += 2;
+	}
+}
+
+int	check_is_space(char *input)
+{
+	int	i;
+	int	count;
+
 	i = 0;
-	int count;
 	count = 0;
 	while (input[i] != '\0')
 	{
-		if(includes(input[i]) && input[i + 1] != '>'){
-			if(input[i + 1] != ' ' || input[i - 1] != ' ')
+		if (includes(input[i]) && input[i + 1] != '>')
+		{
+			if (input[i + 1] != ' ' || input[i - 1] != ' ')
 				count++;
 		}
-		else{
-			if(input[i + 1] == '>'){
-				count++;
-				i += 2;
-			}
-		}
+		else
+			update_input(input, &i, &count);
 		i++;
 	}
 	return (count);

@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/09 22:20:38 by adardour         ###   ########.fr        #
+#    Updated: 2023/04/10 02:13:44 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ includes.c \
 ./check/check_redirection.c ./check/check_type.c ./check/is_qouted.c ./check/check_is_type_command.c \
 ./check/is_wildcard.c \
 ./execute/execute_pipe.c \
-./linked_list/add_front.c ./linked_list/delete_node_by_type.c
+./linked_list/add_front.c ./linked_list/delete_node_by_type.c \
+./built_in/helper/printf_env.c ./built_in/helper/put.c
 
 CC		= cc
 RM		= rm -rf

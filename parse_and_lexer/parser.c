@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 23:56:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 02:17:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,13 @@ void	without_command(t_components *node, t_info *info)
 	}
 }
 
-void	parser(t_components *tokens, t_info *info,char **env)
+void	parser(t_components *tokens, t_info *info, char **env)
 {
 	t_components	*node;
 	t_command		*command;
 	t_piped			*pipe_line;
 
 	node = tokens;
-	command = NULL;
-	pipe_line = NULL;
 	if (handle_errors(tokens))
 		return ;
 	if (check_is_command(node) && check_is_redirection(node->token))
@@ -103,7 +101,7 @@ void	parser(t_components *tokens, t_info *info,char **env)
 			node = node->next;
 		}
 		if (command != NULL)
-			piped(pipe_line, command, info,env);
+			piped(pipe_line, command, info, env);
 		command = NULL;
 	}
 }

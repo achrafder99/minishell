@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 23:57:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 02:35:08 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,19 @@ char			**ft_split(char const *s, char c);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strtrim(char const *s1, char const *set);
 void			push(t_components **head, char *command, char *type);
-void			lexer(char *input, t_components **head, t_info *info,char **env);
+void			lexer(char *input, t_components **head, \
+				t_info *info, char **env);
 int				echo(t_command *cmd, t_info *info);
 int				cd(t_command *cmd);
 int				pwd(t_command *cmd);
 int				get_size(t_components *tokens);
 void			exit_shell(void);
-void			parser(t_components *tokens, t_info *info,char **env);
+void			parser(t_components *tokens, t_info *info, char **env);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
 char			*ft_strstr(const char *haystack, const char *needle);
 void			handle_signals(int sign);
 char			*cut_string(char *s);
-void			simple_command(t_command *command, t_info *info,char **env);
+void			simple_command(t_command *command, t_info *info, char **env);
 int				execute_built_in(t_command *cmd, t_info *info);
 char			**get_argv(t_command *command, int number_arg);
 int				is_redirect(t_command *command);
@@ -77,7 +78,8 @@ int *i, t_components **head);
 void			push_component(t_components **head, \
 char *type, char **spliting, int *i);
 int				check_is_redirection(char *symbol);
-void			piped(t_piped *pipe_line, t_command *command, t_info *info,char **env);
+void			piped(t_piped *pipe_line, t_command \
+				*command, t_info *info, char **env);
 int				check_type(char *type);
 t_command		*init_command(t_command *command, char *cut_str);
 char			**add_args(t_command *command, char *cut_str);
@@ -106,4 +108,6 @@ int				match_file(char *pattern);
 int				number_of_file(char **argv);
 int				number_of_star(char **argv);
 int				matched_file(char *pattern);
+void			print_env(char *string, t_info *info);
+void			ft_put_echo(char *string);
 #endif

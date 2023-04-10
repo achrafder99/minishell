@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 05:54:46 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:48:11 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,12 @@ typedef struct s_data
 	int				*i;
 	int				*flags;
 }				t_data;
+
+typedef struct t_simple_command
+{
+	char		**env;
+	char		**argv;
+	t_command	*command;
+}	t_simple_command;
 
 #endif

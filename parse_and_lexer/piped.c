@@ -6,19 +6,19 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:40:04 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 23:56:49 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:40:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	piped(t_piped *pipe_line, t_command *command, t_info *info,char **env)
+void	piped(t_piped *pipe_line, t_command *command, t_info *info, char **env)
 {
 	t_command	*new_commands;
 
 	if (!pipe_line)
 	{
-		simple_command(command, info,env);
+		simple_command(command, info, env);
 		if (command->argc > 0)
 			free_things(command->args);
 		return ;

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 04:56:34 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 05:57:11 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:37:41 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,34 +23,41 @@ t_regex	*compile_regex(const char *pattern)
 	return (regex);
 }
 
-int	is_match(const char *pattern, int pattern_len, const char *input, int input_len)
+void	helper(const char *pattern, int *p, int *i, const char *input)
+{
+	if (pattern[*p] == '?' || pattern[*p] == input[*i])
+	{
+		(*p)++;
+		(*i)++;
+	}
+}
+
+int	is_match(const char *pattern, int pattern_len, \
+			const char *input, int input_len)
 {
 	int	p;
 	int	i;
 
 	i = 0;
-    p = 0;
+	p = 0;
 	while (p < pattern_len && i < input_len)
 	{
 		if (pattern[p] == '*')
 		{
 			while (p < pattern_len && pattern[p] == '*')
-                p++;
+				p++;
 			if (p == pattern_len)
 				return (1);
 			while (i < input_len && input[i] != pattern[p])
-                i++;
+				i++;
 		}
-		else if (pattern[p] == '?' || pattern[p] == input[i])
-		{
-            p++;
-            i++;
-		}
+		if (pattern[p] == '?' || pattern[p] == input[i])
+			helper(pattern, &p, &i, input);
 		else
 			return (0);
 	}
 	while (p < pattern_len && pattern[p] == '*')
-        p++;
+		p++;
 	return (p == pattern_len && i == input_len);
 }
 

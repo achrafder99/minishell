@@ -3,39 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 21:51:27 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 03:00:32 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_command(char *command){
-	
-	char *path;
-	path = getenv("PATH");
-	char **spliting;
-	char *full_command;
-	spliting = ft_split(path,':');
-	int i;
+int	from_path(char *path, char *command)
+{
+	char	*full_command;
+	char	*join;
+
+	full_command = NULL;
+	join = ft_strjoin("/", command);
+	full_command = ft_strjoin(path, join);
+	if (!access(full_command, X_OK))
+	{
+		free(full_command);
+		free(join);
+		return (1);
+	}
+	free(full_command);
+	free(join);
+	return (0);
+}
+
+int	check_command(char *command)
+{
+	char	*path;
+	char	**spliting;
+	int		i;
+
 	i = 0;
-	char *join;
-	join = ft_strjoin("/",command);
+	path = getenv("PATH");
+	char **mini = ft_split(command,'/');
+	printf("dd == %s\n",strrchr(command,'/'));
+	if (ft_strchr(command, '/'))
+	{
+		if (access(command, X_OK) == 0)
+			return (1);
+	}
+	spliting = ft_split(path, ':');
 	while (spliting[i] != NULL)
 	{
-		full_command = ft_strjoin(spliting[i],join);
-		if(!access(full_command,X_OK)){
-			free_things(spliting);
-			free(full_command);
-			free(join);
+		if (from_path(spliting[i], command))
 			return (1);
-		}
-		free(full_command);
 		i++;
 	}
 	free_things(spliting);
-	free(join);
 	return (0);
 }

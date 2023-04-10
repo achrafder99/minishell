@@ -3,92 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:42:32 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*display_name(void)
+char *display_name(void)
 {
-	char	*username;
-	char	*full_username;
-	char	*temp;
-	char	*dd;
+    char *username;
+    char *full_username;
+    char *temp;
+    char *dd;
 
-	username = ft_strjoin(getenv("USER"), "@:");
-	temp = username;
+    username = ft_strjoin(getenv("USER"), "@:");
+    temp = username;
+    if (temp == NULL)
+        write(2, "Could not get username", ft_strlen("Could not get username"));
+    dd = ft_strjoin(temp, " > ");
 	free(username);
-	if (temp == NULL)
-	{
-		write(2, "Could not get username", ft_strlen("Could not get username"));
-	}
-	dd = ft_strjoin(temp, " > ");
-	return (dd);
+    return (dd);
 }
 
-char	*lowercase(char *input)
+char *get_input(void)
 {
-	int	i;
+    char *input;
+    char *full_username;
+    char *tt;
 
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] >= 65 && input[i] <= 90)
-			input[i] = input[i] + 32;
-		i++;
-	}
-	return (input);
-}
-
-char	*get_input(void)
-{
-	char	*input;
-	char	*full_username;
-	char	*tt;
-
-	input = NULL;
-	full_username = display_name();
-	tt = ft_strjoin(full_username, "");
+    input = NULL;
+    full_username = display_name();
+    tt = ft_strjoin(full_username, "");
+    input = readline(tt);
 	free(full_username);
-	full_username = NULL;
-	input = readline(tt);
 	free(tt);
-	return (input);
+    return (input);
 }
 
-void	process_input(char *input, t_info *info)
+void    process_input(char *input, t_env *env)
 {
-	t_components	*head;
+    t_components	*head;
+	t_info			*info;
 
-	if (input == NULL)
-	{
-		write(1, " ", 1);
-		write(1, "exit\n", 5);
+	info = malloc(sizeof(t_info));
+	if (!info)
 		exit(1);
-	}
-	else if (strlen(input) == 0)
-		return ;
+    if (input == NULL)
+    {
+        write(1, " ", 1);
+        write(1, "exit\n", 5);
+        exit(0);
+    }
+    else if (strlen(input) == 0)
+        return;
+    head = NULL;
+    add_history(input);
+    lexer(input, &head, info,env);
+    printf("%d\n",info->status_code);
+	free_node(head);
 	head = NULL;
-	add_history(input);
-	lexer(input, &head, info);
 }
 
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	t_info	info;
-	char	*input;
+    char *input;
+    t_env   *env;
 
-	signal(SIGINT, handle_signals);
-	while (1)
-	{
-		input = get_input();
-		process_input(input, &info);
-		free(input);
-		input = NULL;
-	}
-	return (0);
+    env->env = get_env(envp);
+	env->exp = get_export_env(envp);
+    while (1)
+    {
+        input = get_input();
+        process_input(input,env);
+        free(input);
+        input = NULL;
+    }
+    return (0);
 }

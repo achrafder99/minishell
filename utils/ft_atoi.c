@@ -1,27 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_built_in.c                                 :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/14 03:41:27 by aalami           ###   ########.fr       */
+/*   Created: 2022/10/12 14:47:35 by aalami            #+#    #+#             */
+/*   Updated: 2023/04/14 01:50:49 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	execute_built_in(t_command *cmd, t_info *info, t_env *env)
+int	ft_atoi(const char *str)
 {
-	if (!ft_strcmp(cmd->name, "cd"))
-		return (info->status_code = cd(cmd, env));
-	else if (!ft_strcmp(cmd->name, "pwd"))
-		return (info->status_code = pwd(cmd));
-	else if (!ft_strcmp(cmd->name, "echo"))
-		return (info->status_code = echo(cmd, info));
-	else if (!ft_strcmp(cmd->name, "export"))
-		return (info->status_code = ft_export(cmd, env));
-	
-	return (1);
+	int	ret;
+	int	sign;
+	int	i;
+
+	i = 0;
+	ret = 0;
+	sign = 1;
+	while ((str[i] >= '\t' && str[i] <= '\r') || str[i] == ' ')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		ret = ((ret * 10) + str[i] - 48);
+		i++;
+	}
+	ret = ret * sign;
+	return (ret);
 }

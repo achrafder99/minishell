@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/10 02:29:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/14 05:42:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_lst	*get_export_env(char **env)
 	char **ret;
 	t_lst	*exp;
 	int i;
-	
+	// printf("dd\n");
 	i = 0;
 	ret = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
 	while (env[i])
@@ -40,13 +40,6 @@ t_lst	*get_export_env(char **env)
 	return (exp);
 }
 
-t_lst	*creat_list()
-{
-	t_lst *a;
-	a = malloc(sizeof(t_lst));
-	a->top = NULL;
-	return (a);
-}
 t_node	*ft_lstlast(t_lst *lst)
 {
 	t_node	*tmp;
@@ -99,6 +92,25 @@ char	*get_value(char *str)
 	}
 	return (0);
 }
+char	*update_shell_level(char *value)
+{
+	int number;
+	char	*new_value;
+	number = ft_atoi(value);
+	// printf("%zu %d %s\n",ft_strlen(value), number, value);
+	if (number > 999)
+	{
+		new_value = ft_strdup("1");
+		printf("bash: warning: shell level (%d) too high, resetting to 1\n", number + 1);
+	}
+	else if (number == 999)
+		new_value = ft_strdup("0");
+	else if (number < 0)
+		new_value = ft_strdup("0");
+	else
+		new_value = ft_strdup(ft_itoa(number + 1));
+	return (new_value);
+}
 void    push_list(t_lst *lst, char **env)
 {
     int i;
@@ -109,10 +121,12 @@ void    push_list(t_lst *lst, char **env)
     while (env[i])
     {
 		split = ft_split(env[i],'=');
+		if (!ft_strcmp(split[0], "SHLVL"))
+			split[1] = update_shell_level(split[1]);
 		if (split[2])
-        	tmp = ft_new_node(split[0], get_value(env[i]));
+      	tmp = ft_new_node(split[0], get_value(env[i]));
 		else
-      	tmp = ft_new_node(split[0], split[1]);
+			tmp = ft_new_node(split[0], split[1]);
       ft_lstadd_back(lst, tmp);
       i++;
     }

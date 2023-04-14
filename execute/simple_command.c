@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 02:48:27 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/14 00:54:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 extern char	**environ;
 
-void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_lst *env)
+void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
 {
-	t_lst	*env;
-	t_lst	*exp;
-	env = get_env(env);
-	exp = get_export_env(env);
+	// t_lst	*env;
+	// t_lst	*exp;
+	// env = get_env(env->env);
+	// exp = get_export_env(env);
 	if (!check_command(command->name))
 	{
 		printf("command not found :\n");
@@ -47,11 +47,10 @@ void	handle_fds(t_fds *fds, t_command *command)
 	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
 }
 
-void	run_child(t_command *command, int flags, int built_in, char **argv, t_lst *env)
+void	run_child(t_command *command, int flags, int built_in, char **argv, char **env)
 {
 	t_fds	*fds;
 	char	*cmd;
-
 	if (!check_command(command->name))
 		return (perror("not found "), exit(127));
 	if (flags)
@@ -61,7 +60,8 @@ void	run_child(t_command *command, int flags, int built_in, char **argv, t_lst *
 	}
 	cmd = get_cmd(command->name);
 	if (!built_in)
-		execve(cmd, argv, NULL);
+		execve(cmd, argv, env);
+
 	exit(1);
 }
 int	get_list_size(t_lst *lst)
@@ -81,14 +81,25 @@ int	get_list_size(t_lst *lst)
 char	**get_new_env(t_lst *env)
 {
 	char	**new;
+	char	*key;
 	t_node	*tmp;
 	int	size;
+	int	i;
 	
 	size = get_list_size(env);
 	tmp = env->top;
+	i = 0;
 	new = (char **)malloc(sizeof(char *) * (size + 1));
-	while
-		
+	while(tmp)
+	{
+		key = ft_strjoin(tmp->key, "=");
+		new[i] = ft_strjoin(key, tmp->value);
+		free(key);
+		tmp = tmp->next;
+		i++;
+	}
+	new[i] = NULL;
+	return (new);	
 }
 
 void	simple_command(t_command *command, t_info *info, t_env *env)
@@ -98,17 +109,18 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	int		fid;
 	int		flags;
 	int		built_in;
-	
+
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
 	first_step(command, info, &built_in, &flags, env);
 	if (built_in || flags == 127)
 		return ;
-	new_env = get_new_env(env->env)
+	new_env = get_new_env(env->env);
+	
 	fid = fork();
 	if (fid == 0)
-		run_child(command, flags, built_in, argv,env);
+		run_child(command, flags, built_in, argv,new_env);
 	else
 	{
 		waitpid(fid, &info->status_code, 0);

@@ -6,11 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 01:42:32 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/14 00:18:46 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
 char *display_name(void)
 {
@@ -62,7 +62,7 @@ void    process_input(char *input, t_env *env)
     head = NULL;
     add_history(input);
     lexer(input, &head, info,env);
-    printf("%d\n",info->status_code);
+    // printf("%d\n",info->status_code);
 	free_node(head);
 	head = NULL;
 }
@@ -72,6 +72,7 @@ int main(int argc, char **argv, char **envp)
     char *input;
     t_env   *env;
 
+    env = creat_env();
     env->env = get_env(envp);
 	env->exp = get_export_env(envp);
     while (1)

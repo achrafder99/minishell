@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 20:45:21 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/17 04:51:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ void	parser(t_components *tokens, t_info *info, char **env)
 	t_command		*command;
 	t_piped			*pipe_line;
 
-
 	node = tokens;
+	command = NULL;
+	pipe_line = NULL;
 	if (handle_errors(tokens))
 		return ;
 	if (check_is_command(node) && check_is_redirection(node->token))
@@ -98,10 +99,11 @@ void	parser(t_components *tokens, t_info *info, char **env)
 		while (node != NULL)
 		{
 			if (ft_strcmp(node->type.type, "PIPE"))
-			{
-				if (!ft_strcmp(handle_command(node, \
-					&command, info), "ERROR_OPEN"))
-					return ;
+			{	
+				if (ft_strcmp(handle_command(node, \
+					&command, info), "SUCCESS")){
+						return ;
+					}
 			}
 			else
 				handle_pipe(node, &pipe_line, &command);

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 20:27:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/14 20:33:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*handle_command(t_components *node, t_command **command, t_info *info)
 		(*command)->args = add_args(*command, cut_str);
 	else if (check_type(node->type.type))
 	{
-		if (ft_strcmp(node->token, "<") || ft_strcmp(node->token, ">"))
+		if (!ft_strcmp(node->token, "<") || !ft_strcmp(node->token, ">"))
 			if (handle_redirect(command, node, &fd, info) == 1)
 				return ("ERROR_OPEN");
 		if (!ft_strcmp(node->token, ">>"))

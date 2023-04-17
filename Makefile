@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/10 20:29:12 by adardour         ###   ########.fr        #
+#    Updated: 2023/04/14 20:15:43 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,10 +44,10 @@ OBJS = ${SRCS:%.c=%.o}
 all:	${NAME}
 
 %.o:%.c minishell.h
-		${CC} -c $< -o ${<:%.c=%.o} -I$(shell brew --prefix readline)/include
+		${CC} -c $< -o ${<:%.c=%.o}
 		
 $(NAME): ${OBJS} 
-		${CC} ${OBJS} -o ${EXECUTABLE} -L$(shell brew --prefix readline)/lib -lreadline
+		${CC} ${OBJS} -o ${EXECUTABLE} -lreadline
 
 clean:
 		${RM}  ${OBJS} 

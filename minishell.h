@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/14 03:54:41 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/25 14:18:09 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int			includes(char car);
 int			handle_errors(t_components *tokens);
 void		free_things(char **spliting);
 int			check_command(char *command);
-void		execute_pipe(t_piped *pipe);
+void		execute_pipe(t_piped *pipe, t_info *info, t_env *env);
 int			check_is_space(char *input);
 int			check_quotes(char *input);
 size_t		ft_strlen(const char *s);
@@ -125,4 +125,8 @@ t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
 int	ft_atoi(const char *str);
 char	*ft_itoa(int c);
+void	run_child(t_command *command, int flags, int built_in, char **argv, char **env);
+void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env);
+char	**get_new_env(t_lst *env);
+int	get_list_size(t_lst *lst);
 #endif

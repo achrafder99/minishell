@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:40:04 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 02:41:38 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/25 14:03:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		}
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
-		execute_pipe(pipe_line);
+		execute_pipe(pipe_line, info, env);
 		return ;
 	}
 }

@@ -57,4 +57,6 @@ int main(int argc, char** argv) {
            waitpid(pid, 0, 0);
            exit(0);                        
       }
-}
+      a = -1
+} if (a)
+{}

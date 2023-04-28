@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/27 20:18:01 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/28 21:55:48 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,67 +26,73 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 		return ;
 	new_env = get_new_env(env->env);
 	run_child(cmd, flags, built_in, argv,new_env);
+
 }
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	i, j;
-	int	fd[piping->number_of_commands - 1][2];
+	int	**fd;
+	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
+	j = 0;
+	while (j < piping->number_of_commands - 1)
+	{
+		fd[j] = malloc(sizeof (int) * 2);
+		j++;
+	}
+	fd[j] = NULL;
 	int	id;
-	int tmpin;
-	int tmpout;
-	tmpin = dup(0);
-	tmpout = dup(1);
 	j = 0;
 	while (j < (piping->number_of_commands - 1))
 	{
 		pipe(fd[j]);
-		// printf("%d %d\n", fd[j][0], fd[j][1]);
 		j++;
 	}
 	i = 0;
 	while (i < piping->number_of_commands)
 	{
+		// if (check_is_built_in(piping->command[i].name))
+		// 	{
+		// 		// if (fork() == 0)			
+		// 		// {
+		// 			if (i > 0)
+		// 				dup2(fd[i - 1][0], 0);
+		// 			if (fd[i] != NULL)
+		// 				dup2(fd[i][1], 1);	
+		// 				exec_pipe_commande(&piping->command[i], info, env);
+		// 		// }
+		// 	}
 		id = fork();
 		if (id == 0)
 		{
-			if (i == 0)
-			{
-				// printf("rrr\n");
-				close(fd[i][0]);
+			if (i > 0)
+				dup2(fd[i - 1][0], 0);
+			if (fd[i] != NULL)
 				dup2(fd[i][1], 1);
-				exec_pipe_commande(&piping->command[i], info, env);
-				close(fd[i][1]);
+			j = 0;
+			while (j < (piping->number_of_commands - 1))
+			{
+				close(fd[j][0]);
+				close(fd[j][1]);
+				j++;
+			}
+			exec_pipe_commande(&piping->command[i], info, env);
+			if (check_is_built_in(piping->command[i].name))
+			{	
+				close (0);
 				close(1);
 			}
-			else if (i == piping->number_of_commands - 1 )
-			{
-				close(fd[i - 1][1]);
-				dup2(fd[i - 1][0], 0);
-				exec_pipe_commande(&piping->command[i], info, env);
-				close(fd[i - 1][0]);
-				close(0);
-			}
-			else
-			{
-				close(fd[i - 1][1]);
-				close(fd[i][0]);
-				dup2(fd[i - 1][0], 0);
-				dup2(fd[i][1], 1);
-				close(fd[i][1]);
-				close(fd[i - 1][0]);
-				exec_pipe_commande(&piping->command[i], info, env);
-			}
-			
-			// exit(0);
 		}
-		close (fd[i][1]);
-		// close (fd[i][0]);
-		wait(NULL);
-			i++;
-		dup2(tmpin, 0);
-		dup2(tmpout, 1);
-		
+		i++;
 	}
+	j = 0;
+	while (j < (piping->number_of_commands - 1))
+	{
+		close(fd[j][0]);
+		close(fd[j][1]);
+		j++;
+	}
+	while(waitpid(-1, NULL, 0) > 0)
+		;
 }
 
 	// int	i;

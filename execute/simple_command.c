@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/25 14:35:34 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/28 17:27:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	run_child(t_command *command, int flags, int built_in, char **argv, char **
 	}
 	cmd = get_cmd(command->name);
 	if (!built_in)
-		execve(cmd, argv, env);
-
-	exit(1);
+	{	
+		printf("%d\n......",execve(cmd, argv, env));
+	}
 }
 int	get_list_size(t_lst *lst)
 {

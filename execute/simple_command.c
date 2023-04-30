@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/28 17:27:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/04/30 19:50:36 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,22 @@
 
 extern char	**environ;
 
+void	handle_fds(t_fds *fds, t_command *command)
+{
+	fds = malloc(sizeof(t_fds));
+	fds->fd_out = open(command->outfile, O_RDWR, 0777);
+	fds->fd_in = open(command->infile, O_RDWR, 0777);
+	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
+}
+
 void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
 {
 	// t_lst	*env;
 	// t_lst	*exp;
 	// env = get_env(env->env);
 	// exp = get_export_env(env);
+	int	save;
+	t_fds	*fds;
 	if (!check_command(command->name))
 	{
 		printf("command not found :\n");
@@ -34,18 +44,15 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	}
 	if (check_is_built_in(command->name))
 	{
+		handle_fds(fds, command);
+		save = dup(STDOUT_FILENO);
+		redirection(command->last->type, command->last->last_file, fds);
 		info->status_code = execute_built_in(command, info, env);
+		// dup2(save, STDOUT_FILENO);
 		*built_in = 1;
 	}
 }
 
-void	handle_fds(t_fds *fds, t_command *command)
-{
-	fds = malloc(sizeof(t_fds));
-	fds->fd_out = open(command->outfile, O_RDWR, 0777);
-	fds->fd_in = open(command->infile, O_RDWR, 0777);
-	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
-}
 
 void	run_child(t_command *command, int flags, int built_in, char **argv, char **env)
 {

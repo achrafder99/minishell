@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_redirection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:20:50 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 05:49:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:44:52 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	redirection(char *type, char *filename, t_fds *fds)
 {
 	int	fd;
-
 	if (!ft_strcmp(type, "REDIRECT_out") || !ft_strcmp(type, "APPEND_MODE"))
 	{
 		if (!ft_strcmp(type, "REDIRECT_out"))

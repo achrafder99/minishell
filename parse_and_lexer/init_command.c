@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 05:13:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:00:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_command	*init_command(t_command *command, char *cut_str)
 {
 	command = (t_command *) malloc(sizeof(t_command));
+	command->last = (t_last_file *) malloc(sizeof(t_last_file));
 	if (!command)
 	{
 		return (NULL);
@@ -28,6 +29,7 @@ t_command	*init_command(t_command *command, char *cut_str)
 	command->append_mode = NULL;
 	command->heredoc = NULL;
 	command->end_heredoc = NULL;
-	command->last = NULL;
+	command->last->last_file = NULL;
+	command->last->type = NULL;
 	return (command);
 }

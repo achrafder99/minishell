@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 04:52:00 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/30 11:14:24 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int echo(t_command *cmd,t_info *info)
 		else
 		{
 			ft_put_echo(cmd->args[i]);
-			write(1," ",1);
+			// write(1," ",1);
 		}
         i++;
     }

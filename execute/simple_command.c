@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/30 19:50:36 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 19:25:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	// exp = get_export_env(env);
 	int	save;
 	t_fds	*fds;
-	if (!check_command(command->name))
+
+	save = -1;
+	if (!check_command(command->name, env))
 	{
-		printf("command not found :\n");
+		printf("minishell: %s: No such file or directory\n", command->name);
 		info->status_code = 127;
 		*flags = 127;
 		return ;
@@ -44,31 +46,43 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	}
 	if (check_is_built_in(command->name))
 	{
-		handle_fds(fds, command);
-		save = dup(STDOUT_FILENO);
-		redirection(command->last->type, command->last->last_file, fds);
+		if (*flags)
+		{
+			handle_fds(fds, command);
+			if (!ft_strcmp(command->last->type, "REDIRECT_in"))
+				save = dup(STDIN_FILENO);
+			else
+				save = dup(STDOUT_FILENO);
+				
+			redirection(command, command->last->type, command->last->last_file, fds);
+		}
 		info->status_code = execute_built_in(command, info, env);
-		// dup2(save, STDOUT_FILENO);
+		if (save != -1)
+		{
+			if (!ft_strcmp(command->last->type, "REDIRECT_in"))
+				dup2(save, STDIN_FILENO);
+			else
+				dup2(save, STDOUT_FILENO);
+		}
+				
 		*built_in = 1;
 	}
 }
 
 
-void	run_child(t_command *command, int flags, int built_in, char **argv, char **env)
+void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *env)
 {
 	t_fds	*fds;
 	char	*cmd;
-	if (!check_command(command->name))
-		return (perror("not found "), exit(127));
 	if (flags)
 	{
 		handle_fds(fds, command);
-		redirection(command->last->type, command->last->last_file, fds);
+		redirection(command, command->last->type, command->last->last_file, fds);
 	}
 	cmd = get_cmd(command->name);
 	if (!built_in)
 	{	
-		printf("%d\n......",execve(cmd, argv, env));
+		printf("%d\n......",execve(cmd, argv, env->env_arr));
 	}
 }
 int	get_list_size(t_lst *lst)
@@ -112,7 +126,7 @@ char	**get_new_env(t_lst *env)
 void	simple_command(t_command *command, t_info *info, t_env *env)
 {
 	char	**argv;
-	char	**new_env;
+	// char	**new_env;
 	int		fid;
 	int		flags;
 	int		built_in;
@@ -123,11 +137,11 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	first_step(command, info, &built_in, &flags, env);
 	if (built_in || flags == 127)
 		return ;
-	new_env = get_new_env(env->env);
+	env->env_arr = get_new_env(env->env);
 	
 	fid = fork();
 	if (fid == 0)
-		run_child(command, flags, built_in, argv,new_env);
+		run_child(command, flags, built_in, argv,env);
 	else
 	{
 		waitpid(fid, &info->status_code, 0);

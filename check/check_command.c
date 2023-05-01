@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/14 00:54:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 17:18:04 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,29 @@ int	from_path(char *path, char *command)
 	free(join);
 	return (0);
 }
-
-int	check_command(char *command)
+char	*get_path(t_lst *env)
+{
+	t_node *tmp;
+	
+	tmp = env->top;
+	while(tmp)
+	{
+		if (!ft_strcmp(tmp->key, "PATH"))
+			return(tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+int	check_command(char *command, t_env *env)
 {
 	char	*path;
 	char	**spliting;
 	int		i;
 
 	i = 0;
-	path = getenv("PATH");
+	path = get_path(env->env);
+	if (!path)
+		return (0);
 	char **mini = ft_split(command,'/');
 	// printf("dd == %s\n",strrchr(command,'/'));
 	if (!check_is_built_in(command))

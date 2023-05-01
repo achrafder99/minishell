@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/14 00:18:46 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 17:12:52 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int main(int argc, char **argv, char **envp)
     env = creat_env();
     env->env = get_env(envp);
 	env->exp = get_export_env(envp);
+    env->env_arr = NULL;
     while (1)
     {
         input = get_input();

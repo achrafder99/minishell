@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/30 17:01:38 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 20:12:49 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,104 +23,100 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	built_in = 0;
 	first_step(cmd, info, &built_in, &flags, env);
 	if (built_in || flags == 127)
-		return ;
-	new_env = get_new_env(env->env);
-	run_child(cmd, flags, built_in, argv,new_env);
+		exit(1);
+	env->env_arr = get_new_env(env->env);
+	run_child(cmd, flags, built_in, argv,env);
 
 }
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
-	// int	i, j;
-	// int	**fd;
-	// fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
-	// j = 0;
-	// while (j < piping->number_of_commands - 1)
-	// {
-	// 	fd[j] = malloc(sizeof (int) * 2);
-	// 	j++;
-	// }
-	// fd[j] = NULL;
-	// int	id;
-	// j = 0;
-	// while (j < (piping->number_of_commands - 1))
-	// {
-	// 	pipe(fd[j]);
-	// 	j++;
-	// }
-	// i = 0;
-	// while (i < piping->number_of_commands)
-	// {
-		// if (check_is_built_in(piping->command[i].name))
-		// 	{
-		// 		// if (fork() == 0)			
-		// 		// {
-		// 			if (i > 0)
-		// 				dup2(fd[i - 1][0], 0);
-		// 			if (fd[i] != NULL)
-		// 				dup2(fd[i][1], 1);	
-		// 				exec_pipe_commande(&piping->command[i], info, env);
-		// 		// }
-		// 	}
-	// 	id = fork();
-	// 	if (id == 0)
-	// 	{
-			
-	// 		if (i > 0)
-	// 			dup2(fd[i - 1][0], 0);
-	// 		if (piping->command[i].outfile)
-	// 		{
-	// 			int outfile;
-	// 			outfile = open(piping->command[i].outfile, O_RDWR,777);
-	// 			dup2(outfile, 1);
-	// 		}
-	// 		if (fd[i] != NULL)
-	// 			dup2(fd[i][1], 1);
-	// 		// printf("child %d: stdin=%d, stdout=%d\n", i, dup(0), dup(1));
-	// 		j = 0;
-	// 		while (j < (piping->number_of_commands - 1))
-	// 		{
-	// 			close(fd[j][0]);
-	// 			close(fd[j][1]);
-	// 			j++;
-	// 		}
-	// 		exec_pipe_commande(&piping->command[i], info, env);
-	// 		if (check_is_built_in(piping->command[i].name))
-	// 			exit(0);
-	// 	}
-	// 	i++;
-	// }
-	// j = 0;
-	// while (j < (piping->number_of_commands - 1))
-	// {
-	// 	close(fd[j][0]);
-	// 	close(fd[j][1]);
-	// 	j++;
-	// }
-	// while(waitpid(-1, NULL, 0) > 0)
-		// ;
-	int	i;
-	int	j;
-
+	int	i, j;
+	int	**fd;
+	int outfile;
+	int infile;
+	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
+	j = 0;
+	while (j < piping->number_of_commands - 1)
+	{
+		fd[j] = malloc(sizeof (int) * 2);
+		j++;
+	}
+	fd[j] = NULL;
+	int	id;
+	j = 0;
+	while (j < (piping->number_of_commands - 1))
+	{
+		pipe(fd[j]);
+		j++;
+	}
 	i = 0;
 	while (i < piping->number_of_commands)
 	{
-		printf("Command (%d)\n", i);
-		printf("command name :%s\n", piping->command[i].name);
-		printf("Args ");
-		j = 0;
-		while (j < piping->command[i].argc)
+		id = fork();
+		if (id == 0)
 		{
-			printf("%s\t", piping->command[i].args[j]);
-			j++;
+			if (!check_command(piping->command[i].name, env))
+			{
+				printf("minishell: %s: No such file or directory\n", piping->command[i].name);
+				info->status_code = 127;
+				exit(1) ;
+			}
+			if (i > 0)
+				dup2(fd[i - 1][0], 0);
+			if (fd[i] != NULL)
+				dup2(fd[i][1], 1);
+			// if (piping->command[i].outfile)
+			// {
+			// 	int outfile;
+			// 	outfile = open(piping->command[i].outfile, O_RDWR,777);
+			// 	dup2(outfile, fd[i - 1][1]);
+			// }
+			// printf("child %d: stdin=%d, stdout=%d\n", i, dup(0), dup(1));
+			j = 0;
+			while (j < (piping->number_of_commands - 1))
+			{
+				close(fd[j][0]);
+				close(fd[j][1]);
+				j++;
+			}
+			exec_pipe_commande(&piping->command[i], info, env);
+			if (check_is_built_in(piping->command[i].name))
+				exit(0);
 		}
-		printf("\n");
-		printf("in %s\n", piping->command[i].infile);
-		printf("out %s\n", piping->command[i].outfile);
-		printf("append %s\n", piping->command[i].append_mode);
-		printf("heredoc %s\n", piping->command[i].heredoc);
-		printf("end heredoc %s\n", piping->command[i].end_heredoc);
-		printf("last %s\n", piping->command[i].last->type);
-		printf("last %s\n", piping->command[i].last->last_file);
 		i++;
 	}
+	j = 0;
+	while (j < (piping->number_of_commands - 1))
+	{
+		close(fd[j][0]);
+		close(fd[j][1]);
+		j++;
+	}
+	while(waitpid(-1, NULL, 0) > 0)
+		;
+	// int	i;
+	// int	j;
+
+	// i = 0;
+	// while (i < piping->number_of_commands)
+	// {
+	// 	printf("Command (%d)\n", i);
+	// 	printf("command name :%s\n", piping->command[i].name);
+	// 	printf("Args ");
+	// 	j = 0;
+	// 	while (j < piping->command[i].argc)
+	// 	{
+	// 		printf("%s\t", piping->command[i].args[j]);
+	// 		j++;
+	// 	}
+	// 	printf("\n");
+	// 	printf("in %s\n", piping->command[i].infile);
+	// 	printf("out %s\n", piping->command[i].outfile);
+	// 	printf("append %s\n", piping->command[i].append_mode);
+	// 	printf("heredoc %s\n", piping->command[i].heredoc);
+	// 	printf("end heredoc %s\n", piping->command[i].end_heredoc);
+	// 	printf("last %s\n", piping->command[i].last->type);
+	// 	printf("last %s\n", piping->command[i].last->last_file);
+	// 	i++;
+	// }
 }

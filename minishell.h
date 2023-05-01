@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/25 14:18:09 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 17:14:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char		*new_str(char *str, int count);
 int			includes(char car);
 int			handle_errors(t_components *tokens);
 void		free_things(char **spliting);
-int			check_command(char *command);
+int			check_command(char *command, t_env *env);
 void		execute_pipe(t_piped *pipe, t_info *info, t_env *env);
 int			check_is_space(char *input);
 int			check_quotes(char *input);
@@ -95,7 +95,7 @@ void		push_component(t_components **head, char *type, char **spliting,
 void		lex_redirection(t_data *data);
 char		*get_cmd(char *command_name);
 void		open_file(t_command *command, t_fds *fds);
-void		redirection(char *type, char *filename, t_fds *fds);
+void		redirection(t_command *command, char *type, char *filename, t_fds *fds);
 char		*handle_command(t_components *node, t_command **command,
 				t_info *info);
 void	handle_pipe(t_components *node,
@@ -125,7 +125,7 @@ t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
 int	ft_atoi(const char *str);
 char	*ft_itoa(int c);
-void	run_child(t_command *command, int flags, int built_in, char **argv, char **env);
+void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *env);
 void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env);
 char	**get_new_env(t_lst *env);
 int	get_list_size(t_lst *lst);

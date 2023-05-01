@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/11 23:41:00 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/01 17:12:27 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_env
 {
 	t_lst				*exp;
 	t_lst				*env;
+	char				**env_arr;
 }						t_env;
 
 #endif

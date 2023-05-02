@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 18:39:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:03:37 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	*check_oldpwd(t_lst *lst)
 t_node	*get_oldpwd(t_lst *lst)
 {
 	t_node	*tmp;
-
+	
 	tmp = lst->top;
 	while (tmp)
 	{

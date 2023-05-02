@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/01 17:18:04 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 14:35:05 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_command(char *command, t_env *env)
 
 	i = 0;
 	path = get_path(env->env);
-	if (!path)
+	if (!path && !check_is_built_in(command))
 		return (0);
 	char **mini = ft_split(command,'/');
 	// printf("dd == %s\n",strrchr(command,'/'));

@@ -1,37 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 15:26:15 by aalami           ###   ########.fr       */
+/*   Created: 2023/05/02 12:49:13 by aalami            #+#    #+#             */
+/*   Updated: 2023/05/02 13:08:19 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-t_lst   *get_env(char **env)
+void	remove_variable(char *key, t_lst *lst)
 {
-	t_lst   *env_lst;
+	t_node	*tmp;
+	t_node	*tmp_a;
 
-	env_lst = creat_list();
-	push_list(env_lst, env);
-	env_lst->flag = 0;
-	return (env_lst);
-}
-
-int  ft_env(t_lst *env_lst)
-{
-	t_node *tmp;
-
-	tmp = env_lst->top;
-	while (tmp)
+	tmp = lst->top;
+	while(tmp)
 	{
-		if (tmp->value)
-			printf("%s=%s\n",tmp->key, tmp->value);
+		if (tmp->next && !ft_strcmp(tmp->next->key, key))
+		{
+			tmp_a = tmp->next;
+			tmp->next = tmp->next->next;
+			free(tmp_a);
+		}
 		tmp = tmp->next;
+	}	
+}
+int	ft_unset(t_command *cmd, t_env *env)
+{
+	int	i;
+	if (cmd->args)
+	{
+		i = 0;
+		while (cmd->args[i])
+		{
+			remove_variable(cmd->args[i],env->exp);
+			remove_variable(cmd->args[i],env->env);
+			i++;
+		}
 	}
 	return (0);
 }

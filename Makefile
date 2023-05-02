@@ -6,7 +6,7 @@
 #    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/04/14 03:05:33 by aalami           ###   ########.fr        #
+#    Updated: 2023/05/02 13:04:03 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ includes.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/add_args.c ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
 ./parse_and_lexer/handle_pipe.c \
-./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c\
+./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c\
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/open_file.c ./execute/get_cmd.c \
 ./execute/start_redirection.c \
 ./free/free_things.c ./free/free_node.c \

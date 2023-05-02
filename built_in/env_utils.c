@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/14 05:42:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 18:39:39 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,68 @@ char	*update_shell_level(char *value)
 		new_value = ft_strdup(ft_itoa(number + 1));
 	return (new_value);
 }
+int	*check_oldpwd(t_lst *lst)
+{
+	t_node	*tmp;
+	t_node	*tmp_a;
+	int	flag;
+	tmp_a = NULL;
+	flag = 0;
+	tmp = lst->top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, "OLDPWD") && flag == 0)
+		{
+			tmp_a = ft_new_node(tmp->key, tmp->value);
+			flag = 1;
+			tmp = lst->top;
+		}
+		else if (!ft_strcmp(tmp->key, "PWD") && flag == 1)
+		{
+			if (!ft_strcmp(tmp->value, tmp_a->value))
+				flag = -1;
+		}
+		tmp = tmp->next;
+	}
+	free(tmp_a);
+	// printf("%d\n", flag);
+	return (flag);
+}
+t_node	*get_oldpwd(t_lst *lst)
+{
+	t_node	*tmp;
+
+	tmp = lst->top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, "OLDPWD"))
+			break;
+		tmp = tmp->next;
+	}
+	return (tmp);
+}
+void	set_oldpwd(t_lst *lst)
+{
+	t_node	*tmp;
+	
+	tmp = lst->top;
+	while(tmp)
+	{
+		if (!ft_strcmp(tmp->key, "SHLVL") && !ft_strcmp(tmp->value, "2"))
+			break;
+		tmp = tmp->next;
+	}
+	if (tmp && check_oldpwd(lst) == -1)
+	{	
+		tmp = get_oldpwd(lst);
+		tmp->value = NULL;
+	}
+	else if (!get_oldpwd(lst))
+	{
+		tmp = ft_new_node("OLDPWD", NULL);
+		ft_lstadd_back(lst, tmp);
+	}
+}
 void    push_list(t_lst *lst, char **env)
 {
     int i;
@@ -130,4 +192,5 @@ void    push_list(t_lst *lst, char **env)
       ft_lstadd_back(lst, tmp);
       i++;
     }
+	set_oldpwd(lst);
 }

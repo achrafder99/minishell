@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/01 19:25:25 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 14:43:09 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	// exp = get_export_env(env);
 	int	save;
 	t_fds	*fds;
-
-	save = -1;
 	if (!check_command(command->name, env))
 	{
 		printf("minishell: %s: No such file or directory\n", command->name);
@@ -39,6 +37,7 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		*flags = 127;
 		return ;
 	}
+	save = -1;
 	if (command->last != NULL)
 	{
 		if (check_type(command->last->type))

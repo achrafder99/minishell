@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/01 17:14:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:13:55 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void		ft_lstadd_back(t_lst *lst, t_node *new);
 t_node		*ft_new_node(char *key, char *value);
 char		*get_value(char *str);
 void		push_list(t_lst *lst, char **env);
-void		ft_env(t_lst *env_lst);
+int		ft_env(t_lst *env_lst);
 t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
 int	ft_atoi(const char *str);
@@ -129,4 +129,6 @@ void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *
 void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env);
 char	**get_new_env(t_lst *env);
 int	get_list_size(t_lst *lst);
+int	ft_unset(t_command *cmd, t_env *env);
+void	remove_variable(char *key, t_lst *lst);
 #endif

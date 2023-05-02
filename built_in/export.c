@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/10 02:14:38 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/02 11:41:39 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ t_lst *sort_env(char **env)
 		while (env[j])
 		{
 			// printf("%s\n",env[j]);
-			if (strcmp(env[i],env[j]) < 0)
+			if (ft_strcmp(env[i],env[j]) < 0)
 			{
-				tmp = strdup(env[i]);
+				tmp = ft_strdup(env[i]);
 				free (env[i]);
-				env[i] = strdup(env[j]);
+				env[i] = ft_strdup(env[j]);
 				free (env[j]);
-				env[j] = strdup(tmp);
+				env[j] = ft_strdup(tmp);
 				free (tmp);
 			}
 			j++;
@@ -258,7 +258,40 @@ int	if_valid_identifier(char **arg, t_env *env)
 // {
 	
 // }
-
+void *sort_exp_list(t_lst *exp)
+{
+	t_node *tmp_a;
+	t_node *tmp_b;
+	char	*tmp_key;
+	char	*tmp_value;
+	
+	tmp_a = exp->top;
+	while (tmp_a)
+	{
+		tmp_b= exp->top;
+		while (tmp_b)
+		{
+			// printf("%s\n",env[j]);
+			if (ft_strcmp(tmp_a->key,tmp_b->key) < 0)
+			{
+				tmp_key = ft_strdup(tmp_a->key);
+				tmp_value = ft_strdup(tmp_a->value);
+				free (tmp_a->key);
+				free (tmp_a->value);
+				tmp_a->key = ft_strdup(tmp_b->key);
+				tmp_a->value = ft_strdup(tmp_b->value);
+				free (tmp_b->key);
+				free (tmp_b->value);
+				tmp_b->key = ft_strdup(tmp_key);
+				tmp_b->value = ft_strdup(tmp_value);
+				free (tmp_key);
+				free (tmp_value);
+			}
+			tmp_b = tmp_b->next;
+		}
+		tmp_a = tmp_a->next;
+	}
+}
 int	ft_export(t_command *cmd, t_env *env)
 {
 	t_node	*tmp;
@@ -269,6 +302,7 @@ int	ft_export(t_command *cmd, t_env *env)
 		return (if_valid_identifier(cmd->args, env));
    else
    {
+	sort_exp_list(lst);
    	tmp = lst->top;
 		while (tmp)
 		{

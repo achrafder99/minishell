@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/30 18:00:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/03 19:32:16 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ t_command	*init_command(t_command *command, char *cut_str)
 	command->end_heredoc = NULL;
 	command->last->last_file = NULL;
 	command->last->type = NULL;
+	// command->heredoc_lst = NULL;
+	// command->heredoc_lst->heredoc = NULL;
 	return (command);
 }

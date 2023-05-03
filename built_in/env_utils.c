@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 19:03:37 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:00:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,17 @@ t_lst	*get_export_env(char **env)
 	// printf("dd\n");
 	i = 0;
 	ret = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
+	if (!ret)
+		return (0);
 	while (env[i])
 	{
-			ret[i] = strdup(env[i]);
+			ret[i] = ft_strdup(env[i]);
 		i++;
 	}
 	ret[i] = NULL;
 	exp = sort_env(ret);
 	exp->flag = 0;
+	free_things(ret);
 	return (exp);
 }
 
@@ -96,22 +99,28 @@ char	*update_shell_level(char *value)
 {
 	int number;
 	char	*new_value;
+	char	*get_num;
 	number = ft_atoi(value);
 	// printf("%zu %d %s\n",ft_strlen(value), number, value);
 	if (number > 999)
 	{
 		new_value = ft_strdup("1");
-		printf("bash: warning: shell level (%d) too high, resetting to 1\n", number + 1);
+		printf("minishell: warning: shell level (%d) too high, resetting to 1\n", number + 1);
 	}
 	else if (number == 999)
 		new_value = ft_strdup("0");
 	else if (number < 0)
 		new_value = ft_strdup("0");
 	else
-		new_value = ft_strdup(ft_itoa(number + 1));
+	{
+		get_num = ft_itoa(number + 1);
+		new_value = ft_strdup(get_num);
+		free(get_num);
+	}
+	free(value);
 	return (new_value);
 }
-int	*check_oldpwd(t_lst *lst)
+int	check_oldpwd(t_lst *lst)
 {
 	t_node	*tmp;
 	t_node	*tmp_a;
@@ -134,6 +143,8 @@ int	*check_oldpwd(t_lst *lst)
 		}
 		tmp = tmp->next;
 	}
+	free(tmp_a->key);
+	free(tmp_a->value);
 	free(tmp_a);
 	// printf("%d\n", flag);
 	return (flag);
@@ -165,6 +176,7 @@ void	set_oldpwd(t_lst *lst)
 	if (tmp && check_oldpwd(lst) == -1)
 	{	
 		tmp = get_oldpwd(lst);
+		free(tmp->value);
 		tmp->value = NULL;
 	}
 	else if (!get_oldpwd(lst))
@@ -186,10 +198,11 @@ void    push_list(t_lst *lst, char **env)
 		if (!ft_strcmp(split[0], "SHLVL"))
 			split[1] = update_shell_level(split[1]);
 		if (split[2])
-      	tmp = ft_new_node(split[0], get_value(env[i]));
+      		tmp = ft_new_node(split[0], get_value(env[i]));
 		else
 			tmp = ft_new_node(split[0], split[1]);
       ft_lstadd_back(lst, tmp);
+	  free_things(split);
       i++;
     }
 	set_oldpwd(lst);

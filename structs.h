@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/01 17:12:27 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/03 19:32:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_command
 	char				*append_mode;
 	char				*heredoc;
 	char				*end_heredoc;
+	// t_heredoc			*heredoc_lst;
 	t_last_file			*last;
 }						t_command;
 
@@ -107,5 +108,9 @@ typedef struct s_env
 	t_lst				*env;
 	char				**env_arr;
 }						t_env;
-
+// typedef struct s_heredoc
+// {
+// 	char				*heredoc;
+// 	t_heredoc				*next;
+// }						t_heredoc;
 #endif

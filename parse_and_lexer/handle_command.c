@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 22:05:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:30:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_components *node, int *fd, t_info *info)
 		(*command)->last->last_file = ft_strdup(node->next->token);
 		(*command)->last->type = ft_strdup(node->type.type);
 	}
+	
 }
 
 char	*handle_command(t_components *node, t_command **command, t_info *info)
@@ -55,7 +56,9 @@ char	*handle_command(t_components *node, t_command **command, t_info *info)
 	t_last_file	*last;
 	char		*cut_str;
 	int			fd;
+	int flag;
 
+	flag = 0;
 	cut_str = cut_string(node->token);
 	if (!ft_strcmp(node->type.type, "COMMAND"))
 		*command = init_command(*command, cut_str);

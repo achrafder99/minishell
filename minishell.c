@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/02 17:45:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/03 16:15:18 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ char *get_input(void)
 	free(tt);
     return (input);
 }
-
+void leak()
+{
+    system("leaks minishell");
+}
 void    process_input(char *input, t_env *env)
 {
     t_components	*head;
 	t_info			*info;
-
 	info = malloc(sizeof(t_info));
 	if (!info)
 		exit(1);
@@ -75,6 +77,7 @@ int main(int argc, char **argv, char **envp)
     env = creat_env();
     env->env = get_env(envp);
 	env->exp = get_export_env(envp);
+    // atexit(leak);
     env->env_arr = NULL;
     while (1)
     {

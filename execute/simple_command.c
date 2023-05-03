@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/02 14:43:09 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/03 19:31:34 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	int		fid;
 	int		flags;
 	int		built_in;
-
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
@@ -137,7 +136,7 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	if (built_in || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	
+	if (command)
 	fid = fork();
 	if (fid == 0)
 		run_child(command, flags, built_in, argv,env);

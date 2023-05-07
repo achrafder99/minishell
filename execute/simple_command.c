@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/06 21:50:40 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 15:29:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,10 @@ char	**get_new_env(t_lst *env)
 	while(tmp)
 	{
 		key = ft_strjoin(tmp->key, "=");
-		new[i] = ft_strjoin(key, tmp->value);
+		if (tmp->value)
+			new[i] = ft_strjoin(key, tmp->value);
+		else
+			new[i] = ft_strdup(key);
 		free(key);
 		tmp = tmp->next;
 		i++;

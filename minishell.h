@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/06 14:37:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 21:09:55 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void		ft_lstadd_back(t_lst *lst, t_node *new);
 t_node		*ft_new_node(char *key, char *value);
 char		*get_value(char *str);
 void		push_list(t_lst *lst, char **env);
-int		ft_env(t_lst *env_lst);
+int 		ft_env(t_lst *env_lst,t_command *command);
 t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
 int	ft_atoi(const char *str);
@@ -137,4 +137,6 @@ int		number_of_token(char *string);
 char	*extract(t_components *node, t_env *env);
 void    expander(t_components *node, t_env *env,t_info *info);
 int		if_key_exist(char *key, t_lst *lst);
+char 	*restring(char *input,int allocation);
+int    	number(char *string);
 #endif

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/06 20:45:36 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 20:30:51 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	i = 0;
 	while (i < piping->number_of_commands)
 	{
+		if (ft_strlen(piping->command[i].name))
+		{
 		id = fork();
 		if (id == 0)
 		{
@@ -59,7 +61,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 			{
 				printf("minishell: %s: No such file or directory\n", piping->command[i].name);
 				info->status_code = 127;
-				exit(1) ;
+				exit(127) ;
 			}
 			if (i > 0)
 				dup2(fd[i - 1][0], 0);
@@ -83,6 +85,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 			if (check_is_built_in(piping->command[i].name))
 				exit(0);
 		}
+		}
 		i++;
 	}
 	j = 0;
@@ -92,8 +95,11 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 		close(fd[j][1]);
 		j++;
 	}
-	while(waitpid(-1, NULL, 0) > 0)
-		;
+	while(waitpid(-1, &info->status_code, 0) > 0)
+	{
+		if (info->status_code != 0 || info->status_code != 127 )
+			info->status_code = 1;
+	}
 	// int	i;
 	// int	j;
 

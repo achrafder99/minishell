@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/05 21:52:42 by adardour         ###   ########.fr        #
+#    Updated: 2023/05/07 19:36:38 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ EXECUTABLE= minishell
 
 SRCS = minishell.c handle_signals.c cut_string.c is_redirect.c check_is_built_in.c new_string.c \
 includes.c \
+./restring.c \
 ./get_argv.c ./utils/join.c ./utils/ft_strcmp.c ./utils/match_file.c ./utils/number_of_file.c \
 ./utils/split.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/ft_strlen.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
 ./utils/ft_strdup.c ./utils/number_of_stars.c ./utils/matched_pattern.c ./utils/ft_atoi.c ./utils/ft_itoa.c \

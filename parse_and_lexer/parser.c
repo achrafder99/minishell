@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 02:03:36 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 19:58:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	command = NULL;
 	pipe_line = NULL;
 	if (handle_errors(tokens))
-		return ;
+		info->status_code = 1;
 	if (check_is_command(node) && check_is_redirection(node->token))
 		node = insert_command_at_front(tokens);
 	if (!check_is_command(node) && check_is_redirection(node->token))

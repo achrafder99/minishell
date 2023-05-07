@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/06 14:38:34 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 19:45:08 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,12 +317,6 @@ int	ft_export(t_command *cmd, t_env *env)
 		}
 		return 0;
    }
-	// else
-	// {
-	// 	// export_variable(cmd);
-		
-	// }
-		
 }
 // int	main(int argc, char **argv, char **env)
 // {

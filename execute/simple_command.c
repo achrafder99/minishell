@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 15:29:17 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 20:24:46 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ int built_in, char **argv, t_env *env)
 		command->last->last_file, fds);
 	}
 	cmd = get_cmd(command->name);
-	if (!built_in)
-		execve(cmd, argv, env->env_arr);
+	execve(cmd, argv, env->env_arr);
 }
 int	get_list_size(t_lst *lst)
 {
@@ -141,7 +140,7 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		run_child(command, flags, built_in, argv,env);
 	else
 	{
-		waitpid(fid, &info->status_code, 0);
+		waitpid(fid, &info->status_code,0);
 		if (info->status_code != 0)
 			info->status_code = 1;
 	}

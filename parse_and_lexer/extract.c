@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/05 22:34:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/06 15:13:46 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ char	*extract(t_components *node, t_env *env)
 		i++;
 	}
 	free(temp);
-	if (!join && !concat)
-		return ("");
 	if (!join)
 		return (concat);
 	join = ft_strdup("");

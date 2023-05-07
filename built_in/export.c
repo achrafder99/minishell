@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 11:41:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/06 14:38:34 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 	while (tmp)
 	{
 		if (!ft_strcmp(split[0],tmp->key))
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 	if (str && flag)
@@ -122,8 +122,8 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 }
 void	add_key_with_value(t_lst *lst, char *str, char **split)
 {
-	t_node *new;
-	int	flag;
+	t_node	*new;
+	int		flag;
 
 	flag = 0;
 	if (ft_strchr(split[0], '+'))

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/05 18:58:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/06 14:44:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,5 @@ char    *new_str(char *input, int count)
         i++; 
     }
     restring[j] = '\0';
-    printf("str = :%s\n",restring);
     return (restring);
 }

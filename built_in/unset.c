@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 12:49:13 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 13:08:19 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/06 15:09:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 void	remove_variable(char *key, t_lst *lst)
 {
 	t_node	*tmp;
@@ -28,6 +29,7 @@ void	remove_variable(char *key, t_lst *lst)
 		tmp = tmp->next;
 	}	
 }
+
 int	ft_unset(t_command *cmd, t_env *env)
 {
 	int	i;

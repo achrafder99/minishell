@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/05 22:18:46 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/06 14:37:28 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,5 @@ char	 **split_2(char *input);
 int		number_of_token(char *string);
 char	*extract(t_components *node, t_env *env);
 void    expander(t_components *node, t_env *env,t_info *info);
+int		if_key_exist(char *key, t_lst *lst);
 #endif

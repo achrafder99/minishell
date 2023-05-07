@@ -1,5 +1,10 @@
 {
     "files.associations": {
         "minishell.h": "c"
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#53153D",
+        "titleBar.activeBackground": "#741E55",
+        "titleBar.activeForeground": "#FEFCFD"
     }
 }

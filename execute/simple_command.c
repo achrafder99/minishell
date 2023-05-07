@@ -5,136 +5,144 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 19:47:21 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:48:20 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/07 15:29:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-extern char **environ;
+extern char	**environ;
 
-char *to_lower(char *input){
-    int i;
-    i = 0;
-
-    char *str;
-    str = malloc(ft_strlen(input) + 1);
-    if(!str){
-        return (NULL);
-        exit(1);
-    }
-    while (input[i] != '\0')
-    {
-        if(input[i] >= 65 && input[i] <= 90)
-            str[i] = input[i] + 32;
-        else
-            str[i] = input[i];
-        i++;
-    }
-    str[i] = '\0';
-    return (str);
+void	handle_fds(t_fds *fds, t_command *command)
+{
+	fds = malloc(sizeof(t_fds));
+	fds->fd_out = open(command->outfile, O_RDWR, 0777);
+	fds->fd_in = open(command->infile, O_RDWR, 0777);
+	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
 }
 
-void simple_command(t_command *command) {
+void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
+{
+	int		save;
+	t_fds	*fds;
+	if (!check_command(command->name, env))
+	{
+		printf("minishell: %s: No such file or directory\n", command->name);
+		info->status_code = 127;
+		*flags = 127;
+		return ;
+	}
+	save = -1;
+	if (command->last != NULL)
+	{
+		if (check_type(command->last->type))
+			*flags = 1;
+	}
+	if (check_is_built_in(command->name))
+	{
+		if (*flags)
+		{
+			handle_fds(fds, command);
+			if (!ft_strcmp(command->last->type, "REDIRECT_in"))
+				save = dup(STDIN_FILENO);
+			else
+				save = dup(STDOUT_FILENO);
+			redirection(command, command->last->type, \
+			command->last->last_file, fds);
+		}
+		info->status_code = execute_built_in(command, info, env);
+		if (save != -1)
+		{
+			if (!ft_strcmp(command->last->type, "REDIRECT_in"))
+				dup2(save, STDIN_FILENO);
+			else
+				dup2(save, STDOUT_FILENO);
+		}
+		*built_in = 1;
+	}
+}
 
-    int i;
-    i = 0;
-    
-    int flags;
-    int redirect_out;
-    int redirect_in;
-    int append;
-    redirect_out = 0;
-    redirect_in = 0;
-    append = 0;
-    flags = 0;
-    
-    int fd;
-    char *str;
 
-    int fd1;
-    str = to_lower(command->name);
-    if(check_is_built_in(command->name))
-        flags = 1;
-    if(is_redirect(command)){
-        if(command->outfile){
-            fd = open(command->outfile,O_WRONLY | O_CREAT | O_TRUNC,0777);
-            redirect_out = 1;
-        }
-        else if(command->append_mode){
-            fd = open(command->append_mode,O_WRONLY | O_CREAT | O_APPEND,0777);
-            append = 1;
-        }
-        else if(command->infile){
-            fd = open(command->infile,O_RDONLY,0777);
-            redirect_in = 1;
-        }
-        if(fd == -1){
-            perror("");
-            exit(1);
-        }
-    }
-    pid_t fid;
-    char *cmd;
-    char **argv;
-    i = 0;
-    char **spliting;
-    int exec;
-    exec = 0;
-    spliting = ft_split(getenv("PATH"),':');
-    i = 0;
-    char *join;
-    while (spliting[i] != NULL && !flags)
-    {
-        cmd = ft_strjoin(spliting[i],"/");
-        join = ft_strjoin(cmd,command->name);
-        if(!access(join,X_OK)){
-            free(cmd);
-            cmd = join;
-            exec = 1;
-            break;
-        }
-        i++;
-    }
-    fid = fork();
-    if(fid == -1){
-        printf("Error\n");
-        return;
-    }
-    if(fid == 0){
-        if (redirect_out || append)
-        { 
-            if(dup2(fd,STDOUT_FILENO) == -1){
-                perror("error occurred.");
-                exit(1);
-            }
-            close(fd);
-        }
-        else if(redirect_in){
-            if(dup2(fd,STDIN_FILENO) == -1){
-                perror("error occurred.");
-                exit(1);
-            }
-            close(fd);
-        }
-        if (flags)
-        {
-            command->name = str;
-            execute_built_in(command);
-            exit(0);
-            free(str);
-        }
-        else
-        {
-            argv = get_argv(command,command->argc);
-            if(exec)
-                execve(cmd,argv,environ);
-            else
-                execve(command->name,argv,environ);
-        }
-    }
-    else
-        wait(NULL);
-        free(command);
+void	run_child(t_command *command, int flags, \
+int built_in, char **argv, t_env *env)
+{
+	t_fds	*fds;
+	char	*cmd;
+	if (flags)
+	{
+		handle_fds(fds, command);
+		redirection(command, command->last->type, \
+		command->last->last_file, fds);
+	}
+	cmd = get_cmd(command->name);
+	if (!built_in)
+		execve(cmd, argv, env->env_arr);
+}
+int	get_list_size(t_lst *lst)
+{
+	int	i;
+	t_node	*tmp;
+
+	i = 0;
+	tmp = lst->top;
+	while(tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	return (i);
+}
+char	**get_new_env(t_lst *env)
+{
+	char	**new;
+	char	*key;
+	t_node	*tmp;
+	int	size;
+	int	i;
+	
+	size = get_list_size(env);
+	tmp = env->top;
+	i = 0;
+	new = (char **)malloc(sizeof(char *) * (size + 1));
+	while(tmp)
+	{
+		key = ft_strjoin(tmp->key, "=");
+		if (tmp->value)
+			new[i] = ft_strjoin(key, tmp->value);
+		else
+			new[i] = ft_strdup(key);
+		free(key);
+		tmp = tmp->next;
+		i++;
+	}
+	new[i] = NULL;
+	return (new);
+}
+
+void	simple_command(t_command *command, t_info *info, t_env *env)
+{	
+	char	**argv;
+	int		fid;
+	int		flags;
+	int		built_in;
+	char 	**spliting;
+
+	argv = get_argv(command, command->argc);
+	flags = 0;
+	built_in = 0;
+	first_step(command, info, &built_in, &flags, env);
+	if (built_in || flags == 127)
+		return ;
+	env->env_arr = get_new_env(env->env);
+	if (command)
+	fid = fork();
+	if (fid == 0)
+		run_child(command, flags, built_in, argv,env);
+	else
+	{
+		waitpid(fid, &info->status_code, 0);
+		if (info->status_code != 0)
+			info->status_code = 1;
+	}
 }

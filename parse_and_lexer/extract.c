@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/06 15:13:46 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/07 14:03:52 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*extract(t_components *node, t_env *env)
 	{	
 		while (tmp)
 		{
-			if (!ft_strcmp(spliting[i], tmp->key))
+			if (!ft_strcmp(spliting[i], tmp->key) && tmp->value)
 				concat = ft_strjoin(concat, tmp->value);
 			tmp = tmp->next;
 		}
@@ -42,6 +42,8 @@ char	*extract(t_components *node, t_env *env)
 		i++;
 	}
 	free(temp);
+	if (ft_strlen(concat) == 0)
+		return (NULL);
 	if (!join)
 		return (concat);
 	join = ft_strdup("");

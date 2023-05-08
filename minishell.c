@@ -6,11 +6,19 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 21:09:39 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:08:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
+
+void	interrupt_handler(int signal)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 char	*display_name(void)
 {
@@ -72,15 +80,21 @@ int	main(int argc, char **argv, char **envp)
 	char	*clear_input;
 	t_env	*env;
 
+	signal(SIGINT, interrupt_handler);
 	env = creat_env();
 	env->env = get_env(envp);
 	env->exp = get_export_env(envp);
 	env->env_arr = NULL;
+	rl_catch_signals = 0;
 	while (1)
 	{
 		input = get_input();
+		if (input == NULL)
+		{
+			printf("exit\n");
+			exit(1);
+		}
 		clear_input = restring(input, number(input));
 		process_input(clear_input, env);
 	}
-	return (0);
 }

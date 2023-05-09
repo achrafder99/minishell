@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/09 18:39:45 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/09 23:11:09 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 				{
 					printf("minishell: %s: No such file or directory\n", piping->command[i].name);
 					info->status_code= 127;
-					if (i + 1 == piping->number_of_commands)
-						exit (127);
+					exit (127);
 				}
 				if (i > 0)
 					dup2(fd[i - 1][0], 0);
@@ -85,7 +84,24 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 				}
 				exec_pipe_commande(&piping->command[i], info, env);
 				if (check_is_built_in(piping->command[i].name))
-					exit(155);
+					exit(info->status_code);
+			}
+			if ((check_is_built_in(piping->command[i].name) || i + 1 == piping->number_of_commands))
+			{	if (!check_is_built_in(piping->command[i].name))
+				{
+					j = 0;
+					while (j < (piping->number_of_commands - 1))
+					{
+						close(fd[j][0]);
+						close(fd[j][1]);
+						j++;
+					}
+				}
+						waitpid(id[i], &info->status_code,0);
+						if (WIFSIGNALED(info->status_code))
+							info->status_code = WTERMSIG(info->status_code) + 128;
+						else
+							info->status_code = WEXITSTATUS(info->status_code);
 			}
 		}
 		i++;
@@ -97,13 +113,13 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 		close(fd[j][1]);
 		j++;
 	}
-	while(waitpid(-1, &info->status_code, 0) > 0)
-	{
-		if (WIFEXITED(info->status_code))
-	
-		  info->status_code =  WEXITSTATUS(info->status_code);
+	while(waitpid(-1, NULL, 0) > 0)
+	;
+	// {
+	// 	if (WIFEXITED(info->status_code))
+	// 	  info->status_code =  WEXITSTATUS(info->status_code);
 
-	}
+	// }
 	// {
 	// 	printf("after%d\n", info->status_code);
 	// }

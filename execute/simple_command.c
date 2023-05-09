@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/09 18:29:47 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/09 22:46:28 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 			command->last->last_file, fds);
 		}
 		execute_built_in(command, info, env);
-		printf("from first %d\n", info->status_code);
 		if (save != -1)
 		{
 			if (!ft_strcmp(command->last->type, "REDIRECT_in"))

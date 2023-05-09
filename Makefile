@@ -6,7 +6,7 @@
 #    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/02 13:04:03 by aalami           ###   ########.fr        #
+#    Updated: 2023/05/09 12:54:09 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,16 @@ EXECUTABLE= minishell
 
 SRCS = minishell.c handle_signals.c cut_string.c is_redirect.c check_is_built_in.c new_string.c \
 includes.c \
+./restring.c \
 ./get_argv.c ./utils/join.c ./utils/ft_strcmp.c ./utils/match_file.c ./utils/number_of_file.c \
 ./utils/split.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/ft_strlen.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
-./utils/ft_strdup.c ./utils/number_of_stars.c ./utils/matched_pattern.c ./utils/ft_atoi.c ./utils/ft_itoa.c \
+./utils/ft_strdup.c ./utils/number_of_stars.c ./utils/matched_pattern.c ./utils/ft_atoi.c ./utils/ft_itoa.c ./utils/ft_putstr_fd.c ./utils/ft_putchar_fd.c\
 ./toknize/push_token.c \
 ./parse_and_lexer/redirection.c ./parse_and_lexer/redirect_componenets.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c ./parse_and_lexer/piped.c ./parse_and_lexer/init_command.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/add_args.c ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
+./parse_and_lexer/ft_strtok.c ./parse_and_lexer/split2.c ./parse_and_lexer/expander.c ./parse_and_lexer/extract.c \
 ./parse_and_lexer/handle_pipe.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c\
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/open_file.c ./execute/get_cmd.c \
@@ -43,11 +45,10 @@ OBJS = ${SRCS:%.c=%.o}
 all:	${NAME}
 
 %.o:%.c minishell.h
-		${CC} -c $< -o ${<:%.c=%.o} 
+		${CC} -I$(shell brew --prefix readline)/include -c  $< -o ${<:%.c=%.o}
 		
 $(NAME): ${OBJS} 
-		${CC} ${OBJS} -o ${EXECUTABLE} -lreadline
-
+		${CC} ${OBJS} -o ${EXECUTABLE} -L$(shell brew --prefix readline)/lib -lreadline
 clean:
 		${RM}  ${OBJS} 
 

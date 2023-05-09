@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_input.c                                      :+:      :+:    :+:   */
+/*   split2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/08 22:29:17 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/08 18:32:28 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/05 19:00:29 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/07 21:25:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**split_input(char *input)
+char	**split_2(char *input)
 {
-	char	*str;
-	char	*error;
-	char	**spliting;
+	int		count;
 	int		i;
+	char	*string;
+	char	**result;
+	char	*token;
 
-	i = 0;
-	str = NULL;
-	if (!check_quotes(input))
+	string = ft_strdup(input);
+	result = (char **)malloc(sizeof(char *) * (number_of_token(input) + 1));
+	if (!result)
 	{
-		error = "Syntax Error: String must be closed\n";
-		write(2, error, ft_strlen(error));
-		return (NULL);
+		perror("");
+		exit(1);
 	}
-	if (check_is_space(input))
-		str = new_str(input, check_is_space(input));
-	if (str)
-		spliting = split_2(str);
-	else
-		spliting = split_2(input);
-	free(str);
-	return (spliting);
+	i = 0;
+	token = ft_strtok(string, " ");
+	while (token != NULL)
+	{
+		result[i] = ft_strdup(token);
+		i++;
+		token = ft_strtok(NULL, " ");
+	}
+	result[i] = NULL;
+	return (result);
 }

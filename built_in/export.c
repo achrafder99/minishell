@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/02 11:41:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/09 12:58:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 	while (tmp)
 	{
 		if (!ft_strcmp(split[0],tmp->key))
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 	if (str && flag)
@@ -122,8 +122,8 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 }
 void	add_key_with_value(t_lst *lst, char *str, char **split)
 {
-	t_node *new;
-	int	flag;
+	t_node	*new;
+	int		flag;
 
 	flag = 0;
 	if (ft_strchr(split[0], '+'))
@@ -244,7 +244,12 @@ int	if_valid_identifier(char **arg, t_env *env)
 			j++;
 		}
 		if (invalid != 0)
-			printf("bash: export: '%s': not a valid identifier\n", arg[i]);
+		{
+			ft_putstr_fd("minshell: export: ", 2);
+			ft_putstr_fd(arg[i], 2);
+			ft_putstr_fd(": not a valid identifier\n", 2);
+		}
+			// printf("bash: export: '%s': not a valid identifier\n", arg[i]);
 		i++;
 	}
 	if (flag)
@@ -317,12 +322,6 @@ int	ft_export(t_command *cmd, t_env *env)
 		}
 		return 0;
    }
-	// else
-	// {
-	// 	// export_variable(cmd);
-		
-	// }
-		
 }
 // int	main(int argc, char **argv, char **env)
 // {

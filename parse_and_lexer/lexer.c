@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/10 01:42:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/08 18:32:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,5 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 			i++;
 		}
 	}
-	return (free_things(spliting), parser(*head, info,env));
+	return (free_things(spliting), expander(*head, env, info));
 }

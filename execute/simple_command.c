@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/03 19:31:34 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/09 18:29:47 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ void	handle_fds(t_fds *fds, t_command *command)
 
 void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
 {
-	// t_lst	*env;
-	// t_lst	*exp;
-	// env = get_env(env->env);
-	// exp = get_export_env(env);
-	int	save;
+	int		save;
 	t_fds	*fds;
 	if (!check_command(command->name, env))
 	{
@@ -52,10 +48,11 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 				save = dup(STDIN_FILENO);
 			else
 				save = dup(STDOUT_FILENO);
-				
-			redirection(command, command->last->type, command->last->last_file, fds);
+			redirection(command, command->last->type, \
+			command->last->last_file, fds);
 		}
-		info->status_code = execute_built_in(command, info, env);
+		execute_built_in(command, info, env);
+		printf("from first %d\n", info->status_code);
 		if (save != -1)
 		{
 			if (!ft_strcmp(command->last->type, "REDIRECT_in"))
@@ -63,26 +60,24 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 			else
 				dup2(save, STDOUT_FILENO);
 		}
-				
 		*built_in = 1;
 	}
 }
 
 
-void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *env)
+void	run_child(t_command *command, int flags, \
+int built_in, char **argv, t_env *env)
 {
 	t_fds	*fds;
 	char	*cmd;
 	if (flags)
 	{
 		handle_fds(fds, command);
-		redirection(command, command->last->type, command->last->last_file, fds);
+		redirection(command, command->last->type, \
+		command->last->last_file, fds);
 	}
 	cmd = get_cmd(command->name);
-	if (!built_in)
-	{	
-		printf("%d\n......",execve(cmd, argv, env->env_arr));
-	}
+	execve(cmd, argv, env->env_arr);
 }
 int	get_list_size(t_lst *lst)
 {
@@ -113,22 +108,26 @@ char	**get_new_env(t_lst *env)
 	while(tmp)
 	{
 		key = ft_strjoin(tmp->key, "=");
-		new[i] = ft_strjoin(key, tmp->value);
+		if (tmp->value)
+			new[i] = ft_strjoin(key, tmp->value);
+		else
+			new[i] = ft_strdup(key);
 		free(key);
 		tmp = tmp->next;
 		i++;
 	}
 	new[i] = NULL;
-	return (new);	
+	return (new);
 }
 
 void	simple_command(t_command *command, t_info *info, t_env *env)
-{
+{	
 	char	**argv;
-	// char	**new_env;
 	int		fid;
 	int		flags;
 	int		built_in;
+	char 	**spliting;
+
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
@@ -142,8 +141,12 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		run_child(command, flags, built_in, argv,env);
 	else
 	{
-		waitpid(fid, &info->status_code, 0);
-		if (info->status_code != 0)
-			info->status_code = 1;
+		waitpid(fid, &info->status_code,0);
+		if (WIFSIGNALED(info->status_code))
+			info->status_code = WTERMSIG(info->status_code) + 128;
+		else
+			info->status_code = WEXITSTATUS(info->status_code);
+		// if (info->status_code != 0)
+		// 	info->status_code = 1;
 	}
 }

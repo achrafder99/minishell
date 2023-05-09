@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:30:20 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 21:08:06 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:44:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	push_component(t_components **head, char *type, char **spliting, int *i)
 	if (!ft_strcmp(type, "PIPE"))
 	{
 		push(head, spliting[*i], "PIPE");
-		if (spliting[*i + 1] != NULL)
+		if (spliting[*i + 1] != NULL && ft_strcmp(spliting[*i + 1],"<<"))
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			(*i)++;

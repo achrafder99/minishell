@@ -1,7 +1,7 @@
 {
-    "files.associations": {
-        "minishell.h": "c",
-        "signal.h": "c",
-        "structs.h": "c"
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#123417",
+        "titleBar.activeBackground": "#1A4920",
+        "titleBar.activeForeground": "#F5FCF6"
     }
 }

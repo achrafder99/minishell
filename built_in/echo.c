@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/30 11:14:24 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/10 15:01:30 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int echo(t_command *cmd,t_info *info)
 
     int i;
     int flags;
+	int j;
 	i = 0;
 	
 	flags = 0;
@@ -150,18 +151,10 @@ int echo(t_command *cmd,t_info *info)
         i++;
     }
     while (cmd->args[i] != NULL)
-	{
-        if (ft_strchr(cmd->args[i],'$'))
-		{
-			print_env(cmd->args[i],info);
-			write(1," ",1);
-		}
-		else
-		{
-			ft_put_echo(cmd->args[i]);
-			// write(1," ",1);
-		}
+	{	
+		write(1,cmd->args[i],ft_strlen(cmd->args[i]));
         i++;
+		write(1," ",1);
     }
     if (!flags) 
         write(1, "\n", 1);

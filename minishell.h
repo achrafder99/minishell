@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/09 12:59:30 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/10 13:18:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	remove_variable(char *key, t_lst *lst);
 char* 	ft_strtok(char* str, const char* delim);
 char	 **split_2(char *input);
 int		number_of_token(char *string);
-char	*extract(t_components *node, t_env *env);
+char	*extract(t_components *node, t_env *env, t_info *info);
 void    expander(t_components *node, t_env *env,t_info *info);
 int		if_key_exist(char *key, t_lst *lst);
 char 	*restring(char *input,int allocation);

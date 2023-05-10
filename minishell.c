@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/08 19:38:36 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/10 13:44:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,10 @@ char	*get_input(void)
 	return (input);
 }
 
-void	process_input(char *input, t_env *env)
+void	process_input(char *input, t_env *env, t_info *info)
 {
 	t_components	*head;
-	t_info			*info;
 
-	info = malloc(sizeof(t_info));
-	if (!info)
-		exit(1);
 	if (input == NULL)
 	{
 		write(1, " ", 1);
@@ -70,7 +66,6 @@ void	process_input(char *input, t_env *env)
 	head = NULL;
 	add_history(input);
 	lexer(input, &head, info, env);
-	printf("Status Exit %d\n",info->status_code);
 	head = NULL;
 }
 
@@ -79,12 +74,16 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	*clear_input;
 	t_env	*env;
+	t_info 	*info;
 
 	signal(SIGINT, interrupt_handler);
 	env = creat_env();
 	env->env = get_env(envp);
 	env->exp = get_export_env(envp);
 	env->env_arr = NULL;
+	info = malloc(sizeof(t_info));
+	if (!info)
+		exit(1);
 	rl_catch_signals = 0;
 	while (1)
 	{
@@ -95,6 +94,6 @@ int	main(int argc, char **argv, char **envp)
 			exit(1);
 		}
 		clear_input = restring(input, number(input));
-		process_input(clear_input, env);
+		process_input(clear_input, env, info);
 	}
 }

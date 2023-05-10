@@ -6,14 +6,42 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 14:03:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/10 13:51:41 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*extract(t_components *node, t_env *env)
+char	*get_exit_status(char *string, t_info *info)
 {
+	int		i;
+	int		length;
+	int		j;
+	char	*status_exit;
+	char	*str;
+
+	status_exit = ft_strdup(ft_itoa(info->status_code));
+	length = (ft_strlen(string) - 1) + ft_strlen(status_exit);
+	str = malloc(sizeof(char) * (length + 1));
+	i = 0;
+	while (i < ft_strlen(status_exit))
+	{
+		str[i] = status_exit[i];
+		i++;
+	}
+	j = 1;
+	while (string[j] != '\0')
+	{
+		str[i] = string[j];
+		j++;
+		i++;
+	}
+	str[length] = '\0';
+	return (str);
+}
+
+char	*extract(t_components *node, t_env *env, t_info *info)
+{	
 	int		i;
 	char	*join;
 	t_node	*tmp;
@@ -32,10 +60,15 @@ char	*extract(t_components *node, t_env *env)
 	spliting = ft_split(ss1, '$');
 	while (spliting[i] != NULL)
 	{	
+		if (ft_strchr(spliting[i], '?'))
+			concat = ft_strjoin(concat, get_exit_status(spliting[i], info));
 		while (tmp)
 		{
 			if (!ft_strcmp(spliting[i], tmp->key) && tmp->value)
+			{
 				concat = ft_strjoin(concat, tmp->value);
+				break ;
+			}
 			tmp = tmp->next;
 		}
 		tmp = env->env->top;
@@ -46,6 +79,5 @@ char	*extract(t_components *node, t_env *env)
 		return (NULL);
 	if (!join)
 		return (concat);
-	join = ft_strdup("");
 	return (ft_strjoin(join, concat));
 }

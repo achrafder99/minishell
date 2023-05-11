@@ -6,13 +6,13 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:12:24 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/14 00:19:27 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/09 05:50:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void exit_shell()
+void	exit_shell(void)
 {
-    exit(1);
+	exit(0);
 }

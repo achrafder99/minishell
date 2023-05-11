@@ -3,91 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/02 04:58:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 22:46:09 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**split_input(char *input)
+void free_components(t_components *head)
 {
-	char	*str;
-	char	*error;
-	char	**spliting;
+    t_components *current = head;
+    t_components *next;
 
-	str = NULL;
-	if (check_is_space(input))
-		str = new_str(input, check_is_space(input));
-	if (str)
-		spliting = ft_split(str, ' ');
-	else
-		spliting = ft_split(input, ' ');
-	if (!check_quotes(input))
-	{
-		error = "Syntax Error: String must be closed\n";
-		write(2, error, ft_strlen(error));
-		return (NULL);
-	}
-	free(str);
-	return (spliting);
+    while (current != NULL) {
+        next = current->next;
+        free(current->token);
+        free(current->type.type);
+        free(current);
+        current = next;
+    }
 }
 
-void	push_component(t_components **head, char *type, char **spliting, int *i)
+void	lex2(char **spliting, char *type, t_data *data)
 {
-	if (!ft_strcmp(type, "PIPE"))
-	{
-		push(head, spliting[*i], "PIPE");
-		if (spliting[*i + 1] != NULL)
-		{
-			push(head, spliting[*i + 1], "COMMAND");
-			(*i)++;
-		}
-	}
-	else if (!ft_strcmp(type, "REDIRECT_out"))
-		out(spliting, i, head);
-	else if (!ft_strcmp(type, "REDIRECT_in"))
-		in(spliting, i, head);
-	else if (!ft_strcmp(type, "APPEND_MODE"))
-		append_mode(spliting, i, head);
-	else
-		here_doc(spliting, i, head);
+	if (!ft_strcmp(spliting[0], ">>"))
+		lex_redirection(data);
+	else if (!ft_strcmp(spliting[0], "<<"))
+		lex_redirection(data);
+	else if (!ft_strcmp(spliting[0], ">"))
+		lex_redirection(data);
+	else if (!ft_strcmp(spliting[0], "<"))
+		lex_redirection(data);
 }
 
-int	check_is_redirection(char *symbol)
+void	lex1(char **spliting, t_components **head, int i)
 {
-	return (!ft_strcmp(symbol, "<<")
-		|| !ft_strcmp(symbol, ">>")
-		|| !ft_strcmp(symbol, "<")
-		|| !ft_strcmp(symbol, ">"));
-}
+	t_data				data;
+	int					flags;
 
-void	lexer(char *input, t_components **head, t_info *info)
-{
-	char	**spliting;
-	int		i;
-
-	spliting = split_input(input);
-	if (!spliting)
-		return ;
-	push(head, spliting[0], "COMMAND");
-	i = 1;
+	flags = 0;
+	data = (t_data){.type = spliting[0], head, spliting, &i, &flags};
+	lex2(spliting, data.type, &data);
 	while (spliting[i] != NULL)
 	{
-		if (spliting[i][0] == '-')
-			push(head, spliting[i], "OPTION");
-		else if (spliting[i][0] == '|')
+		if (spliting[i][0] == '|')
 			push_component(head, "PIPE", spliting, &i);
 		else if (check_is_redirection(spliting[i]))
+		{
 			redirect_componenets(spliting, &i, head);
+			if (spliting[i + 1] != NULL && !flags \
+			&& !check_is_redirection(spliting[i + 1]))
+			{
+				push(head, spliting[i + 1], "COMMAND");
+				i++;
+				flags = 1;
+			}
+		}
 		else
 			push(head, spliting[i], "ARG");
 		i++;
 	}
-	free_things(spliting);
-	parser(*head, info);
-	free_node(*head);
-	*head = NULL;
+}
+
+void	lexer(char *input, t_components **head, t_info *info, t_env *env)
+{
+	char	**spliting;
+	int		i;
+
+	i = 0;
+	spliting = split_input(input);
+	if (check_is_redirection(spliting[0]))
+		lex1(spliting, head, i);
+	else
+	{
+		push(head, spliting[0], "COMMAND");
+		i = 1;
+		while (spliting[i] != NULL)
+		{
+			if (spliting[i][0] == '-')
+				push(head, spliting[i], "OPTION");
+			else if (spliting[i][0] == '|')
+				push_component(head, "PIPE", spliting, &i);
+			else if (check_is_redirection(spliting[i]))
+				redirect_componenets(spliting, &i, head);
+			else
+				push(head, spliting[i], "ARG");
+			i++;
+		}
+	}
+	
+	return (free_things(spliting), expander(*head, env, info));
 }

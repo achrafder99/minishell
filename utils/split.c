@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 18:34:22 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/11 18:10:51 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:01:01 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,18 @@
 
 static int	getrows(char const *str, char delimiter)
 {
-	int count = 0;
-    int i = 0;
+	int	count;
+	int	i;
 
-    while (str[i] != '\0') {
-        if (str[i] != delimiter && (i == 0 || str[i-1] == delimiter)) 
-            count++;
-        i++;
-    }
-
-    return count;
+	count = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != delimiter && (i == 0 || str[i -1] == delimiter))
+			count++ ;
+		i++ ;
+	}
+	return (count);
 }
 
 static int	getcolumn(char const *str, char delimiter, int index)

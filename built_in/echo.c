@@ -6,13 +6,14 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 21:23:30 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:01:30 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void print_env(char *string){
+void print_env(char *string,t_info *info)
+{
 	
 	int i;
 	while (*string != '\0' && *string != '$')
@@ -46,9 +47,11 @@ void print_env(char *string){
 	char *value;
 	spliting = ft_split(string,'$');
 	i = 0;
-	while (spliting[i] != NULL) {
-		if(spliting[i][0] == '?'){
-			write(1,"0",1);
+	while (spliting[i] != NULL)
+	{
+		if(spliting[i][0] == '?')
+		{
+			printf("%d\n",info->status_code);
 			int j;
 			j = 1;
 			while (spliting[i][j] != '\0')
@@ -128,29 +131,32 @@ void	free_split(char **split)
 	free(split);
 }
 
-void echo(t_command *cmd) {
+int echo(t_command *cmd,t_info *info)
+{
 
-    int i = 0;
-    int flags = 0;
-    if (cmd->argc == 0) {
+    int i;
+    int flags;
+	int j;
+	i = 0;
+	
+	flags = 0;
+    if (cmd->argc == 0)
+	{
         write(1, "\n", 1);
-        return;
+        return (1);
     }
-    while (cmd->args[i] != NULL && !ft_strcmp(cmd->args[i], "-n")) {
+    while (cmd->args[i] != NULL && !ft_strcmp(cmd->args[i], "-n"))
+	{
         flags = 1;
         i++;
     }
-    while (cmd->args[i] != NULL) {
-        if(ft_strchr(cmd->args[i],'$')){
-			print_env(cmd->args[i]);
-			write(1," ",1);
-		}
-		else{
-			ft_put_echo(cmd->args[i]);
-			write(1," ",1);
-		}
+    while (cmd->args[i] != NULL)
+	{	
+		write(1,cmd->args[i],ft_strlen(cmd->args[i]));
         i++;
+		write(1," ",1);
     }
     if (!flags) 
         write(1, "\n", 1);
+	return (0);
 }

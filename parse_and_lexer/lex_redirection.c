@@ -1,0 +1,138 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_redirection.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/09 00:38:41 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/11 22:24:12 by aalami           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+void	handle_heredoc(t_data *data)
+{
+	t_components	**head;
+	char			**spliting;
+	int				*i;
+	int				*flags;
+
+	head = data->head;
+	spliting = data->spliting;
+	i = data->i;
+	flags = data->flags;
+	push(head, spliting[0], "HEREDOC");
+	*i = 1;
+	if (spliting[1] != NULL && !check_is_redirection(spliting[1]))
+	{
+		push(head, spliting[1], "END_HEREDOC");
+		*i += 1;
+	}
+	if (spliting[2] != NULL && !check_is_redirection(spliting[*i]) && ft_strcmp(spliting[*i],"|"))
+	{
+		push(head, spliting[2], "COMMAND");
+		*i += 1;
+		*flags = 1;
+	}
+}
+
+void	handle_redirect_out(t_data *data)
+{
+	t_components	**head;
+	char			**spliting;
+	int				*i;
+	int				*flags;
+
+	head = data->head;
+	spliting = data->spliting;
+	i = data->i;
+	flags = data->flags;
+	push(head, spliting[0], "REDIRECT_out");
+	*i = 1;
+	if (spliting[1] != NULL && !check_is_redirection(spliting[1]))
+	{
+		push(head, spliting[1], "FILENAME");
+		*i += 1;
+	}
+	if (spliting[2] != NULL && !check_is_redirection(spliting[*i]))
+	{
+		push(head, spliting[2], "COMMAND");
+		*i += 1;
+		*flags = 1;
+	}
+}
+
+void	handle_redirect_in(t_data *data)
+{
+	t_components	**head;
+	int				*i;
+	int				*flags;
+
+	head = data->head;
+	i = data->i;
+	flags = data->flags;
+	push(head, data->spliting[0], "REDIRECT_in");
+	*i = 1;
+	if (data->spliting[1] != NULL && !check_is_redirection(data->spliting[1]))
+	{
+		push(head, data->spliting[1], "FILENAME");
+		*i += 1;
+	}
+	if (data->spliting[2] != NULL && !check_is_redirection(data->spliting[*i]))
+	{
+		push(head, data->spliting[2], "COMMAND");
+		*i += 1;
+		*flags = 1;
+	}
+}
+
+void	handle_append_mode(t_data *data)
+{
+	t_components	**head;
+	char			**spliting;
+	int				*i;
+	int				*flags;
+
+	head = data->head;
+	spliting = data->spliting;
+	i = data->i;
+	flags = data->flags;
+	push(head, spliting[0], "APPEND_MODE");
+	*i = 1;
+	if (spliting[1] != NULL && !check_is_redirection(spliting[1]))
+	{
+		push(head, spliting[1], "FILENAME");
+		*i += 1;
+	}
+	if (spliting[2] != NULL && !check_is_redirection(spliting[*i]))
+	{
+		push(head, spliting[2], "COMMAND");
+		*i += 1;
+		*flags = 1;
+	}
+}
+
+void	lex_redirection(t_data *data)
+{
+	t_components	**head;
+	char			*type;
+	char			**spliting;
+	int				*i;
+	int				*flags;
+
+	type = data->type;
+	head = data->head;
+	spliting = data->spliting;
+	i = data->i;
+	flags = data->flags;
+	if (!ft_strcmp(type, "<<"))
+		handle_heredoc(data);
+	else if (!ft_strcmp(type, ">"))
+		handle_redirect_out(data);
+	else if (!ft_strcmp(type, "<"))
+		handle_redirect_in(data);
+	else
+		handle_append_mode(data);
+}

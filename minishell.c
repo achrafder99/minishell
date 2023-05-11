@@ -6,11 +6,19 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/10 13:44:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
+
+void	interrupt_handler(int signal)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 char	*display_name(void)
 {
@@ -21,27 +29,11 @@ char	*display_name(void)
 
 	username = ft_strjoin(getenv("USER"), "@:");
 	temp = username;
-	free(username);
 	if (temp == NULL)
-	{
 		write(2, "Could not get username", ft_strlen("Could not get username"));
-	}
 	dd = ft_strjoin(temp, " > ");
+	free(username);
 	return (dd);
-}
-
-char	*lowercase(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] >= 65 && input[i] <= 90)
-			input[i] = input[i] + 32;
-		i++;
-	}
-	return (input);
 }
 
 char	*get_input(void)
@@ -53,14 +45,13 @@ char	*get_input(void)
 	input = NULL;
 	full_username = display_name();
 	tt = ft_strjoin(full_username, "");
-	free(full_username);
-	full_username = NULL;
 	input = readline(tt);
+	free(full_username);
 	free(tt);
 	return (input);
 }
 
-void	process_input(char *input, t_info *info)
+void	process_input(char *input, t_env *env, t_info *info)
 {
 	t_components	*head;
 
@@ -68,27 +59,41 @@ void	process_input(char *input, t_info *info)
 	{
 		write(1, " ", 1);
 		write(1, "exit\n", 5);
-		exit(1);
+		exit(0);
 	}
 	else if (strlen(input) == 0)
 		return ;
 	head = NULL;
 	add_history(input);
-	lexer(input, &head, info);
+	lexer(input, &head, info, env);
+	head = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_info	info;
 	char	*input;
+	char	*clear_input;
+	t_env	*env;
+	t_info 	*info;
 
-	signal(SIGINT, handle_signals);
+	signal(SIGINT, interrupt_handler);
+	env = creat_env();
+	env->env = get_env(envp);
+	env->exp = get_export_env(envp);
+	env->env_arr = NULL;
+	info = malloc(sizeof(t_info));
+	if (!info)
+		exit(1);
+	rl_catch_signals = 0;
 	while (1)
 	{
 		input = get_input();
-		process_input(input, &info);
-		free(input);
-		input = NULL;
+		if (input == NULL)
+		{
+			printf("exit\n");
+			exit(1);
+		}
+		clear_input = restring(input, number(input));
+		process_input(clear_input, env, info);
 	}
-	return (0);
 }

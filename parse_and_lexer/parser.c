@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 19:58:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:33:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ int	open_fds(const char *type, const char *filename, int *fd)
 		*fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (*fd == -1)
 			return (perror("error occurred."), -1);
+	}
+	else if (!ft_strcmp(type, "HEREDOC"))
+	{	
+		printf("open heredoc\n");
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/10 13:44:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:30:10 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	process_input(char *input, t_env *env, t_info *info)
 	head = NULL;
 	add_history(input);
 	lexer(input, &head, info, env);
-	head = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -94,6 +93,12 @@ int	main(int argc, char **argv, char **envp)
 			exit(1);
 		}
 		clear_input = restring(input, number(input));
+		free(input);
+		input = NULL;
 		process_input(clear_input, env, info);
+		free(clear_input);
+		clear_input = NULL;
+		free(info);
+		info = NULL;
 	}
 }

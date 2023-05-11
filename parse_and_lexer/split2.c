@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 19:00:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 21:25:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:55:27 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ char	**split_2(char *input)
 		token = ft_strtok(NULL, " ");
 	}
 	result[i] = NULL;
+	free(string);
 	return (result);
 }

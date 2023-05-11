@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/10 15:02:44 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:54:56 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_env *env, t_info *info)
 		if (ft_strchr(components->token, '$') \
 		&& ft_strcmp(components->type.type, "END_HEREDOC"))
 		{
-			temp = extract(components, env,info);
+			temp = extract(components, env, info);
 			if (temp)
 			{
 				spliting = ft_split(temp, ' ');
@@ -46,18 +46,13 @@ t_env *env, t_info *info)
 			}
 			else
 				push(&components1, "", components->type.type);
+			free(temp);
+			temp = NULL;
 		}
 		else
 			push(&components1, components->token, components->type.type);
 		components = components->next;
 	}
 	components = components1;
-	while (components != NULL)
-	{
-		printf("Token (%s) Type (%s)\n", components->token, \
-		components->type.type);
-		components = components->next;
-	}
-	return ;
 	parser(components1, info, env);
 }

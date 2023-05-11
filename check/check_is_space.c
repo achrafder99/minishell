@@ -6,25 +6,11 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:51:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/08 18:30:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:29:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	update_input(char *input, int *i, int *count)
-{
-	if (input[*i + 1] == '>')
-	{
-		(*count)++;
-		(*i) += 2;
-	}
-	else if (input[*i + 1] == '<')
-	{
-		(*count)++;
-		(*i) += 2;
-	}
-}
 
 int check_is_space(char *input)
 {
@@ -32,44 +18,47 @@ int check_is_space(char *input)
     int count;
     
     i = 0;
-	count = 0;
+    count = 0;
     while (input[i] != '\0')
-	{
+    {
         if (input[i] == '\"' || input[i] == '\'')
         {
             while (input[i] != '\0' && (input[i] != '\'' || input[i] != '\"'))
                 i++;            
         }
-        if (includes(input[i]) && (input[i + 1] != '>' && input[i + 1] != '<'))
-		{
+        if (includes(input[i]) && input[i + 1] != '>' && input[i + 1] != '<')
+        {
             if (input[i + 1] == ' ' && input[i - 1] != ' ')
-				count += 1;
+                count += 1;
             if(input[i + 1] != ' ' && input[i - 1] == ' ')
                 count += 1;
             if(input[i + 1] != ' ' && input[i - 1] != ' ')
                 count += 2;
         }
         else
-		{
-
-            if (input[i] == '>' && input[i + 1] == '>')
-			{
-                if (input[i - 1] != ' ' && input[i + 2] != ' ')
+        {
+            if ((input[i] == '>' && input[i + 1] == '>'))
+            {
+                if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0)
+                    count += 1;
+                else if (input[i - 1] == ' ' &&  input[i + 2] != ' ' && i != 0)
+                    count += 1;
+                else if (input[i - 1] != ' ' &&  input[i + 2] != ' ' && i != 0)
                     count += 2;
-                else if (input[i - 1] == ' ' && input[i + 2] != ' ')
-                    count += 1;
-                else if (input[i - 1] != ' ' && input[i + 2] == ' ')
-                    count += 1;
+                if (i == 0 && input[i] == '>' &&  input[i + 1] == '>' && input[i + 2] != ' ')
+                  count++;
                 i += 1;
             }
             else if (input[i] == '<' && input[i + 1] == '<')
-			{
-                if (input[i - 1] != ' ' && input[i + 2] == ' ')
+            {
+                if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0)
                     count += 1;
-                else if (input[i - 1] == ' ' && input[i + 2] != ' ')
+                else if (input[i - 1] == ' ' &&  input[i + 2] != ' ' && i != 0)
                     count += 1;
-                else if (input[i - 1] != ' ' && input[i + 2] != ' ')
+                else if (input[i - 1] != ' ' &&  input[i + 2] != ' ' && i != 0)
                     count += 2;
+                if (i == 0 && input[i] == '<' &&  input[i + 1] == '<' && input[i + 2] != ' ')
+                  count++;
                 i += 1;
             }
         }

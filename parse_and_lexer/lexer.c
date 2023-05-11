@@ -6,11 +6,25 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/08 18:32:47 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:48:51 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void free_components(t_components *head)
+{
+    t_components *current = head;
+    t_components *next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current->token);
+        free(current->type.type);
+        free(current);
+        current = next;
+    }
+}
 
 void	lex2(char **spliting, char *type, t_data *data)
 {
@@ -60,6 +74,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 
 	i = 0;
 	spliting = split_input(input);
+	i = 0;
 	if (check_is_redirection(spliting[0]))
 		lex1(spliting, head, i);
 	else
@@ -79,5 +94,9 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 			i++;
 		}
 	}
-	return (free_things(spliting), expander(*head, env, info));
+	expander(*head, env, info);
+	free(*head);
+	free_things(spliting);
+    *head = NULL;
+	return ;
 }

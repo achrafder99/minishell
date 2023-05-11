@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 11:13:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:50:52 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	int		built_in;
 	char 	**spliting;
 
-	return;
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;

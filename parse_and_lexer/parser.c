@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 14:33:26 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:06:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,12 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	t_piped			*pipe_line;
 
 	node = tokens;
+	while (node)
+	{
+		printf("%s\n",node->token);
+		node = node->next;
+	}
+	return;
 	command = NULL;
 	pipe_line = NULL;
 	if (handle_errors(tokens))

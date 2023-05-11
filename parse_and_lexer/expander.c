@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 11:54:56 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:14:29 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,14 @@ t_env *env, t_info *info)
 
 	components1 = NULL;
 	position = 0;
+	// components = node;	
 	components = node;
+	while (components)
+	{
+		printf("%s\n",components->token);
+		components = components->next;
+	}
+	return;
 	tmp = node;
 	while (components != NULL)
 	{
@@ -54,5 +61,6 @@ t_env *env, t_info *info)
 		components = components->next;
 	}
 	components = components1;
+	return;
 	parser(components1, info, env);
 }

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 23:16:50 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/12 20:03:33 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 
 	command = NULL;
 	pipe_line = NULL;
-	if (handle_errors(tokens))
+	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
 		info->status_code = 1;
 	if (check_is_command(node) && check_is_redirection(node->token))
 		node = insert_command_at_front(tokens);

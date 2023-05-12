@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 17:29:32 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:32:46 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 // # define GREEN "\033[32m"
 // # define RESET "\033[0m"
 
+
 # include "structs.h"
 # include "heredoc.h"
 # include <dirent.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -46,7 +48,7 @@ int			echo(t_command *cmd, t_info *info);
 int			cd(t_command *cmd, t_env *env);
 int			pwd(t_command *cmd);
 int			get_size(t_components *tokens);
-void		exit_shell(void);
+int			exit_shell(t_command *cmd);
 void		parser(t_components *tokens, t_info *info, t_env *env);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char		*ft_strstr(const char *haystack, const char *needle);
@@ -124,6 +126,7 @@ void		push_list(t_lst *lst, char **env);
 int 		ft_env(t_lst *env_lst,t_command *command);
 t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
+unsigned long long	ft_atoi2(const char *str);
 int	ft_atoi(const char *str);
 char	*ft_itoa(int c);
 void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *env);
@@ -147,4 +150,5 @@ void	ft_add_heredoc(t_here_lst *lst, t_heredoc *new);
 t_heredoc	*last_heredoc(t_here_lst *lst);
 t_heredoc	*new_heredoc(char *heredoc, char *delimit);
 t_here_data	*open_heredoc(t_here_lst *list);
+int	ft_isdigit(int c);
 #endif

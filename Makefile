@@ -6,7 +6,7 @@
 #    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/11 14:53:50 by aalami           ###   ########.fr        #
+#    Updated: 2023/05/12 19:33:09 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ includes.c \
 ./restring.c \
 ./get_argv.c ./utils/join.c ./utils/ft_strcmp.c ./utils/match_file.c ./utils/number_of_file.c \
 ./utils/split.c ./utils/ft_strchr.c ./utils/ft_strtrim.c ./utils/ft_strlen.c ./utils/get_size.c ./utils/ft_memcpy.c ./utils/ft_strstr.c \
-./utils/ft_strdup.c ./utils/number_of_stars.c ./utils/matched_pattern.c ./utils/ft_atoi.c ./utils/ft_itoa.c ./utils/ft_putstr_fd.c ./utils/ft_putchar_fd.c\
+./utils/ft_strdup.c ./utils/number_of_stars.c ./utils/matched_pattern.c ./utils/ft_atoi.c ./utils/ft_itoa.c ./utils/ft_putstr_fd.c ./utils/ft_putchar_fd.c ./utils/ft_isdigit.c ./utils/ft_atoi2.c\
 ./toknize/push_token.c \
 ./parse_and_lexer/redirection.c ./parse_and_lexer/redirect_componenets.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c ./parse_and_lexer/piped.c ./parse_and_lexer/init_command.c \

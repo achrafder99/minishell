@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoi2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 14:47:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/12 19:32:12 by aalami           ###   ########.fr       */
+/*   Created: 2023/05/12 19:31:52 by aalami            #+#    #+#             */
+/*   Updated: 2023/05/12 19:32:05 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_atoi(const char *str)
+unsigned long long	ft_atoi2(const char *str)
 {
-	int	ret;
-	int	sign;
-	int	i;
+	unsigned long long	ret;
+	int			sign;
+	int			i;
 
 	i = 0;
 	ret = 0;
@@ -29,7 +29,7 @@ int	ft_atoi(const char *str)
 			sign *= -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (ft_isdigit(str[i]))
 	{
 		ret = ((ret * 10) + str[i] - 48);
 		i++;

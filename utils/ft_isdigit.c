@@ -1,39 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 14:47:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/12 19:32:12 by aalami           ###   ########.fr       */
+/*   Created: 2023/05/12 19:28:17 by aalami            #+#    #+#             */
+/*   Updated: 2023/05/12 19:28:38 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_atoi(const char *str)
+int	ft_isdigit(int c)
 {
-	int	ret;
-	int	sign;
-	int	i;
-
-	i = 0;
-	ret = 0;
-	sign = 1;
-	while ((str[i] >= '\t' && str[i] <= '\r') || str[i] == ' ')
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		ret = ((ret * 10) + str[i] - 48);
-		i++;
-	}
-	ret = ret * sign;
-	return (ret);
+	if (c >= '0' && c <= '9')
+		return (1);
+	else
+		return (0);
 }

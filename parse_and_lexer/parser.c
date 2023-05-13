@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/12 20:03:33 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 17:52:07 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	{
 		while (node != NULL)
 		{
+			// printf("Token (%s) Type (%s)\n",node->token,node->type.type);
 			if (ft_strcmp(node->type.type, "PIPE"))
 				handle_command(node, &command, info);
 			else

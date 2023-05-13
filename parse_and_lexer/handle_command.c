@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 22:41:16 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 16:40:55 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,18 @@ char	*handle_command(t_components *node, t_command **command, t_info *info)
 	cut_str = cut_string(node->token);
 	if (!ft_strcmp(node->type.type, "COMMAND"))
 		*command = init_command(*command, cut_str);
-	if ((*command)->last == NULL)
-	{
-		(*command)->last = malloc(sizeof(t_last_file));
-		(*command)->last->last_in = NULL;
-		(*command)->last->last_out = NULL;
-		(*command)->last->in_type = NULL;
-		(*command)->last->out_type = NULL;
-	}
 	else if (!ft_strcmp(node->type.type, "OPTION") \
 		|| !ft_strcmp(node->type.type, "ARG"))
 		(*command)->args = add_args(*command, cut_str);
 	else if (check_type(node->type.type))
 	{
+		if ((*command)->last == NULL)
+		{
+			(*command)->last->last_in = NULL;
+			(*command)->last->last_out = NULL;
+			(*command)->last->in_type = NULL;
+			(*command)->last->out_type = NULL;
+		}
 		if (ft_strcmp(node->token, "<") || ft_strcmp(node->token, ">"))
 			handle_redirect(command, node, &fd, info);
 		if (!ft_strcmp(node->token, ">>"))

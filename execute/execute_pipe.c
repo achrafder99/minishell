@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 23:17:27 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 17:55:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 }
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
+	printf("TT\n");
 	int	i, j;
 	int	**fd;
 	int outfile;
@@ -144,21 +145,22 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	// {
 	// 	printf("Command (%d)\n", i);
 	// 	printf("command name :%s\n", piping->command[i].name);
-	// 	// printf("Args ");
-	// 	// j = 0;
-	// 	// while (j < piping->command[i].argc)
-	// 	// {
-	// 	// 	printf("%s\t", piping->command[i].args[j]);
-	// 	// 	j++;
-	// 	// }
-	// 	// printf("\n");
-	// 	// t_heredoc *tmp;
-	// 	// tmp = piping->command[i].heredoc_lst->top;
-	// 	// while(tmp)
-	// 	// {
-	// 	// 	printf("heredoc delimiter %s\n", tmp->delimit);
-	// 	// 	tmp = tmp->next;
-	// 	// }
+	// 	printf("Args ");
+	// 	j = 0;
+	// 	while (j < piping->command[i].argc)
+	// 	{
+	// 		printf("%s\t", piping->command[i].args[j]);
+	// 		j++;
+	// 	}
+	// 	printf("\n");
+	// 	if (piping->command[i].heredoc_lst)
+	// 	{t_heredoc *tmp;
+	// 	tmp = piping->command[i].heredoc_lst->top;
+	// 	while(tmp)
+	// 	{
+	// 		printf("heredoc delimiter %s\n", tmp->delimit);
+	// 		tmp = tmp->next;
+	// 	}}
 	// 	printf("last %s\n", piping->command[i].last->in_type);
 	// 	printf("last %s\n", piping->command[i].last->last_in);
 	// 	i++;

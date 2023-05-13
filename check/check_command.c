@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/02 14:35:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:23:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ int	from_path(char *path, char *command)
 }
 char	*get_path(t_lst *env)
 {
-	t_node *tmp;
-	
+	t_node	*tmp;
+
 	tmp = env->top;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "PATH"))
-			return(tmp->value);
+			return (tmp->value);
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -48,13 +48,13 @@ int	check_command(char *command, t_env *env)
 	char	*path;
 	char	**spliting;
 	int		i;
+	char	**mini;
 
 	i = 0;
 	path = get_path(env->env);
 	if (!path && !check_is_built_in(command))
 		return (0);
-	char **mini = ft_split(command,'/');
-	// printf("dd == %s\n",strrchr(command,'/'));
+	mini = ft_split(command, '/');
 	if (!check_is_built_in(command))
 	{
 		if (ft_strchr(command, '/'))

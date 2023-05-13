@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 14:17:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/11 16:28:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:28:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ void	ft_add_heredoc(t_here_lst *lst, t_heredoc *new)
 	new->next = 0;
 }
 
-t_here_lst	*creat_heredoc_list()
+t_here_lst	*creat_heredoc_list(void)
 {
-	t_here_lst	*lst;
+	t_here_lst *lst;
 	lst = malloc(sizeof(t_here_lst));
 	if (!lst)
-		return 0;
+		return (0);
 	lst->top = NULL;
 	return (lst);
 }

@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   check_is_space.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:51:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 22:07:26 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:23:49 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../minishell.h"
 
 #include "../minishell.h"
 

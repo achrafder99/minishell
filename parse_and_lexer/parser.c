@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/13 17:52:07 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:21:30 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,6 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	t_piped			*pipe_line;
 
 	node = tokens;
-	// while (node)
-	// {
-	// 	printf("%s\n",node->token);
-	// 	node = node->next;
-	// }
-	// return;
-
 	command = NULL;
 	pipe_line = NULL;
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
@@ -107,7 +100,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	{
 		while (node != NULL)
 		{
-			// printf("Token (%s) Type (%s)\n",node->token,node->type.type);
+			printf("Token (%s) Type (%s)\n",node->token,node->type.type);
 			if (ft_strcmp(node->type.type, "PIPE"))
 				handle_command(node, &command, info);
 			else

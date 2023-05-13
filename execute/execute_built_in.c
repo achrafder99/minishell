@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/12 20:04:07 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:25:56 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ int	execute_built_in(t_command *cmd, t_info *info, t_env *env)
 		info->status_code = exit_shell(cmd);
 		exit(info->status_code);
 	}
-		// return (info->status_code = exit_shell(cmd));
 	return (1);
 }

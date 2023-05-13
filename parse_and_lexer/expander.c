@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 13:58:20 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:20:19 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,5 @@ t_env *env, t_info *info)
 		components = components->next;
 	}
 	components = components1;
-	// while (components != NULL)
-	// {
-	// 	printf("Token (%s) Type (%s)\n", components->token, \
-	// 	components->type.type);
-	// 	components = components->next;
-	// }
-	// return ;
 	parser(components1, info, env);
 }

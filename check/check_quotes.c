@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:53:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 21:41:09 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:24:12 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_quotes(char *input)
 		if ((input[i] == '\'' || input[i] == '\"') && input[i - 1] != '\\')
 		{
 			if (input[i] == '\'')
-					single++;
+				single++;
 			else
 				double_q++;
 		}

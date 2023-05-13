@@ -6,11 +6,11 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/10 13:44:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:13:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	interrupt_handler(int signal)
 {
@@ -74,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	*clear_input;
 	t_env	*env;
-	t_info 	*info;
+	t_info	*info;
 
 	signal(SIGINT, interrupt_handler);
 	env = creat_env();

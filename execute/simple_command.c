@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 21:11:01 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/13 20:27:09 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 
 extern char	**environ;
 
-// void	handle_fds(t_fds *fds, t_command *command)
-// {
-// 	fds = malloc(sizeof(t_fds));
-// 	fds->fd_out = open(command->outfile, O_RDWR, 0777);
-// 	fds->fd_in = open(command->infile, O_RDWR, 0777);
-// 	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
-// }
 t_here_node	*last_here_node(t_here_data *lst)
 {
 	t_here_node	*tmp;
@@ -32,6 +25,7 @@ t_here_node	*last_here_node(t_here_data *lst)
 		tmp = tmp->next;
 	return (tmp);
 }
+
 t_here_node	*new_here_node(char *data)
 {
 	t_here_node	*node;
@@ -57,12 +51,13 @@ void	ft_add_here_data(t_here_data *lst, t_here_node *new)
 	new->next = 0;
 }
 
-t_here_data	*creat_heredoc_data_list()
+t_here_data	*creat_heredoc_data_list(void)
 {
 	t_here_data	*lst;
+
 	lst = malloc(sizeof(t_here_lst));
 	if (!lst)
-		return 0;
+		return (0);
 	lst->top = NULL;
 	return (lst);
 }
@@ -72,8 +67,8 @@ t_here_data	*open_heredoc(t_here_lst *list)
 	t_heredoc	*tmp;
 	t_here_data	*data_lst;
 	t_here_node	*node;
-	char *data;
-	int	flag;
+	char		*data;
+	int			flag;
 
 	tmp = list->top;
 	flag = 0;
@@ -89,26 +84,25 @@ t_here_data	*open_heredoc(t_here_lst *list)
 		{
 			data = readline(">");
 			if (!data)
-				break;
+				break ;
 			if (ft_strcmp(data, tmp->delimit))
 			{
-				// write(1, data, ft_strlen(data));
-				// write(1, "\n", 1);
 				if (flag)
 				{
 					node = new_here_node(data);
 					ft_add_here_data(data_lst, node);
-				}	
+				}
 			}
 			else
-				break;
-			free (data);	
+				break ;
+			free(data);
 		}
 		tmp = tmp->next;
 	}
 	return (data_lst);
 }
-void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
+void	first_step(t_command *command, t_info *info, int *built_in, int *flags,
+		t_env *env)
 {
 	int		save;
 	t_fds	*fds;
@@ -123,15 +117,14 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	save = -1;
 	if (command->last != NULL)
 	{
-		if (check_type(command->last->in_type) || check_type(command->last->out_type))
+		if (check_type(command->last->in_type)
+			|| check_type(command->last->out_type))
 			*flags = 1;
 	}
-	
 	if (check_is_built_in(command->name))
 	{
 		if (*flags)
 		{
-			// handle_fds(fds, command);
 			if (command->last->last_in)
 				save = dup(STDIN_FILENO);
 			else if (command->last->last_out)
@@ -150,29 +143,25 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	}
 }
 
-
-void	run_child(t_command *command, int flags, \
-int built_in, char **argv, t_env *env)
+void	run_child(t_command *command, int flags, int built_in, char **argv,
+		t_env *env)
 {
 	t_fds	*fds;
 	char	*cmd;
-		// printf("%d\n",flags);
+
 	if (flags)
-	{
-		// handle_fds(fds, command);
 		redirection(command, command->data_lst);
-	}
 	cmd = get_cmd(command->name);
 	execve(cmd, argv, env->env_arr);
 }
 int	get_list_size(t_lst *lst)
 {
-	int	i;
+	int		i;
 	t_node	*tmp;
 
 	i = 0;
 	tmp = lst->top;
-	while(tmp)
+	while (tmp)
 	{
 		i++;
 		tmp = tmp->next;
@@ -184,14 +173,14 @@ char	**get_new_env(t_lst *env)
 	char	**new;
 	char	*key;
 	t_node	*tmp;
-	int	size;
-	int	i;
-	
+	int		size;
+	int		i;
+
 	size = get_list_size(env);
 	tmp = env->top;
 	i = 0;
 	new = (char **)malloc(sizeof(char *) * (size + 1));
-	while(tmp)
+	while (tmp)
 	{
 		key = ft_strjoin(tmp->key, "=");
 		if (tmp->value)
@@ -207,12 +196,12 @@ char	**get_new_env(t_lst *env)
 }
 
 void	simple_command(t_command *command, t_info *info, t_env *env)
-{	
+{
 	char	**argv;
 	int		fid;
 	int		flags;
 	int		built_in;
-	char 	**spliting;
+	char	**spliting;
 
 	argv = get_argv(command, command->argc);
 	flags = 0;
@@ -220,17 +209,16 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);
-	
 	if (built_in || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
 	if (command)
-	fid = fork();
+		fid = fork();
 	if (fid == 0)
-		run_child(command, flags, built_in, argv,env);
+		run_child(command, flags, built_in, argv, env);
 	else
 	{
-		waitpid(fid, &info->status_code,0);
+		waitpid(fid, &info->status_code, 0);
 		if (WIFSIGNALED(info->status_code))
 			info->status_code = WTERMSIG(info->status_code) + 128;
 		else

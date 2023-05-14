@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 00:20:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/14 15:05:57 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	int infile;
 	int flag;
 	
-	return;
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
 	j = 0;
 	while (j < piping->number_of_commands - 1)
@@ -56,7 +55,6 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	i = 0;
 	while (i < piping->number_of_commands)
 	{
-		printf("Rr\n");
 		flag = 0;
 		if (ft_strlen(piping->command[i].name))
 		{

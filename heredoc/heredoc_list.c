@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 14:17:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/11 16:28:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/14 15:04:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ t_heredoc	*last_heredoc(t_here_lst *lst)
 void	ft_add_heredoc(t_here_lst *lst, t_heredoc *new)
 {
 	t_heredoc	*tmp;
-
 	if (!new)
 		return ;
 	if (!lst->top)

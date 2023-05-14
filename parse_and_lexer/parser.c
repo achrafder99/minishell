@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 00:14:24 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/14 15:09:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,31 @@ void	without_command(t_components *node, t_info *info)
 {
 	t_components	*tokens;
 	int				fd;
+	char			*line;
+	char			*deli;
+	int			temppp;
 
 	tokens = node;
-	while (node != NULL)
+	while (tokens != NULL)
 	{
-		if (node->next == NULL)
-			break ;
-		info->status_code = open_fds(node->type.type, node->next->token, &fd);
-		close(fd);
-		node = node->next;
+		if (tokens->next == NULL)
+			break;
+		if (ft_strcmp(tokens->type.type, "HEREDOC"))
+		{
+			info->status_code = open_fds(tokens->type.type, tokens->next->token, &fd);
+			close(fd);
+		}
+		else{
+			deli = tokens->next->token;
+			while (1)
+			{
+				line = readline("> ");
+				if (!strncmp(line, deli, ft_strlen(line)))
+					break ;
+			}
+			free(line);
+		}
+		tokens = tokens->next;
 	}
 }
 
@@ -101,18 +117,13 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	t_piped			*pipe_line;
 
 	node = tokens;
-	// while (node)
-	// {
-	// 	printf("%s\n",node->token);
-	// 	node = node->next;
-	// }
-	// return;
-
 	command = NULL;
 	pipe_line = NULL;
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
 		info->status_code = 1;
-	if (check_is_command(node) && check_is_redirection(node->token) && !not_pipe(node))
+	if (check_is_command(node) && \
+	check_is_redirection(node->token) \
+	&& !not_pipe(node))
 		node = insert_command_at_front(tokens);
 	if (!check_is_command(node) && check_is_redirection(node->token))
 		without_command(node, info);
@@ -120,11 +131,11 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	{
 		while (node != NULL)
 		{
-			// printf("Token (%s) Type (%s)\n",node->token,node->type.type);
-			if (ft_strcmp(node->type.type, "PIPE"))
-				handle_command(node, &command, info);
-			else
-				handle_pipe(node, &pipe_line, &command);
+			printf("Token (%s) Type (%s)\n",node->token,node->type.type);
+			// if (ft_strcmp(node->type.type, "PIPE"))
+			// 	handle_command(node, &command, info);
+			// else
+			// 	handle_pipe(node, &pipe_line, &command);
 			node = node->next;
 		}
 		if (command != NULL)

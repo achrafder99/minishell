@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 22:46:09 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/14 15:47:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	lex2(char **spliting, char *type, t_data *data)
 		lex_redirection(data);
 }
 
-void	lex1(char **spliting, t_components **head, int i)
+void	lex1(char **spliting, t_components **head, int i,t_info *info)
 {
 	t_data				data;
 	int					flags;
@@ -49,10 +49,10 @@ void	lex1(char **spliting, t_components **head, int i)
 	while (spliting[i] != NULL)
 	{
 		if (spliting[i][0] == '|')
-			push_component(head, "PIPE", spliting, &i);
+			push_component(head, "PIPE", spliting, &i, info);
 		else if (check_is_redirection(spliting[i]))
 		{
-			redirect_componenets(spliting, &i, head);
+			redirect_componenets(spliting, &i, head,info);
 			if (spliting[i + 1] != NULL && !flags \
 			&& !check_is_redirection(spliting[i + 1]))
 			{
@@ -71,11 +71,12 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 {
 	char	**spliting;
 	int		i;
+	int		flag;
 
 	i = 0;
 	spliting = split_input(input);
 	if (check_is_redirection(spliting[0]))
-		lex1(spliting, head, i);
+		lex1(spliting, head, i,info);
 	else
 	{
 		push(head, spliting[0], "COMMAND");
@@ -85,14 +86,18 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 			if (spliting[i][0] == '-')
 				push(head, spliting[i], "OPTION");
 			else if (spliting[i][0] == '|')
-				push_component(head, "PIPE", spliting, &i);
+			{
+				info->flags = 0;
+				if (!check_is_redirection(spliting[i + 1]))
+					info->flags = 1;
+				push_component(head, "PIPE", spliting, &i,info);
+			}
 			else if (check_is_redirection(spliting[i]))
-				redirect_componenets(spliting, &i, head);
+				redirect_componenets(spliting, &i, head, info);
 			else
 				push(head, spliting[i], "ARG");
 			i++;
 		}
 	}
-	
 	return (free_things(spliting), expander(*head, env, info));
 }

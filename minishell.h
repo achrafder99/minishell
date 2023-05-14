@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/12 19:32:46 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/14 15:11:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,11 @@ int			check_quotes(char *input);
 size_t		ft_strlen(const char *s);
 void		free_node(t_components *head);
 int			check_option(t_components *node);
-void		in(char **spliting, int *i, t_components **head);
-void		out(char **spliting, int *i, t_components **head);
-void		append_mode(char **spliting, int *i, t_components **head);
-void		here_doc(char **spliting, int *i, t_components **head);
-void	redirect_componenets(char **spliting,
-							int *i,
-							t_components **head);
-void	push_component(t_components **head,
-					char *type,
-					char **spliting,
-					int *i);
+void	in(char **spliting, int *i, t_components **head, t_info *info);
+void		out(char **spliting, int *i, t_components **head, t_info *info);
+void		append_mode(char **spliting, int *i, t_components **head, t_info *info);
+void		here_doc(char **spliting, int *i, t_components **head,t_info *info);
+void	redirect_componenets(char **spliting, int *i, t_components **head,t_info *info);
 int			check_is_redirection(char *symbol);
 void		piped(t_piped *pipe_line, t_command *command, t_info *info,
 				t_env *env);
@@ -93,8 +87,7 @@ void		delete_node_by_type(t_components **head, char *type);
 char		*ft_strdup(const char *s1);
 int			match_regex(t_regex *regex, const char *input);
 t_regex		*compile_regex(const char *pattern);
-void		push_component(t_components **head, char *type, char **spliting,
-				int *i);
+void	push_component(t_components **head, char *type, char **spliting, int *i,t_info *info);
 void		lex_redirection(t_data *data);
 char		*get_cmd(char *command_name);
 void		open_file(t_command *command, t_fds *fds);

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 00:55:28 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 15:44:19 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:56:55 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ void	here_doc(char **spliting, int *i, t_components **head, t_info *info)
 		(*i)++;
 		if (spliting[*i + 1] != NULL \
 		&& ft_strcmp(spliting[*i + 1], "|") \
-		&& !check_is_redirection(spliting[*i + 1]) \
-		&& !info->flags)
+		&& !check_is_redirection(spliting[*i + 1]))
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			(*i)++;

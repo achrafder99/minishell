@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 15:09:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:06:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,68 @@ int	not_pipe(t_components *node)
 	temp = node;
 	while (node)
 	{
-		if (!ft_strcmp(node->type.type,"PIPE"))
+		if (!ft_strcmp(node->type.type, "PIPE"))
 			return (1);
 		node = node->next;
 	}
 	return (0);
+}
+
+void	update(t_components *full_nodes, int postion, t_components *pipe_node , t_components *red_node)
+{
+	t_components *tempp;
+	t_components *tempp2;
+	int			i;
+	i = 0;
+	tempp = red_node;
+
+		// printf("%s %s\n",tempp->token,tempp->type.type);
+	while (tempp != NULL && tempp->next != NULL && ft_strcmp(tempp->next->type.type,"COMMAND"))
+	{
+		
+		tempp = tempp->next; // node before cmd
+	}
+	tempp2 =  tempp->next; //cmd node
+	// t_components *ff = 	full_nodes;
+	// while (i < postion )
+		// ff = pipe_node;
+	// if (ff)
+	// {
+	// }
+	if (tempp->next->next)
+	{
+		tempp->next = tempp2->next;
+		// printf("%s %s\n",tempp->token,tempp->type.type);
+		// printf("%s %s---\n",red_node->token, red_node->type.type);
+	}
+	else
+		tempp->next = NULL;
+		
+	pipe_node->next = tempp2;
+	tempp2->next = red_node;
+		// printf("%s %s\n",pipe_node->next->token,pipe_node->next->type.type);
+}
+
+t_components *insert_at_position(t_components *node)
+{
+	t_components *temp;
+	int position;
+	position = 0;
+	temp = node;
+	while (temp)
+	{
+		if (temp->next == NULL)
+		{
+			break;
+		}
+		if (!ft_strcmp(temp->type.type, "PIPE") \
+		&& check_is_redirection(temp->next->token))
+			update(node, position, temp, temp->next);
+
+		temp = temp->next;
+		position++;
+	}
+	return (node);
 }
 
 void	parser(t_components *tokens, t_info *info, t_env *env)
@@ -122,9 +179,10 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
 		info->status_code = 1;
 	if (check_is_command(node) && \
-	check_is_redirection(node->token) \
-	&& !not_pipe(node))
+	check_is_redirection(node->token))
 		node = insert_command_at_front(tokens);
+	if (not_pipe(node))
+		node = insert_at_position(node);
 	if (!check_is_command(node) && check_is_redirection(node->token))
 		without_command(node, info);
 	else
@@ -138,8 +196,8 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			// 	handle_pipe(node, &pipe_line, &command);
 			node = node->next;
 		}
-		if (command != NULL)
-			piped(pipe_line, command, info, env);
-		command = NULL;
+		// if (command != NULL)
+		// 	piped(pipe_line, command, info, env);
+		// command = NULL;
 	}
 }

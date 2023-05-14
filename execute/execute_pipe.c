@@ -6,27 +6,27 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 15:05:57 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:55:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 {
-	char	**argv;
-	char	**new_env;
-	int		fid;
-	int		flags;
-	int		built_in;
-	argv = get_argv(cmd, cmd->argc);
-	flags = 0;
-	built_in = 0;
-	first_step(cmd, info, &built_in, &flags, env);
+// 	char	**argv;
+// 	char	**new_env;
+// 	int		fid;
+// 	int		flags;
+// 	int		built_in;
+// 	argv = get_argv(cmd, cmd->argc);
+// 	flags = 0;
+// 	built_in = 0;
+// 	first_step(cmd, info, &built_in, &flags, env);
 
-	if (built_in || flags == 127)
-		return ;
-	env->env_arr = get_new_env(env->env);
-	run_child(cmd, flags, built_in, argv,env);
+// 	if (built_in || flags == 127)
+// 		return ;
+// 	env->env_arr = get_new_env(env->env);
+// 	run_child(cmd, flags, built_in, argv,env);
 
 }
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)

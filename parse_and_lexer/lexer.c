@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 15:47:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:56:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 				push(head, spliting[i], "OPTION");
 			else if (spliting[i][0] == '|')
 			{
-				info->flags = 0;
 				if (!check_is_redirection(spliting[i + 1]))
 					info->flags = 1;
 				push_component(head, "PIPE", spliting, &i,info);

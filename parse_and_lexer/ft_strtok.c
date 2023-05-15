@@ -15,16 +15,20 @@
 char* ft_strtok(char* str, const char* delim)
 {
     static char* buffer = NULL;
+    char qoute;
+    char* qend;
+    
     if (str != NULL)
         buffer = str;
     if (buffer == NULL || *buffer == '\0')
         return NULL;
-    while (*buffer != '\0' && strchr(delim, *buffer) != NULL)
+    while (*buffer != '\0' && ft_strchr(delim, *buffer) != NULL)
         buffer++;
-    if (*buffer == '\"')
+    if (*buffer == '\"' || *buffer == '\'')
 	{
+        qoute = *buffer;
         char* start = buffer + 1;
-        char* end = strchr(start, '\"');
+        char* end = strchr(start, qoute);
 		end++;
         if (end == NULL)
             return NULL;
@@ -36,9 +40,13 @@ char* ft_strtok(char* str, const char* delim)
     char* end = buffer;
     while (*end != '\0' && strchr(delim, *end) == NULL)
 	{
-        if (*end == '\"') {
+        if (*end == '\"' || *end == '\'')
+        {
             char* qstart = end + 1;
-            char* qend = strchr(qstart, '\"');
+            if (ft_strchr(qstart, '\"'))
+                qend = ft_strchr(qstart, '\"');
+            else
+                qend = ft_strchr(qstart, '\'');
             if (qend == NULL)
                 return (NULL);
             end = qend;
@@ -50,7 +58,7 @@ char* ft_strtok(char* str, const char* delim)
         buffer = NULL;
         return NULL;
     }
-    if (*end == '\"')
+    if (*end == '\"' || *end == '\'')
         end++;
     if (*end != '\0')
 	{
@@ -62,17 +70,15 @@ char* ft_strtok(char* str, const char* delim)
     return (start);
 }
 
-int	number_of_token(char *string)
+int number_of_token(char* string)
 {
-	char *token;
-	int count;
-
-	count = 0;
-	token = ft_strtok(string, " ");
+    char* token;
+    int count = 0;
+    token = ft_strtok(string, " ");
     while (token != NULL)
     {
         count++;
         token = ft_strtok(NULL, " ");
     }
-	return (count);
+    return count;
 }

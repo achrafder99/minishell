@@ -121,9 +121,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		return ;
 	}
 	save = -1;
-	
-	// 	write(2, command->name, ft_strlen(command->name));
-	// write(2, "\n", 1);
 	if (command->last != NULL)
 	{
 		if (check_type(command->last->in_type) || check_type(command->last->out_type))
@@ -133,7 +130,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	{
 		if (*flags)
 		{
-			// handle_fds(fds, command);
 			if (command->last->last_in)
 				save = dup(STDIN_FILENO);
 			else if (command->last->last_out)
@@ -158,15 +154,13 @@ int built_in, char **argv, t_env *env)
 {
 	t_fds	*fds;
 	char	*cmd;
-		// printf("%d\n",flags);
+
 	if (flags)
-	{
-		// handle_fds(fds, command);
 		redirection(command, command->data_lst);
-	}
 	cmd = get_cmd(command->name);
 	execve(cmd, argv, env->env_arr);
 }
+
 int	get_list_size(t_lst *lst)
 {
 	int	i;
@@ -219,11 +213,10 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
+
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);
-	
-	
 	if (built_in || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
@@ -237,7 +230,10 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		if (WIFSIGNALED(info->status_code))
 			info->status_code = WTERMSIG(info->status_code) + 128;
 		else
+		{
 			info->status_code = WEXITSTATUS(info->status_code);
+			free_things(argv);
+		}
 	}
 	unlink(".heredoc");
 }

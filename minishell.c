@@ -12,13 +12,13 @@
 
 # include "minishell.h"
 
-void	interrupt_handler(int signal)
-{
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+// void	interrupt_handler(int signal)
+// {
+// 	write(1, "\n", 1);
+// 	rl_replace_line("", 0);
+// 	rl_on_new_line();
+// 	rl_redisplay();
+// }
 
 char	*display_name(void)
 {
@@ -42,7 +42,6 @@ char	*get_input(void)
 	char	*full_username;
 	char	*tt;
 
-	input = NULL;
 	full_username = display_name();
 	tt = ft_strjoin(full_username, "");
 	input = readline(tt);
@@ -55,6 +54,7 @@ void	process_input(char *input, t_env *env, t_info *info)
 {
 	t_components	*head;
 
+	head = malloc(sizeof(head));
 	if (input == NULL)
 	{
 		write(1, " ", 1);
@@ -66,6 +66,7 @@ void	process_input(char *input, t_env *env, t_info *info)
 	head = NULL;
 	add_history(input);
 	lexer(input, &head, info, env);
+	free_node(head);
 	head = NULL;
 }
 
@@ -76,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env;
 	t_info 	*info;
 
-	signal(SIGINT, interrupt_handler);
+	// signal(SIGINT, interrupt_handler);
 	env = creat_env();
 	env->env = get_env(envp);
 	env->exp = get_export_env(envp);
@@ -84,7 +85,7 @@ int	main(int argc, char **argv, char **envp)
 	info = malloc(sizeof(t_info));
 	if (!info)
 		exit(1);
-	rl_catch_signals = 0;
+	// rl_catch_signals = 0;
 	while (1)
 	{
 		input = get_input();

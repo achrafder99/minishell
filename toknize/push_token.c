@@ -20,7 +20,7 @@ void	push(t_components **head, char *command, char *type_command)
 	new_node = (t_components *)malloc(sizeof(t_components));
 	if (new_node == NULL)
 	{
-		fprintf(stderr, "Memory allocation failed");
+		write(2, "Memory allocation failed\n",25);
 		exit(EXIT_FAILURE);
 	}
 	new_node->token = ft_strdup(command);

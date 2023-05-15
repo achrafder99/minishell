@@ -12,20 +12,15 @@
 
 #include "../minishell.h"
 
-void	free_node(t_components *head)
+void free_node(t_components *head)
 {
-	t_components	*node;
-
-	node = head;
+	t_components *node = head;
 	while (node != NULL)
 	{
+		t_components *next = node->next;
 		free(node->token);
 		free(node->type.type);
 		free(node);
-		node->token = NULL;
-		node->type.type = NULL;
-		node = node->next;
+		node = next;
 	}
-	free(node);
-	node = NULL;
 }

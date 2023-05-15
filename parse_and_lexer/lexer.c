@@ -54,7 +54,7 @@ void	lex1(char **spliting, t_components **head, int i,t_info *info)
 		{
 			redirect_componenets(spliting, &i, head,info);
 			if (spliting[i + 1] != NULL && !flags \
-			&& !check_is_redirection(spliting[i + 1]))
+			&& !check_is_redirection(spliting[i + 1]) && ft_strcmp(spliting[i + 1],"|"))
 			{
 				push(head, spliting[i + 1], "COMMAND");
 				i++;
@@ -72,7 +72,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 	char	**spliting;
 	int		i;
 	int		flag;
-
+	
 	i = 0;
 	spliting = split_input(input);
 	if (check_is_redirection(spliting[0]))
@@ -85,7 +85,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 		{
 			if (spliting[i][0] == '-')
 				push(head, spliting[i], "OPTION");
-			else if (spliting[i][0] == '|')
+			else if (!ft_strcmp(spliting[i],"|"))
 			{
 				if (!check_is_redirection(spliting[i + 1]))
 					info->flags = 1;
@@ -98,5 +98,6 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 			i++;
 		}
 	}
-	return (free_things(spliting), expander(*head, env, info));
+	expander(*head, env, info);
+    free_things(spliting);
 }

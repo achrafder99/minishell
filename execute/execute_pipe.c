@@ -13,21 +13,20 @@
 #include "../minishell.h"
 void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 {
-// 	char	**argv;
-// 	char	**new_env;
-// 	int		fid;
-// 	int		flags;
-// 	int		built_in;
-// 	argv = get_argv(cmd, cmd->argc);
-// 	flags = 0;
-// 	built_in = 0;
-// 	first_step(cmd, info, &built_in, &flags, env);
+	char	**argv;
+	char	**new_env;
+	int		fid;
+	int		flags;
+	int		built_in;
+	argv = get_argv(cmd, cmd->argc);
+	flags = 0;
+	built_in = 0;
+	first_step(cmd, info, &built_in, &flags, env);
 
-// 	if (built_in || flags == 127)
-// 		return ;
-// 	env->env_arr = get_new_env(env->env);
-// 	run_child(cmd, flags, built_in, argv,env);
-
+	if (built_in || flags == 127)
+		return ;
+	env->env_arr = get_new_env(env->env);
+	run_child(cmd, flags, built_in, argv,env);
 }
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
@@ -124,19 +123,19 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	while(waitpid(-1, NULL, 0) > 0)
 	;
 	unlink(".heredoc");
-	// {
-	// 	if (WIFEXITED(info->status_code))
-	// 	  info->status_code =  WEXITSTATUS(info->status_code);
+// 	{
+// 		if (WIFEXITED(info->status_code))
+// 		  info->status_code =  WEXITSTATUS(info->status_code);
 
-	// }
-	// {
-	// 	printf("after%d\n", info->status_code);
-	// }
-		// ;
-	// {
-	// 	if (info->status_code != 0 || info->status_code != 127 )
-	// 		info->status_code =1;
-	// }
+// 	}
+// 	{
+// 		printf("after%d\n", info->status_code);
+// 	}
+// 		;
+// 	{
+// 		if (info->status_code != 0 || info->status_code != 127 )
+// 			info->status_code =1;
+// 	}
 // 	int	i;
 // 	int	j;
 

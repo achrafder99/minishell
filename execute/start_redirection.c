@@ -79,7 +79,8 @@ void	redirection(t_command *cmd, t_here_data *data_lst)
 	t_last_file *l_fs;
 
 	l_fs = cmd->last;
-	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out") || !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
+	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out") \
+	|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
 	{
 		if (!ft_strcmp(l_fs->out_type, "REDIRECT_out"))
 			fd = open(l_fs->last_out, O_RDWR, 0777);

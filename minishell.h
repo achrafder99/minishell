@@ -79,7 +79,7 @@ int			check_is_redirection(char *symbol);
 void		piped(t_piped *pipe_line, t_command *command, t_info *info,
 				t_env *env);
 int			check_type(char *type);
-t_command	*init_command(t_command *command, char *cut_str);
+t_command	*init_command(t_command *command, char *str);
 char		**add_args(t_command *command, char *cut_str);
 int			open_in(t_command *command, char *infile);
 void		ft_lstadd_front(t_components **lst, t_components *new);
@@ -92,8 +92,7 @@ void		lex_redirection(t_data *data);
 char		*get_cmd(char *command_name);
 void		open_file(t_command *command, t_fds *fds);
 void		redirection(t_command *command, t_here_data *data_lst);
-char		*handle_command(t_components *node, t_command **command,
-				t_info *info);
+void	handle_command(t_components *node, t_command **command, t_info *info);
 void	handle_pipe(t_components *node,
 					t_piped **pipe_line,
 					t_command **command);

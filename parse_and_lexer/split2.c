@@ -29,11 +29,11 @@ char	**split_2(char *input)
 	}
 	i = 0;
 	token = ft_strtok(string, " ");
-	while (token != NULL)
+	while (token)
 	{
 		result[i] = ft_strdup(token);
-		i++;
 		token = ft_strtok(NULL, " ");
+		i++;
 	}
 	result[i] = NULL;
 	free(string);

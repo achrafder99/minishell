@@ -19,9 +19,7 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 	if (!pipe_line)
 	{
 		simple_command(command, info,env);
-		if (command->argc > 0)
-			free_things(command->args);
-		return ;
+		return;
 	}
 	else
 	{
@@ -37,6 +35,6 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
 		execute_pipe(pipe_line, info, env);
-		return ;
+		return;
 	}
 }

@@ -12,17 +12,15 @@
 
 #include "../minishell.h"
 
-t_command	*init_command(t_command *command, char *cut_str)
+t_command	*init_command(t_command *command, char *str)
 {
 	command = (t_command *) malloc(sizeof(t_command));
-	
 	if (!command)
 	{
 		return (NULL);
 		exit(1);
 	}
-	
-	command->name = cut_str;
+	command->name = str;
 	command->last = NULL;
 	command->argc = 0;
 	command->args = NULL;

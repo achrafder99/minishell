@@ -92,6 +92,7 @@ void	without_command(t_components *node, t_info *info)
 					break ;
 			}
 			free(line);
+			line = NULL;
 		}
 		tokens = tokens->next;
 	}
@@ -178,8 +179,8 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	pipe_line = NULL;
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
 		info->status_code = 1;
-	if (check_is_command(node) && \
-	check_is_redirection(node->token))
+	if (check_is_command(node) \
+	&& check_is_redirection(node->token))
 		node = insert_command_at_front(tokens);
 	if (not_pipe(node))
 		node = insert_at_position(node);
@@ -189,15 +190,14 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	{
 		while (node != NULL)
 		{
-			printf("Token (%s) Type (%s)\n",node->token,node->type.type);
-			// if (ft_strcmp(node->type.type, "PIPE"))
-			// 	handle_command(node, &command, info);
-			// else
-			// 	handle_pipe(node, &pipe_line, &command);
+			if (ft_strcmp(node->type.type, "PIPE"))
+				handle_command(node, &command, info);
+			else
+				handle_pipe(node, &pipe_line, &command);
 			node = node->next;
 		}
-		// if (command != NULL)
-		// 	piped(pipe_line, command, info, env);
-		// command = NULL;
+		if (command != NULL)
+			piped(pipe_line, command, info, env);
+		free(command->args);
 	}
 }

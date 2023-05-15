@@ -1,5 +1,5 @@
-total 312
-drwxr-xr-x  40 adardour  candidate   1.3K May 14 13:00 .
+      41    2630
+r-x  40 adardour  candidate   1.3K May 14 13:00 .
 drwx------   4 adardour  candidate   136B May 14 12:52 ..
 drwxr-xr-x  12 adardour  candidate   408B May 14 00:46 .git
 drwxr-xr-x   3 adardour  candidate   102B May 14 00:46 .vscode
@@ -39,3 +39,4 @@ drwxr-xr-x  41 adardour  candidate   1.4K May 14 12:58 parse_and_lexer
 -rw-r--r--   1 adardour  candidate   2.4K May 14 00:46 structs.h
 drwxr-xr-x   4 adardour  candidate   136B May 14 12:55 toknize
 drwxr-xr-x  43 adardour  candidate   1.4K May 14 12:55 utils
+      41    2630

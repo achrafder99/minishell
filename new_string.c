@@ -70,8 +70,7 @@ char    *new_str(char *input, int count)
                 i++;
             }
         }
-        else if ((input[i] == '>' && input[i + 1] == '>') \
-        || (input[i] == '<' && input[i + 1] == '<'))
+        else if ((input[i] == '>' && input[i + 1] == '>') || (input[i] == '<' && input[i + 1] == '<'))
         {
             if (input[i -1] != ' ' && input[i + 2] == ' ')
             {

@@ -79,6 +79,12 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 	
 	i = 0;
 	spliting = split_input(input);
+	// while (spliting[i])
+	// {
+	// 	printf("%s\n",spliting[i]);
+	// 	i++;
+	// }
+	// return;
 	if (check_is_redirection(spliting[0]))
 		lex1(spliting, head, i,info);
 	else

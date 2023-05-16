@@ -14,12 +14,12 @@
 
 void	handler_heredoc(t_command **command, int *fd, t_components *node)
 {
-	
 	if ((*command)->heredoc_lst == NULL)
 		(*command)->heredoc_lst = creat_heredoc_list();
 	ft_add_heredoc((*command)->heredoc_lst, new_heredoc(node->token, node->next->token));
 	(*command)->last->last_in = ft_strdup(node->next->token);
 	(*command)->last->in_type = ft_strdup(node->type.type);
+	printf("%s lst input\n", (*command)->last->last_in);
 }
 
 void	handle_append(t_command **command, int *fd, t_components *node)
@@ -57,9 +57,10 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 {
 	t_last_file	*last;
 	int			fd;
+	static int last_flag;
 	
 	if (check_is_redirection(node->token) && !info->flags)
-	{
+	{	
 		*command = init_command(*command, node->token);
 		info->flags = 1;
 	}
@@ -80,11 +81,14 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 		(*command)->last->last_out = NULL;
 		(*command)->last->in_type = NULL;
 		(*command)->last->out_type = NULL;
+		last_flag = 1;
 		if (!ft_strcmp(node->token, "<") || !ft_strcmp(node->token, ">"))
 			handle_redirect(command, node, &fd, info);
 		if (!ft_strcmp(node->token, ">>"))
 			handle_append(command, &fd, node);
-		if (!ft_strcmp(node->type.type, "HEREDOC"))
+		if (!ft_strcmp(node->type.type, "HEREDOC"))	
 			handler_heredoc(command, &fd, node);
+		printf("lst input %s\n",(*command)->last->last_in);
+		printf("lst output %s\n",(*command)->last->last_out);
 	}
 }

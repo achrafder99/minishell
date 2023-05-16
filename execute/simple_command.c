@@ -12,15 +12,12 @@
 
 #include "../minishell.h"
 
-extern char	**environ;
+void	handler(int sig)
+{
+	(void)sig;
+	printf("ddd\n");
+}
 
-// void	handle_fds(t_fds *fds, t_command *command)
-// {
-// 	fds = malloc(sizeof(t_fds));
-// 	fds->fd_out = open(command->outfile, O_RDWR, 0777);
-// 	fds->fd_in = open(command->infile, O_RDWR, 0777);
-// 	fds->fd_append = open(command->append_mode, O_RDWR | O_APPEND, 0777);
-// }
 t_here_node	*last_here_node(t_here_data *lst)
 {
 	t_here_node	*tmp;
@@ -222,7 +219,10 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	if (command)
 	fid = fork();
 	if (fid == 0)
+	{
+		signal(SIGQUIT, SIG_DFL);
 		run_child(command, flags, built_in, argv,env);
+	}
 	else
 	{
 		waitpid(fid, &info->status_code,0);

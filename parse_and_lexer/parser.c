@@ -227,7 +227,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			else
 			{
 				handle_pipe(node, &pipe_line, &command);
-				info->flags = 1;
+				info->flags = 0;
 			}
 			node = node->next;
 		}

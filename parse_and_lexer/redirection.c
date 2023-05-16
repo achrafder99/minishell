@@ -78,7 +78,8 @@ void	here_doc(char **spliting, int *i, t_components **head, t_info *info)
 		(*i)++;
 		if (spliting[*i + 1] != NULL \
 		&& ft_strcmp(spliting[*i + 1], "|") \
-		&& !check_is_redirection(spliting[*i + 1]))
+		&& !check_is_redirection(spliting[*i + 1]) \
+		&& !info->flags)
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			(*i)++;

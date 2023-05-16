@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-#include "../minishell.h"
-
 int check_is_space(char *input)
 {
     int i;

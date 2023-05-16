@@ -57,8 +57,13 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 {
 	t_last_file	*last;
 	int			fd;
-
-	if (!ft_strcmp(node->type.type, "COMMAND"))
+	
+	if (check_is_redirection(node->token) && !info->flags)
+	{
+		*command = init_command(*command, node->token);
+		info->flags = 1;
+	}
+	if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
 		*command = init_command(*command, node->token);
 	else if (!ft_strcmp(node->type.type, "OPTION") \
 		|| !ft_strcmp(node->type.type, "ARG"))

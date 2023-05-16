@@ -25,6 +25,7 @@ void	push_component(t_components **head, char *type, char **spliting, int *i,t_i
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			(*i)++;
+			info->flags = 1;
 		}
 	}
 	else if (!ft_strcmp(type, "REDIRECT_out"))

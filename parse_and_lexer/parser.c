@@ -47,7 +47,19 @@ t_components	*insert_command_at_front(t_components *tokens)
 {
 	t_components	*goal;
 	t_components	*temp;
+	t_components	*check_command;
+	int 			flag;
 
+	flag = 0;
+	check_command = tokens;
+	while (check_command != NULL && ft_strcmp(check_command->type.type,"PIPE"))
+	{
+		if (!ft_strcmp(check_command->type.type,"COMMAND"))
+			flag = 1;
+		check_command = check_command->next;
+	}
+	if (!flag)
+		return (tokens);
 	if (tokens == NULL)
 	{
 		tokens = temp;
@@ -115,16 +127,27 @@ void	update(t_components *full_nodes, int postion, t_components *pipe_node , t_c
 {
 	t_components *tempp;
 	t_components *tempp2;
+	t_components *tempp10;
 	int			i;
+	int			flag;
 	i = 0;
+	flag = 0;
 	tempp = red_node;
 
-		// printf("%s %s\n",tempp->token,tempp->type.type);
-	while (tempp != NULL && tempp->next != NULL && ft_strcmp(tempp->next->type.type,"COMMAND"))
+	flag = 0;
+	tempp10 = red_node;
+	while (tempp10 != NULL && ft_strcmp(tempp10->type.type,"PIPE"))
 	{
-		
-		tempp = tempp->next; // node before cmd
+		if (!ft_strcmp(tempp10->type.type,"COMMAND"))
+			flag = 1;
+		tempp10 = tempp10->next;
 	}
+	if (!flag)
+		return;
+	// printf("%s %s\n",tempp->token,tempp->type.type);
+
+	while (tempp != NULL && tempp->next != NULL && ft_strcmp(tempp->next->type.type,"COMMAND"))
+		tempp = tempp->next; // node before cmd
 	tempp2 =  tempp->next; //cmd node
 	// t_components *ff = 	full_nodes;
 	// while (i < postion )
@@ -155,13 +178,10 @@ t_components *insert_at_position(t_components *node)
 	while (temp)
 	{
 		if (temp->next == NULL)
-		{
 			break;
-		}
 		if (!ft_strcmp(temp->type.type, "PIPE") \
 		&& check_is_redirection(temp->next->token))
 			update(node, position, temp, temp->next);
-
 		temp = temp->next;
 		position++;
 	}
@@ -177,6 +197,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	node = tokens;
 	command = NULL;
 	pipe_line = NULL;
+	info->flags = 0;
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
 		info->status_code = 1;
 	if (check_is_command(node) \
@@ -193,7 +214,10 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			if (ft_strcmp(node->type.type, "PIPE"))
 				handle_command(node, &command, info);
 			else
+			{
 				handle_pipe(node, &pipe_line, &command);
+				info->flags = 1;
+			}
 			node = node->next;
 		}
 		if (command != NULL)

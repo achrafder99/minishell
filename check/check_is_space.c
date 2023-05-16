@@ -39,7 +39,7 @@ int check_is_space(char *input)
         {
             if ((input[i] == '>' && input[i + 1] == '>'))
             {
-                if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0)
+                if (input[i - 1] != ' ' && input[i + 2] == ' ' && i != 0)
                     count += 1;
                 else if (input[i - 1] == ' ' &&  input[i + 2] != ' ' && i != 0)
                     count += 1;
@@ -51,7 +51,7 @@ int check_is_space(char *input)
             }
             else if (input[i] == '<' && input[i + 1] == '<')
             {
-                if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0)
+                if (input[i - 1] != ' ' && input[i + 2] == ' ' && i != 0)
                     count += 1;
                 else if (input[i - 1] == ' ' &&  input[i + 2] != ' ' && i != 0)
                     count += 1;

@@ -134,14 +134,12 @@ char	**split_input(char *input)
 
 	i = 0;
 	str = NULL;
-	// printf("dd = %d\n",check_is_space(input));
 	if (check_is_space(input))
 		str = new_str(input, check_is_space(input));
 	if (str)
 		spliting = split_token(str);
 	else
 		spliting = split_token(input);
-	// printf("str = %s\n",str);
 	if (str)
 		free(str);
 	return (spliting);

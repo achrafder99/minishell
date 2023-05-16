@@ -75,8 +75,14 @@ int	handle_errors(t_components *tokens)
 	node = tokens;
 	if (check_option(node))
 		return (1);
+		
 	while (node != NULL)
-	{
+	{	
+		if (ft_strchr(node->token,'\\'))
+		{
+			write(2,"error\n",6);
+			return (1);
+		}
 		if (handle_pipe_errors(node))
 			return (1);
 		if (handle_redirect_errors(node))

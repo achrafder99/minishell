@@ -12,25 +12,78 @@
 
 #include "../minishell.h"
 
+int check_is_matched(char *pattern)
+{
+	int				flag;
+	DIR				*dir;
+	t_regex			*regex;
+	struct dirent	*entry;
+
+	regex = compile_regex(pattern);
+	dir = opendir(".");
+	entry = readdir(dir);
+	flag = 0;
+	while (entry != NULL)
+	{
+		if (match_regex(regex, entry->d_name))	
+			return (1);
+		entry = readdir(dir);
+	}
+	free(regex);
+	free(regex->pattern);
+	closedir(dir);
+	return (0);
+}
+
+void	extract_matched_file(char *pattern,char *type,t_components **components1)
+{
+	int				flag;
+	DIR				*dir;
+	t_regex			*regex;
+	struct dirent	*entry;
+
+	regex = compile_regex(pattern);
+	dir = opendir(".");
+	entry = readdir(dir);
+	flag = 0;
+	while (entry != NULL)
+	{
+		if (match_regex(regex, entry->d_name))	
+		{
+			if (!flag)
+			{
+				push(components1,entry->d_name,type);
+				flag = 1;
+			}
+			else
+				push(components1,entry->d_name,"ARG");
+		}
+		entry = readdir(dir);
+	}
+	free(regex);
+	free(regex->pattern);
+	closedir(dir);
+}
+
 void    expander(t_components *node, \
 t_env *env, t_info *info)
 {
-	t_components			*components;
-	char					*temp;
-	t_components			*tmp;
-	t_components			*components1;
-	char					**spliting;
-	int						i;
-	int						position;
+	t_components				*components;
+	t_components				*components1;
+	char						*temp;
+	char						**spliting;
+	int							i;
+	int							position;
 	char						*token;
 
 	components1 = NULL;
 	position = 0;
 	components = node;
-	tmp = node;
 	while (components != NULL)
 	{	
-		if (ft_strchr(components->token, '$') \
+		if (ft_strchr(components->token,'*') && check_is_matched(components->token))
+			extract_matched_file(components->token,components->type.type,&components1);
+		else if (ft_strchr(components->token, '$') \
 		&& ft_strcmp(components->type.type, "END_HEREDOC"))
 		{	
 			token = components->token;
@@ -59,6 +112,12 @@ t_env *env, t_info *info)
 			push(&components1, components->token, components->type.type);
 		components = components->next;
 	}
+	// while (components1)
+	// {
+	// 	printf("Token (%s) Type (%s)\n",components1->token,components1->type.type);
+	// 	components1 = components1->next;
+	// }
+	// return;
 	parser(components1, info, env);
 	free_node(components1);
 }

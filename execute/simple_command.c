@@ -213,7 +213,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
-
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);

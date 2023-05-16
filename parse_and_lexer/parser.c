@@ -125,9 +125,10 @@ int	not_pipe(t_components *node)
 
 void	update(t_components *full_nodes, int postion, t_components *pipe_node , t_components *red_node)
 {
-	t_components *tempp;
-	t_components *tempp2;
-	t_components *tempp10;
+	t_components	*tempp;
+	t_components	*tempp2;
+	t_components 	*tempp10;
+
 	int			i;
 	int			flag;
 	i = 0;
@@ -141,32 +142,19 @@ void	update(t_components *full_nodes, int postion, t_components *pipe_node , t_c
 		if (!ft_strcmp(tempp10->type.type,"COMMAND"))
 			flag = 1;
 		tempp10 = tempp10->next;
-	}
+	}	
 	if (!flag)
 		return;
-	// printf("%s %s\n",tempp->token,tempp->type.type);
-
 	while (tempp != NULL && tempp->next != NULL && ft_strcmp(tempp->next->type.type,"COMMAND"))
-		tempp = tempp->next; // node before cmd
-	tempp2 =  tempp->next; //cmd node
-	// t_components *ff = 	full_nodes;
-	// while (i < postion )
-		// ff = pipe_node;
-	// if (ff)
-	// {
-	// }
+		tempp = tempp->next;
+	tempp2 =  tempp->next;
 	if (tempp->next->next)
-	{
 		tempp->next = tempp2->next;
-		// printf("%s %s\n",tempp->token,tempp->type.type);
-		// printf("%s %s---\n",red_node->token, red_node->type.type);
-	}
 	else
 		tempp->next = NULL;
 		
 	pipe_node->next = tempp2;
 	tempp2->next = red_node;
-		// printf("%s %s\n",pipe_node->next->token,pipe_node->next->type.type);
 }
 
 t_components *insert_at_position(t_components *node)
@@ -199,7 +187,10 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	pipe_line = NULL;
 	info->flags = 0;
 	if (ft_strcmp(tokens->token, "exit") && handle_errors(tokens))
+	{
 		info->status_code = 1;
+		return;
+	}
 	if (check_is_command(node) \
 	&& check_is_redirection(node->token))
 		node = insert_command_at_front(tokens);
@@ -212,7 +203,11 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 		while (node != NULL)
 		{
 			if (ft_strcmp(node->type.type, "PIPE"))
+			{
+				if (!ft_strcmp(node->type.type, "COMMAND") && !info->flags)
+					info->flags = 1;
 				handle_command(node, &command, info);
+			}
 			else
 			{
 				handle_pipe(node, &pipe_line, &command);

@@ -12,13 +12,13 @@
 
 # include "minishell.h"
 
-// void	interrupt_handler(int signal)
-// {
-// 	write(1, "\n", 1);
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// 	rl_redisplay();
-// }
+void	interrupt_handler(int signal)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
 char	*display_name(void)
 {
@@ -73,11 +73,12 @@ void	process_input(char *input, t_env *env, t_info *info)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
+	char	**spliting;
 	char	*clear_input;
 	t_env	*env;
 	t_info 	*info;
 
-	// signal(SIGINT, interrupt_handler);
+	signal(SIGINT, interrupt_handler);
 	env = creat_env();
 	env->env = get_env(envp);
 	env->exp = get_export_env(envp);
@@ -85,7 +86,7 @@ int	main(int argc, char **argv, char **envp)
 	info = malloc(sizeof(t_info));
 	if (!info)
 		exit(1);
-	// rl_catch_signals = 0;
+	rl_catch_signals = 0;
 	while (1)
 	{
 		input = get_input();
@@ -94,7 +95,22 @@ int	main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			exit(1);
 		}
-		clear_input = restring(input, number(input));
-		process_input(clear_input, env, info);
+		if (strrchr(input,';'))
+		{
+			int i = 0;
+			spliting = ft_split(input,';');
+			while (spliting[i])
+			{
+				clear_input = restring(spliting[i], number(input));
+				process_input(clear_input, env, info);
+				free(clear_input);
+				i++;
+			}
+		}
+		else
+		{
+			clear_input = restring(input, number(input));
+			process_input(clear_input, env, info);
+		}
 	}
 }

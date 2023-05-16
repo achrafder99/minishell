@@ -79,17 +79,10 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 	
 	i = 0;
 	spliting = split_input(input);
-	while (spliting[i])
-	{
-		printf("%s\n",spliting[i]);
-		i++;
-	}
-	return;
 	if (check_is_redirection(spliting[0]))
 		lex1(spliting, head, i,info);
 	else
 	{
-
 		push(head, spliting[0], "COMMAND");
 		i = 1;
 		while (spliting[i] != NULL)
@@ -110,6 +103,5 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 			i++;
 		}
 	}
-	expander(*head, env, info);
-    free_things(spliting);
+    return (free_things(spliting),expander(*head, env, info),free_node(*head));
 }

@@ -118,7 +118,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		return ;
 	}
 	save = -1;
-
 	if (check_type(command->in_type) || check_type(command->out_type))
 		*flags = 1;
 	if (check_is_built_in(command->name))
@@ -154,6 +153,8 @@ int built_in, char **argv, t_env *env)
 		redirection(command, command->data_lst);
 	cmd = get_cmd(command->name);
 	execve(cmd, argv, env->env_arr);
+	free(cmd);
+	cmd = NULL;
 }
 
 int	get_list_size(t_lst *lst)
@@ -215,7 +216,7 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		return ;
 	env->env_arr = get_new_env(env->env);
 	if (command)
-	fid = fork();
+		fid = fork();
 	if (fid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
@@ -227,10 +228,9 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		if (WIFSIGNALED(info->status_code))
 			info->status_code = WTERMSIG(info->status_code) + 128;
 		else
-		{
 			info->status_code = WEXITSTATUS(info->status_code);
-			free_things(argv);
-		}
 	}
+	free_things(argv);
+	free_things(env->env_arr);
 	unlink(".heredoc");
 }

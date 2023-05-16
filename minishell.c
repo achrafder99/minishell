@@ -71,8 +71,6 @@ void	process_input(char *input, t_env *env, t_info *info)
 	head = NULL;
 	add_history(input);
 	lexer(input, &head, info, env);
-	free_node(head);
-	head = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -89,12 +87,12 @@ int	main(int argc, char **argv, char **envp)
 	env->env = get_env(envp);
 	env->exp = get_export_env(envp);
 	env->env_arr = NULL;
-	info = malloc(sizeof(t_info));
-	if (!info)
-		exit(1);
 	rl_catch_signals = 0;
 	while (1)
 	{
+		info = malloc(sizeof(t_info));
+		if (!info)
+			exit(1);
 		input = get_input();
 		if (input == NULL)
 		{
@@ -116,7 +114,11 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			clear_input = restring(input, number(input));
+			free(input);
 			process_input(clear_input, env, info);
+			free(clear_input);
+			clear_input =  NULL;
 		}
+		free(info);
 	}
 }

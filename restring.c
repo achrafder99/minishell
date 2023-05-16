@@ -96,6 +96,5 @@ char	*restring(char *input, int allocation)
 		i++;
 	}
 	restring[j] = '\0';
-	free(input);
 	return (restring);
 }

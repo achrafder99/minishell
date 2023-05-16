@@ -118,27 +118,25 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		return ;
 	}
 	save = -1;
-	if (command->last != NULL)
-	{
-		if (check_type(command->last->in_type) || check_type(command->last->out_type))
-			*flags = 1;
-	}
+
+	if (check_type(command->in_type) || check_type(command->out_type))
+		*flags = 1;
 	if (check_is_built_in(command->name))
 	{
 		if (*flags)
 		{
-			if (command->last->last_in)
+			if (command->last_in)
 				save = dup(STDIN_FILENO);
-			else if (command->last->last_out)
+			else if (command->last_out)
 				save = dup(STDOUT_FILENO);
 			redirection(command, command->data_lst);
 		}
 		execute_built_in(command, info, env);
 		if (save != -1)
 		{
-			if (command->last->last_in)
+			if (command->last_in)
 				dup2(save, STDIN_FILENO);
-			else if (command->last->last_out)
+			else if (command->last_out)
 				dup2(save, STDOUT_FILENO);
 		}
 		*built_in = 1;

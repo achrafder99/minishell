@@ -189,6 +189,7 @@ t_components *insert_at_position(t_components *node)
 		temp = temp->next;
 		position++;
 	}
+	
 	return (node);
 }
 

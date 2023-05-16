@@ -112,12 +112,6 @@ t_env *env, t_info *info)
 			push(&components1, components->token, components->type.type);
 		components = components->next;
 	}
-	// while (components1)
-	// {
-	// 	printf("Token (%s) Type (%s)\n",components1->token,components1->type.type);
-	// 	components1 = components1->next;
-	// }
-	// return;
 	parser(components1, info, env);
 	free_node(components1);
 }

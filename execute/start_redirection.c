@@ -45,13 +45,13 @@
 // }
 int	check_rederict_in(t_command *cmd)
 {
-	if (cmd->last->last_in)
+	if (cmd->last_in)
 		return (1);
 	return (0);
 }
 int	check_rederict_out(t_command *cmd)
 {
-	if (cmd->last->last_out)
+	if (cmd->last_out)
 		return (1);
 	return (0);
 }
@@ -76,9 +76,9 @@ int	save_heredoc_data(t_command *cmd, t_here_data *data_lst)
 void	redirection(t_command *cmd, t_here_data *data_lst)
 {
 	int	fd;
-	t_last_file *l_fs;
+	t_command *l_fs;
 
-	l_fs = cmd->last;
+	l_fs = cmd;
 	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out") \
 	|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
 	{

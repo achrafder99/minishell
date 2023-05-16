@@ -33,9 +33,6 @@ t_piped	*create_new_pipeline(t_command **command)
 void	add_command_to_pipeline(t_piped **pipeline, t_command **command)
 {
 	t_command	*new_commands;
-	// new_commands[0] = ls -la
-	// new_commands[1] = wc -l
-	// new_commands[2] = date
 
 
 	(*pipeline)->number_of_commands++;

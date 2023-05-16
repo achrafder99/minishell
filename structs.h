@@ -66,8 +66,11 @@ typedef struct s_command
 	char				*name;
 	char				**args;
 	int					argc;
+	char				*last_in;
+	char				*last_out;
+	char				*in_type;
+	char				*out_type;
 	t_here_lst			*heredoc_lst;
-	t_last_file			*last;
 	t_here_data			*data_lst;
 }						t_command;
 

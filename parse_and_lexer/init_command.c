@@ -21,9 +21,12 @@ t_command	*init_command(t_command *command, char *str)
 		exit(1);
 	}
 	command->name = str;
-	command->last = NULL;
 	command->argc = 0;
 	command->args = NULL;
 	command->heredoc_lst = NULL;
+	command->last_in = NULL;
+	command->last_out = NULL;
+	command->in_type = NULL;
+	command->out_type = NULL;
 	return (command);
 }

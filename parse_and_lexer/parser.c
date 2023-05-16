@@ -77,37 +77,53 @@ t_components	*insert_command_at_front(t_components *tokens)
 	return (tokens);
 }
 
-void	without_command(t_components *node, t_info *info)
+void without_command(t_components *node, t_info *info)
 {
-	t_components	*tokens;
-	int				fd;
-	char			*line;
-	char			*deli;
-	int			temppp;
+    t_components    *tokens;
+    int             fd;
+    char            *line;
+    char            *deli;
+    int             temppp;
+    int             fd_pipe[2];
 
-	tokens = node;
-	while (tokens != NULL)
-	{
-		if (tokens->next == NULL)
-			break;
-		if (ft_strcmp(tokens->type.type, "HEREDOC"))
-		{
-			info->status_code = open_fds(tokens->type.type, tokens->next->token, &fd);
-			close(fd);
-		}
-		else{
-			deli = tokens->next->token;
-			while (1)
+
+    tokens = node;
+    while (tokens != NULL)
+    {
+        if (tokens->next == NULL)
+            break;
+        if (ft_strcmp(tokens->type.type, "HEREDOC"))
+        {
+            info->status_code = open_fds(tokens->type.type, tokens->next->token, &fd);
+            close(fd);
+        }
+        else
+        {
+            deli = tokens->next->token;
+			fd = open(".heredoc",O_CREAT | O_RDWR, 0777);
+			if (fd == -1)
 			{
-				line = readline("> ");
-				if (!strncmp(line, deli, ft_strlen(line)))
-					break ;
+				perror("");
+				exit(0);
 			}
-			free(line);
-			line = NULL;
-		}
-		tokens = tokens->next;
-	}
+            while (1)
+            {
+                line = readline("> ");
+				if (line != NULL)
+				{
+					if (!strncmp(line, deli, ft_strlen(deli)))
+						break;
+					write(fd, line, ft_strlen(line));
+				}
+				else
+					break;
+            }
+            free(line);
+            line = NULL;
+			unlink(".heredoc");
+        }
+        tokens = tokens->next;
+    }
 }
 
 int	not_pipe(t_components *node)

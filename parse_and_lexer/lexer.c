@@ -76,7 +76,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 {
 	char	**spliting;
 	int		i;
-	
+
 	i = 0;
 	spliting = split_input(input);
 	if (check_is_redirection(spliting[0]))

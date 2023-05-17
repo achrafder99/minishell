@@ -28,7 +28,11 @@ char	*get_cmd(char *command_name)
 		join = ft_strjoin("/", command_name);
 		cmd = ft_strjoin(spliting[i], join);
 		if (access(cmd, X_OK) == 0)
+		{
+			free(join);
+			join = NULL;
 			return (cmd);
+		}
 		i++;
 	}
 	free(join);

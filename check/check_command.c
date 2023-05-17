@@ -48,13 +48,11 @@ int	check_command(char *command, t_env *env)
 	char	*path;
 	char	**spliting;
 	int		i;
-	char	**mini;
 
 	i = 0;
 	path = get_path(env->env);
 	if (!path && !check_is_built_in(command))
 		return (0);
-	mini = ft_split(command,'/');
 	if (!check_is_built_in(command))
 	{
 		if (ft_strchr(command, '/'))

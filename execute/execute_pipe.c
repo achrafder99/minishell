@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 {
 	char	**argv;
@@ -18,16 +19,17 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	int		fid;
 	int		flags;
 	int		built_in;
+
 	argv = get_argv(cmd, cmd->argc);
 	flags = 0;
 	built_in = 0;
 	first_step(cmd, info, &built_in, &flags, env);
-
 	if (built_in || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
 	run_child(cmd, flags, built_in, argv,env);
 }
+
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	i, j;
@@ -37,6 +39,11 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	int flag;
 	
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
+	if (!fd)
+	{
+		perror("");
+		exit(1);
+	}
 	j = 0;
 	while (j < piping->number_of_commands - 1)
 	{

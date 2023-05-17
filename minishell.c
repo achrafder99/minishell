@@ -25,61 +25,47 @@ void	interrupt_handler(int signal)
 	}
 }
 
-char	*display_name(void)
-{
-	char	*username;
-	char	*full_username;
-	char	*temp;
-	char	*dd;
-
-	username = ft_strjoin(getenv("USER"), "@:");
-	temp = username;
-	if (temp == NULL)
-		write(2, "Could not get username", ft_strlen("Could not get username"));
-	dd = ft_strjoin(temp, " > ");
-	free(username);
-	return (dd);
+char* display_name(void) {
+	char* username = getenv("USER");
+	if (username == NULL) {
+		write(2, "Could not get username", strlen("Could not get username"));
+		return NULL;
+	}
+	char* display;
+	display = ft_strjoin(username,"@:> ");
+	return display;
+	free(display); 
 }
 
-char	*get_input(void)
-{
-	char	*input;
-	char	*full_username;
-	char	*tt;
-
-	full_username = display_name();
-	tt = ft_strjoin(full_username, "");
-	input = readline(tt);
+char* get_input(void) {
+	char* full_username = display_name();
+	if (full_username == NULL) {
+		return NULL;
+	}
+	char* input = readline(full_username);
 	free(full_username);
-	free(tt);
-	return (input);
+	return input;
 }
 
-void	process_input(char *input, t_env *env, t_info *info)
-{
-	t_components	*head;
-
-	head = malloc(sizeof(head));
-	if (input == NULL)
-	{
-		write(1, " ", 1);
-		write(1, "exit\n", 5);
+void process_input(char* input, t_env* env, t_info* info) {
+	if (input == NULL) {
+		write(1, " exit\n", 6);
 		exit(0);
 	}
-	else if (strlen(input) == 0)
-		return ;
-	head = NULL;
+	if (strlen(input) == 0) {
+		return;
+	}
 	add_history(input);
+	t_components* head = NULL;
 	lexer(input, &head, info, env);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	char	*input;
-	char	**spliting;
-	char	*clear_input;
-	t_env	*env;
-	t_info 	*info;
+int main(int argc, char** argv, char** envp) {
+	char* input;
+	char** spliting;
+	char* clear_input;
+	t_env* env;
+	t_info* info;
 
 	signal(SIGINT, interrupt_handler);
 	signal(SIGQUIT, interrupt_handler);
@@ -88,37 +74,36 @@ int	main(int argc, char **argv, char **envp)
 	env->exp = get_export_env(envp);
 	env->env_arr = NULL;
 	rl_catch_signals = 0;
-	while (1)
-	{
+
+	while (1) {
 		info = malloc(sizeof(t_info));
-		if (!info)
+		if (!info) {
+			perror("");
 			exit(1);
+		}
 		input = get_input();
-		if (input == NULL)
-		{
+		if (input == NULL) {
 			printf("exit\n");
 			exit(1);
 		}
-		if (strrchr(input,';'))
-		{
+		if (strrchr(input, ';')) {
 			int i = 0;
-			spliting = ft_split(input,';');
-			while (spliting[i])
-			{
+			spliting = ft_split(input, ';');
+			while (spliting[i]) {
 				clear_input = restring(spliting[i], number(input));
 				process_input(clear_input, env, info);
 				free(clear_input);
 				i++;
 			}
 		}
-		else
-		{
+		else {
 			clear_input = restring(input, number(input));
-			free(input);
 			process_input(clear_input, env, info);
 			free(clear_input);
-			clear_input =  NULL;
 		}
+		free(input);
 		free(info);
 	}
+	free(env);
+	return 0;
 }

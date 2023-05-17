@@ -98,7 +98,7 @@ void	redirection(t_command *cmd, t_here_data *data_lst)
 		{
 			fd = open(l_fs->last_in, O_RDWR, 0777);
 			if (fd == -1)
-				return (perror("error occurred"));
+				return (perror(""));
 			if (dup2(fd, STDIN_FILENO) == -1)
 				return (perror("error occurred"));
 			close(fd);

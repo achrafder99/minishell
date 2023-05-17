@@ -12,12 +12,6 @@
 
 #include "../minishell.h"
 
-void	handler(int sig)
-{
-	(void)sig;
-	printf("ddd\n");
-}
-
 t_here_node	*last_here_node(t_here_data *lst)
 {
 	t_here_node	*tmp;
@@ -153,8 +147,6 @@ int built_in, char **argv, t_env *env)
 		redirection(command, command->data_lst);
 	cmd = get_cmd(command->name);
 	execve(cmd, argv, env->env_arr);
-	free(cmd);
-	cmd = NULL;
 }
 
 int	get_list_size(t_lst *lst)
@@ -176,6 +168,7 @@ char	**get_new_env(t_lst *env)
 	char	**new;
 	char	*key;
 	t_node	*tmp;
+
 	int	size;
 	int	i;
 	
@@ -183,6 +176,11 @@ char	**get_new_env(t_lst *env)
 	tmp = env->top;
 	i = 0;
 	new = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!new)
+	{
+		perror("");
+		exit(1);
+	}
 	while(tmp)
 	{
 		key = ft_strjoin(tmp->key, "=");
@@ -221,6 +219,8 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		run_child(command, flags, built_in, argv,env);
+		free_things(command->args);
+		free(command);
 	}
 	else
 	{

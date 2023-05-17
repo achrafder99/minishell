@@ -54,7 +54,6 @@ t_components *node, int *fd, t_info *info)
 
 void	handle_command(t_components *node, t_command **command, t_info *info)
 {
-	t_last_file	*last;
 	int			fd;
 	static int last_flag;
 	

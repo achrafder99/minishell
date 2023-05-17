@@ -25,8 +25,13 @@ int check_is_matched(char *pattern)
 	flag = 0;
 	while (entry != NULL)
 	{
-		if (match_regex(regex, entry->d_name))	
+		if (match_regex(regex, entry->d_name))
+		{
+			free(regex);
+			free(regex->pattern);	
+			closedir(dir);
 			return (1);
+		}
 		entry = readdir(dir);
 	}
 	free(regex);

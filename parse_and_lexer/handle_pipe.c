@@ -34,7 +34,6 @@ void	add_command_to_pipeline(t_piped **pipeline, t_command **command)
 {
 	t_command	*new_commands;
 
-
 	(*pipeline)->number_of_commands++;
 	new_commands = malloc((*pipeline)->number_of_commands * sizeof(t_command));
 	if (!new_commands)

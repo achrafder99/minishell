@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 13:58:20 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/17 18:52:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_env *env, t_info *info)
 	int							position;
 	char						*token;
 
+	
 	components1 = NULL;
 	position = 0;
 	components = node;
@@ -111,10 +112,14 @@ t_env *env, t_info *info)
 					push(&components1, "", components->type.type);
 			}
 			else
-				push(&components1, ft_strtrim(token,"\'"), components->type.type);
+				push(&components1, ft_strtrim(token,"\'\""), components->type.type);
 		}
 		else
-			push(&components1, components->token, components->type.type);
+		{
+			token = ft_strtrim(components->token,"\'\"");
+			push(&components1, token, components->type.type);
+			free(token);
+		}
 		components = components->next;
 	}
 	parser(components1, info, env);

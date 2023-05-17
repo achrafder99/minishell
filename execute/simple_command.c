@@ -6,11 +6,25 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 00:16:18 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/17 18:53:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_data(t_here_data *data)
+{
+	t_here_node *top;
+	top = data->top;
+	while (top)
+	{
+		free(top->data);
+		free(top);
+		top =  top->next;
+	}
+	free(top);
+	free(data);
+}
 
 t_here_node	*last_here_node(t_here_data *lst)
 {
@@ -83,8 +97,6 @@ t_here_data	*open_heredoc(t_here_lst *list)
 				break;
 			if (ft_strcmp(data, tmp->delimit))
 			{
-				// write(1, data, ft_strlen(data));
-				// write(1, "\n", 1);
 				if (flag)
 				{
 					node = new_here_node(data);
@@ -92,8 +104,9 @@ t_here_data	*open_heredoc(t_here_lst *list)
 				}	
 			}
 			else
-				break;
-			free (data);	
+				{free (data);
+				break;}
+			free(data);
 		}
 		tmp = tmp->next;
 	}
@@ -111,6 +124,7 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		*flags = 127;
 		return ;
 	}
+	
 	save = -1;
 	if (check_type(command->in_type) || check_type(command->out_type))
 		*flags = 1;
@@ -207,11 +221,20 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
+
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);
 	if (built_in || flags == 127)
+	{
+		if (argv)
+			free_things(argv);
+		if (env->env_arr)
+			free_things(env->env_arr);
+		if (command->data_lst)
+			free_data(command->data_lst);
 		return ;
+	}
 	env->env_arr = get_new_env(env->env);
 	if (command)
 		fid = fork();
@@ -219,8 +242,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		run_child(command, flags, built_in, argv,env);
-		free_things(command->args);
-		free(command);
 	}
 	else
 	{
@@ -230,7 +251,20 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		else
 			info->status_code = WEXITSTATUS(info->status_code);
 	}
-	free_things(argv);
-	free_things(env->env_arr);
+	if (argv)
+	{
+		free_things(argv);
+		argv = NULL;
+	}
+	if (env->env_arr)
+	{
+		free_things(env->env_arr);
+		env->env_arr = NULL;
+	}
+	if (command->data_lst)
+	{
+		free_data(command->data_lst);
+		command->data_lst = NULL;
+	}
 	unlink(".heredoc");
 }

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/13 23:55:49 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/17 18:48:13 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_command	*init_command(t_command *command, char *str)
 	command->argc = 0;
 	command->args = NULL;
 	command->heredoc_lst = NULL;
+	command->data_lst = NULL;
 	command->last_in = NULL;
 	command->last_out = NULL;
 	command->in_type = NULL;

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/13 23:40:02 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/17 18:28:14 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ char* display_name(void) {
 	}
 	char* display;
 	display = ft_strjoin(username,"@:> ");
-	return display;
+	return (display);
 	free(display); 
 }
 
-char* get_input(void) {
+char* get_input(void)
+{
 	char* full_username = display_name();
 	if (full_username == NULL) {
 		return NULL;
@@ -60,11 +61,12 @@ void process_input(char* input, t_env* env, t_info* info) {
 	lexer(input, &head, info, env);
 }
 
-int main(int argc, char** argv, char** envp) {
-	char* input;
-	char** spliting;
-	char* clear_input;
-	t_env* env;
+int main(int argc, char** argv, char** envp)
+{
+	char* 	input;
+	char** 	spliting;
+	char* 	clear_input;
+	t_env* 	env;
 	t_info* info;
 
 	signal(SIGINT, interrupt_handler);
@@ -75,12 +77,13 @@ int main(int argc, char** argv, char** envp) {
 	env->env_arr = NULL;
 	rl_catch_signals = 0;
 
-	while (1) {
-		info = malloc(sizeof(t_info));
-		if (!info) {
-			perror("");
-			exit(1);
-		}
+	info = malloc(sizeof(t_info));
+	if (!info) {
+		perror("");
+		exit(1);
+	}
+	while (1)
+	{
 		input = get_input();
 		if (input == NULL) {
 			printf("exit\n");
@@ -102,8 +105,8 @@ int main(int argc, char** argv, char** envp) {
 			free(clear_input);
 		}
 		free(input);
-		free(info);
 	}
+	free(info);
 	free(env);
 	return 0;
 }

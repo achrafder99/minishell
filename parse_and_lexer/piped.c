@@ -119,9 +119,7 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 			}
 			i++;
 		}
-		free(pipe_line->command);
 		free(pipe_line);
-		free_command(pipe_line->command);
-		pipe_line->command = NULL;
+		pipe_line = NULL;
 	}
 }

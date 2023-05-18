@@ -229,30 +229,16 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			{
 				handle_pipe(node, &pipe_line, &command);
 				info->flags = 0;
-				free(command);
 				free_command(command);
 				command = NULL;
 			}
 			node = node->next;
 		}
 		if (command != NULL)
-			piped(pipe_line, command, info, env);
-		if (command)
 		{
-			free(command->args);
-			command->args = NULL;
-			free(command);
+			piped(pipe_line, command, info, env);
+			free_command(command);
 			command = NULL;
-		{
-			piped(pipe_line, command, info, env);
-			if (pipe_line)
-			{
-				free_command(command);
-				command = NULL;
-				free(pipe_line);
-				pipe_line = NULL;
-			}
 		}
 	}
-}
 }

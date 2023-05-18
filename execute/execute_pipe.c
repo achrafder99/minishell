@@ -31,14 +31,13 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 }
 
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
-{
+{	
 	int	i, j;
 	int	**fd;
 	int outfile;
 	int infile;
 	int flag;
 
-	return;
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
 	if (!fd)
 	{
@@ -135,14 +134,14 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	while(waitpid(-1, NULL, 0) > 0)
 	;
 	unlink(".heredoc");
-	i = 0;
-	while (i < piping->number_of_commands)
-	{
-		free(fd[i]);
-		i++;
-	}
+	// i = 0;
+	// while (i < piping->number_of_commands)
+	// {
+	// 	free(fd[i]);
+	// 	i++;
+	// }
 	// free(fd[i]);
-	free(fd);
+	// free(fd);
 	
 	// {
 	// 	if (WIFEXITED(info->status_code))

@@ -53,9 +53,8 @@ void free_command(t_command *command)
         return;
     if (command->args != NULL)
 	{
-        free_things(command->args);
+        free(command->args);
 		command->args = NULL;
-        command->args = NULL; 
     }
     free(command);
 	command = NULL;
@@ -78,6 +77,10 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 			free(command->last_out);
 			free(command->out_type);
 		}
+		free(command->args);
+		free(command);
+		command = NULL;
+		return;
 	}
 	else
 	{
@@ -88,38 +91,11 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		{
 			ft_memcpy(new_commands, pipe_line->command, \
 			(pipe_line->number_of_commands -1) * sizeof(t_command));
-			free_command(pipe_line->command);
+			free(pipe_line->command);
 		}
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
 	}
 	if (pipe_line)
-	{
 		execute_pipe(pipe_line, info, env);
-		int i = 0;
-		while (i < pipe_line->number_of_commands)
-		{
-			if (pipe_line->command[i].last_in && pipe_line->command[i].in_type)
-			{
-				free(pipe_line->command[i].last_in);
-				free(pipe_line->command[i].in_type);
-			}
-			if (pipe_line->command[i].last_out && pipe_line->command[i].out_type)
-			{
-				free(pipe_line->command[i].last_out);
-				free(pipe_line->command[i].out_type);
-			}
-			if (pipe_line->command[i].heredoc_lst)
-			{
-				free_heredoc(pipe_line->command[i].heredoc_lst);
-			}
-			if (pipe_line->command[i].data_lst)
-			{
-				free_data(pipe_line->command[i].data_lst);
-			}
-			i++;
-		}
-		free(pipe_line);
-		pipe_line = NULL;
-	}
 }

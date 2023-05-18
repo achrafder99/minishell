@@ -1,46 +1,50 @@
-total 704
-3206128 drwxr-xr-x  45 aalami  candidate   1.5K May 18 14:04 .
-     20 drwxr-xr-x  19 aalami  candidate   646B May 18 14:01 ..
-3206129 drwxr-xr-x  12 aalami  candidate   408B May 18 14:01 .git
-3206193 drwxr-xr-x   3 aalami  candidate   102B May 18 14:01 .vscode
-3206195 -rwxr-xr-x   1 aalami  candidate     0B May 18 14:01 <
-3206196 -rw-r--r--   1 aalami  candidate   3.1K May 18 14:01 Makefile
-3206197 -rwxr-xr-x   1 aalami  candidate     1B May 18 14:01 append.txt
-3206198 drwxr-xr-x  18 aalami  candidate   612B May 18 14:02 built_in
-3206207 drwxr-xr-x  20 aalami  candidate   680B May 18 14:02 check
-3206217 -rw-r--r--   1 aalami  candidate   1.3K May 18 14:01 check_is_built_in.c
-3206405 -rw-r--r--   1 aalami  candidate   2.6K May 18 14:02 check_is_built_in.o
-3206218 -rw-r--r--   1 aalami  candidate   1.5K May 18 14:01 cut_string.c
-3206403 -rw-r--r--   1 aalami  candidate   2.9K May 18 14:02 cut_string.o
-3206219 drwxr-xr-x  14 aalami  candidate   476B May 18 14:02 execute
-3206226 drwxr-xr-x   6 aalami  candidate   204B May 18 14:02 free
-3206229 -rw-r--r--   1 aalami  candidate   1.3K May 18 14:01 get_argv.c
-3206409 -rw-r--r--   1 aalami  candidate   3.5K May 18 14:02 get_argv.o
-3206230 -rw-r--r--   1 aalami  candidate   1.2K May 18 14:01 handle_signals.c
-3206402 -rw-r--r--   1 aalami  candidate   2.5K May 18 14:02 handle_signals.o
-3206232 drwxr-xr-x   4 aalami  candidate   136B May 18 14:02 heredoc
-3206231 -rw-r--r--   1 aalami  candidate   1.1K May 18 14:01 heredoc.h
-3206234 -rw-r--r--   1 aalami  candidate   1.0K May 18 14:01 includes.c
-3206407 -rw-r--r--   1 aalami  candidate   2.0K May 18 14:02 includes.o
-3206235 -rw-r--r--   1 aalami  candidate   1.0K May 18 14:01 is_redirect.c
-3206404 -rw-r--r--   1 aalami  candidate   2.8K May 18 14:02 is_redirect.o
-3206236 drwxr-xr-x   8 aalami  candidate   272B May 18 14:02 linked_list
-3206484 -rwxr-xr-x   1 aalami  candidate   114K May 18 14:02 minishell
-3206240 -rw-r--r--   1 aalami  candidate   2.7K May 18 14:01 minishell.c
-3206241 drwxr-xr-x   3 aalami  candidate   102B May 18 14:01 minishell.dSYM
-3206247 -rw-r--r--   1 aalami  candidate   6.1K May 18 14:01 minishell.h
-3206401 -rw-r--r--   1 aalami  candidate   6.3K May 18 14:02 minishell.o
-3206248 -rw-r--r--   1 aalami  candidate   3.9K May 18 14:01 new_string.c
-3206406 -rw-r--r--   1 aalami  candidate   5.3K May 18 14:02 new_string.o
-3206249 -rwxr-xr-x   1 aalami  candidate   2.9K May 18 14:01 out.txt
-3206250 drwxr-xr-x  41 aalami  candidate   1.4K May 18 14:02 parse_and_lexer
-3206271 -rw-r--r--   1 aalami  candidate   2.2K May 18 14:01 restring.c
-3206408 -rw-r--r--   1 aalami  candidate   3.8K May 18 14:02 restring.o
-3206272 -rwxr-xr-x   1 aalami  candidate   399B May 18 14:01 rr
-3206273 -rw-r--r--   1 aalami  candidate   2.5K May 18 14:01 structs.h
-3206274 drwxr-xr-x   4 aalami  candidate   136B May 18 14:02 toknize
-3206276 -rwxr-xr-x   1 aalami  candidate   3.1K May 18 14:03 tt
-3206277 -rwxr-xr-x   1 aalami  candidate   399B May 18 14:01 ttr
+total 712
+drwxr-xr-x  45 adardour  candidate    1530 May 18 17:20 .
+drwx------   4 adardour  candidate     136 May 18 16:38 ..
+drwxr-xr-x  13 adardour  candidate     442 May 18 16:52 .git
+drwxr-xr-x   3 adardour  candidate     102 May 18 16:38 .vscode
+-rwxr-xr-x   1 adardour  candidate       0 May 18 16:38 <
+-rw-r--r--   1 adardour  candidate    3193 May 18 16:38 Makefile
+-rwxr-xr-x   1 adardour  candidate    2687 May 18 16:38 append.txt
+drwxr-xr-x  18 adardour  candidate     612 May 18 16:53 built_in
+drwxr-xr-x  20 adardour  candidate     680 May 18 16:53 check
+-rw-r--r--   1 adardour  candidate    1305 May 18 16:38 check_is_built_in.c
+-rw-r--r--   1 adardour  candidate    2668 May 18 16:53 check_is_built_in.o
+-rw-r--r--   1 adardour  candidate    1560 May 18 16:38 cut_string.c
+-rw-r--r--   1 adardour  candidate    2920 May 18 16:53 cut_string.o
+drwxr-xr-x  14 adardour  candidate     476 May 18 17:04 execute
+drwxr-xr-x   6 adardour  candidate     204 May 18 16:53 free
+-rw-r--r--   1 adardour  candidate    1341 May 18 16:38 get_argv.c
+-rw-r--r--   1 adardour  candidate    3540 May 18 16:53 get_argv.o
+-rw-r--r--   1 adardour  candidate    1228 May 18 16:38 handle_signals.c
+-rw-r--r--   1 adardour  candidate    2572 May 18 16:53 handle_signals.o
+drwxr-xr-x   4 adardour  candidate     136 May 18 16:53 heredoc
+-rw-r--r--   1 adardour  candidate    1101 May 18 16:38 heredoc.h
+-rw-r--r--   1 adardour  candidate    1017 May 18 16:38 includes.c
+-rw-r--r--   1 adardour  candidate    2044 May 18 16:53 includes.o
+-rw-r--r--   1 adardour  candidate    1057 May 18 16:38 is_redirect.c
+-rw-r--r--   1 adardour  candidate    2900 May 18 16:53 is_redirect.o
+drwxr-xr-x   8 adardour  candidate     272 May 18 16:53 linked_list
+-rwxr-xr-x   1 adardour  candidate  116936 May 18 17:20 minishell
+-rw-r--r--   1 adardour  candidate    2723 May 18 16:38 minishell.c
+drwxr-xr-x   3 adardour  candidate     102 May 18 16:38 minishell.dSYM
+-rw-r--r--   1 adardour  candidate    6323 May 18 16:38 minishell.h
+-rw-r--r--   1 adardour  candidate    6468 May 18 16:53 minishell.o
+-rw-r--r--   1 adardour  candidate    3993 May 18 16:38 new_string.c
+-rw-r--r--   1 adardour  candidate    5444 May 18 16:53 new_string.o
+-rwxr-xr-x   1 adardour  candidate    2928 May 18 16:38 out.txt
+drwxr-xr-x  41 adardour  candidate    1394 May 18 17:20 parse_and_lexer
+-rw-r--r--   1 adardour  candidate    2277 May 18 16:38 restring.c
+-rw-r--r--   1 adardour  candidate    3904 May 18 16:53 restring.o
+-rwxr-xr-x   1 adardour  candidate     399 May 18 16:38 rr
+-rw-r--r--   1 adardour  candidate    2564 May 18 16:38 structs.h
+drwxr-xr-x   4 adardour  candidate     136 May 18 16:53 toknize
+-rwxr-xr-x   1 adardour  candidate    3173 May 18 16:38 tt
+-rwxr-xr-x   1 adardour  candidate     399 May 18 16:38 ttr
+drwxr-xr-x  43 adardour  candidate    1462 May 18 16:53 utils
+-rw-r--r--   1 adardour  candidate  116109 May 18 16:38 valgrind-out.txt
+-rwxr-xr-x   1 adardour  candidate    3212 May 18 16:38 zz
+ay 18 14:01 ttr
 3206278 drwxr-xr-x  43 aalami  candidate   1.4K May 18 14:02 utils
 3206300 -rw-r--r--   1 aalami  candidate   113K May 18 14:01 valgrind-out.txt
 3206655 -rwxr-xr-x   1 aalami  candidate     0B May 18 14:04 zz

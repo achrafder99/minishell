@@ -23,6 +23,5 @@ char **add_args(t_command *command, char *cut_str)
     new_args[command->argc] = NULL;
 
     free(command->args);
-    command->args = new_args;
     return (new_args);
 }

@@ -12,6 +12,42 @@
 
 #include "../minishell.h"
 
+char	**add_argument(t_components **node,char *cmd)
+{
+	t_components *temp;
+	char 		**args;
+	int			i;
+	int			number_of_args;
+
+	number_of_args = 0;
+	temp = *node;
+	while (temp && ft_strcmp(temp->type.type,"PIPE"))
+	{
+		if (!ft_strcmp(temp->type.type,"OPTION") || !ft_strcmp(temp->type.type,"ARG"))
+			number_of_args++;
+		temp = temp->next;
+	}
+	i = 0;
+	temp = *node;
+	args = (char**)malloc((sizeof(char*) * number_of_args) + 1);
+	if (!args)
+	{
+		perror("");
+		exit(1);
+	}
+	while (i < number_of_args && temp && ft_strcmp(temp->type.type,"PIPE"))
+	{
+		if (!ft_strcmp(temp->type.type,"OPTION") || !ft_strcmp(temp->type.type,"ARG"))
+		{
+			args[i] = ft_strdup(temp->token);
+			i++;
+		}
+		temp = temp->next;
+	}
+	args[i] = NULL;
+	return (args);
+}
+
 void	handler_heredoc(t_command **command, int *fd, t_components *node)
 {
 	if ((*command)->heredoc_lst == NULL)
@@ -60,6 +96,15 @@ t_components *node, int *fd, t_info *info)
 	
 }
 
+int	get_size_of_args(char **argument)
+{
+	int size;
+	size = 0;
+	while (argument[size])
+		size++;
+	return (size);
+}
+
 void	handle_command(t_components *node, t_command **command, t_info *info)
 {
 	int			fd;
@@ -71,10 +116,11 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 		info->flags = 1;
 	}
 	if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
+	{
 		*command = init_command(*command, node->token);
-	else if (!ft_strcmp(node->type.type, "OPTION") \
-		|| !ft_strcmp(node->type.type, "ARG"))
-			(*command)->args = add_args(*command, node->token);
+		(*command)->args = add_argument(&node,node->token);
+		(*command)->argc = get_size_of_args((*command)->args);
+	}
 	else if (check_type(node->type.type))
 	{
 		if (!ft_strcmp(node->token, "<") || !ft_strcmp(node->token, ">"))

@@ -6,37 +6,32 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:58:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 04:03:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:50:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-char **get_argv(t_command *command, int number_arg) {
-    char **argv;
+char	**get_argv(t_command *command, int number_arg)
+{
+	char			**argv;
+	int				full_size;
+	int				i;
+	int				j;
 
-    if (command->name && command->argc == 0) {
-        argv = malloc(sizeof(char*) * 2);
-        argv[0] = command->name;
-        argv[1] = NULL;
-        return argv;
-    }
-
-    argv = malloc(sizeof(char*) * (number_arg + 2));
-    if (!argv)
-        return NULL;
-    argv[0] = command->name;
-    for (int i = 1; i <= number_arg; i++) {
-        argv[i] = malloc(sizeof(char) * (strlen(command->args[i-1]) + 1));
-        if (!argv[i]) {
-            for (int j = i-1; j >= 1; j--) {
-                free(argv[j]);
-            }
-            free(argv);
-            return NULL;
-        }
-        strcpy(argv[i], command->args[i-1]);
-    }
-    argv[number_arg+1] = NULL;
-    return argv;
+	full_size = number_arg + 1;
+	argv = malloc((sizeof(char**) * full_size) + 1);
+	if (!argv)
+		return (printf("error\n"), (NULL));
+	argv[0] = ft_strdup(command->name);
+	i = 1;
+	j = 0;
+	while (i <= number_arg)
+	{
+		argv[i] = ft_strdup(command->args[j]);
+		i++;
+		j++;
+	}
+	argv[full_size] = NULL;
+	return (argv);
 }

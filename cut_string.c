@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 04:59:19 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/31 04:22:25 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/06 03:24:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ char *cut_string(char *s)
 	j = 0;
     int size = ft_strlen(s) - count_quotes(s);
     char *s1 = malloc(sizeof(char) * (size + 1));
-    if (!s1)
-        return 0;
+    if(!s1)
+        return (NULL);
     while (s[i])
     {
-        if (s[i] == '"' || s[i] == '\'')
+        if (s[i] == '\"' || s[i] == '\'')
         {
             i++;
             continue;

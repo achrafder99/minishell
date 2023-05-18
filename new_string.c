@@ -6,58 +6,106 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 21:59:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:31:51 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-char *new_str(char *str,int count){
-    int i;
-    i = 0;
-
-    int j;
-    j = 0;
-    
-    char *new_str;
-    int length = ft_strlen(str) + count * 2;
-    new_str = malloc(length + 1);
-    while (i < length - 1)
+char    *new_str(char *str, int count)
+{
+    char *restring;
+    restring =  malloc(sizeof(char) * strlen(str) + count + 1);
+    if (!restring)
     {
-        if(str[i] == '>' && str[i + 1] == '>'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-		else if(str[i] == '<' && str[i + 1] == '<'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-        else{
-			if(includes(str[i])){
-                new_str[j] = ' ';
-                j++;
-                new_str[j] = str[i];
-                j++;
-                new_str[j] = ' ';
-            }
-			else
-				new_str[j] = str[i];
-		}
-        i++;
-        j++;
+        perror("");
+        exit(1);
     }
+    int j = 0;
 
-    return (new_str);
+    int i = 0; 
+    while (i < strlen(str))
+    {
+        if (includes(str[i])  && (str[i + 1] != '>' && str[i + 1] != '<'))
+        {
+            if (i > 0 && str[i - 1] != ' ')
+                restring[j++] = ' ';
+            restring[j++] = str[i++];
+            if (i < strlen(str) - 1 && str[i + 1] != ' ')
+                restring[j++] = ' ';
+        }
+        else if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
+        {
+            if (str[i + 1] == '>' && str[i] == '>')
+            {
+                if (i > 0 && str[i - 1] != ' ' && str[i + 2] != ' ')
+                {
+                    restring[j++] = ' ';
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = ' ';
+                }
+                else if (i > 0 && str[i - 1] != ' ' && str[i + 2] == ' ')
+                {
+                    restring[j++] = ' ';
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = ' ';
+                }
+                else if (i > 0 && str[i - 1] == ' ' && str[i + 2] != ' ')
+                {
+                    restring[j++] = str[i++];
+                    restring[j++] = str[i++];
+                    restring[j++] = ' ';
+                }
+                else
+                {
+                  restring[j++] = str[i++];  
+                  restring[j++] = str[i++];
+                  restring[j] = ' ';
+                }
+            }
+            else
+            {
+                if (i > 0 && str[i - 1] != ' ' && str[i + 2] != ' ')
+                {
+                    restring[j++] = ' ';
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = ' ';
+                }
+                else if (i > 0 && str[i - 1] != ' ' && str[i + 2] == ' ')
+                {
+                    restring[j++] = ' ';
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = str[i];
+                    i++;
+                    restring[j++] = ' ';
+                }
+                else if (i > 0 && str[i - 1] == ' ' && str[i + 2] != ' ')
+                {
+                    restring[j++] = str[i++];
+                    restring[j++] = str[i++];
+                    restring[j++] = ' ';
+                }
+                else
+                {
+                  restring[j++] = str[i++];  
+                  restring[j++] = str[i++];
+                  restring[j] = ' ';
+                }
+            }
+        }
+        else
+          restring[j++] = str[i++];
+    }
+    restring[j] = '\0';
+    return (restring);
 }

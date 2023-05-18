@@ -6,13 +6,13 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:01:20 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/29 17:22:42 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:55:13 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	push(t_components **head, char *command,char *type_command)
+void	push(t_components **head, char *command, char *type_command)
 {
 	t_components	*new_node;
 	t_components	*current_node;
@@ -20,11 +20,11 @@ void	push(t_components **head, char *command,char *type_command)
 	new_node = (t_components *)malloc(sizeof(t_components));
 	if (new_node == NULL)
 	{
-		fprintf(stderr, "Memory allocation failed");
+		write(2, "Memory allocation failed\n",25);
 		exit(EXIT_FAILURE);
 	}
-	new_node->token = strdup(command);
-	new_node->type.type = strdup(type_command);
+	new_node->token = ft_strdup(command);
+	new_node->type.type = ft_strdup(type_command);
 	new_node->next = NULL;
 	if (*head == NULL)
 	{

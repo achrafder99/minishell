@@ -6,12 +6,11 @@
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 16:52:08 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/21 12:29:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:02:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 char	*ft_strtrim(char const *s1, char const *set)
 {

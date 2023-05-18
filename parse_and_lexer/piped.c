@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:40:04 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 18:48:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/18 14:32:24 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	free_pipe(t_piped *pipe)
 {
+<<<<<<< HEAD
 	int i = 0;
 	if (pipe == NULL)
 		return;
@@ -28,6 +29,21 @@ void	free_pipe(t_piped *pipe)
 	}
 }
 
+=======
+	if (pipe == NULL)
+		return;
+	int i = 0;
+	while (i < pipe->number_of_commands - 1)
+	{
+		free_command(&pipe->command[i]);
+		i++;
+	}
+	free(pipe);
+	pipe = NULL;
+}
+
+
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
 void	free_heredoc(t_here_lst *lst_heredoc)
 {
 	if (lst_heredoc == NULL)
@@ -45,14 +61,23 @@ void	free_heredoc(t_here_lst *lst_heredoc)
 	free(lst_heredoc);
 }
 
+<<<<<<< HEAD
 void free_command(t_command *command)
 {
+=======
+void free_command(t_command *command) {
+
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
     if (command == NULL)
         return;
     if (command->args != NULL)
 	{
         free_things(command->args);
+<<<<<<< HEAD
 		command->args = NULL;
+=======
+        command->args = NULL; 
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
     }
     free(command);
 	command = NULL;
@@ -85,7 +110,11 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		{
 			ft_memcpy(new_commands, pipe_line->command, \
 			(pipe_line->number_of_commands -1) * sizeof(t_command));
+<<<<<<< HEAD
 			// free(pipe_line->command);
+=======
+			free_command(pipe_line->command);
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
 		}
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
@@ -93,6 +122,7 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 	if (pipe_line)
 	{
 		execute_pipe(pipe_line, info, env);
+<<<<<<< HEAD
 		int i = 0;
 		while (i < pipe_line->number_of_commands)
 		{
@@ -118,5 +148,9 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		}
 		free(pipe_line->command);
 		free(pipe_line);
+=======
+		free_command(pipe_line->command);
+		pipe_line->command = NULL;
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
 	}
 }

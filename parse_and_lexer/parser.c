@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 18:53:08 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/18 14:32:00 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,17 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			{
 				handle_pipe(node, &pipe_line, &command);
 				info->flags = 0;
+<<<<<<< HEAD
 				free(command);
+=======
+				free_command(command);
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
 				command = NULL;
 			}
 			node = node->next;
 		}
 		if (command != NULL)
+<<<<<<< HEAD
 			piped(pipe_line, command, info, env);
 		if (command)
 		{
@@ -242,6 +247,17 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			command->args = NULL;
 			free(command);
 			command = NULL;
+=======
+		{
+			piped(pipe_line, command, info, env);
+			if (pipe_line)
+			{
+				free_command(command);
+				command = NULL;
+				free(pipe_line);
+				pipe_line = NULL;
+			}
+>>>>>>> 147926a5c80bf3e293af1805bb1be39a025d6bbb
 		}
 	}
 }

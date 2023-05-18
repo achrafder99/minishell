@@ -1,5 +1,5 @@
 total 704
-3206128 drwxr-xr-x  44 aalami  candidate   1.5K May 18 14:02 .
+3206128 drwxr-xr-x  45 aalami  candidate   1.5K May 18 14:04 .
      20 drwxr-xr-x  19 aalami  candidate   646B May 18 14:01 ..
 3206129 drwxr-xr-x  12 aalami  candidate   408B May 18 14:01 .git
 3206193 drwxr-xr-x   3 aalami  candidate   102B May 18 14:01 .vscode
@@ -43,4 +43,4 @@ total 704
 3206277 -rwxr-xr-x   1 aalami  candidate   399B May 18 14:01 ttr
 3206278 drwxr-xr-x  43 aalami  candidate   1.4K May 18 14:02 utils
 3206300 -rw-r--r--   1 aalami  candidate   113K May 18 14:01 valgrind-out.txt
-8 14:01 valgrind-out.txt
+3206655 -rwxr-xr-x   1 aalami  candidate     0B May 18 14:04 zz

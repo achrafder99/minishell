@@ -115,7 +115,7 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 		*command = init_command(*command, node->token);
 		info->flags = 1;
 	}
-	if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
+	else if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
 	{
 		*command = init_command(*command, node->token);
 		(*command)->args = add_argument(&node,node->token);

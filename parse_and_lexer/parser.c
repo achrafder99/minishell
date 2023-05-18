@@ -86,7 +86,6 @@ void without_command(t_components *node, t_info *info)
     int             temppp;
     int             fd_pipe[2];
 
-
     tokens = node;
     while (tokens != NULL)
     {
@@ -117,6 +116,8 @@ void without_command(t_components *node, t_info *info)
 				}
 				else
 					break;
+            	free(line);
+				line = NULL;
             }
             free(line);
             line = NULL;
@@ -229,6 +230,8 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			{
 				handle_pipe(node, &pipe_line, &command);
 				info->flags = 0;
+				free(command);
+				command = NULL;
 			}
 			node = node->next;
 		}

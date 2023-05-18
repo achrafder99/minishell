@@ -20,10 +20,20 @@ void	remove_variable(char *key, t_lst *lst)
 	tmp = lst->top;
 	while(tmp)
 	{
+		if (tmp == lst->top && !ft_strcmp(lst->top->key, key))
+		{
+			tmp_a = lst->top;
+			lst->top = lst->top->next;
+			free(tmp_a->key);
+			free(tmp_a->value);
+			free(tmp_a);
+		}
 		if (tmp->next && !ft_strcmp(tmp->next->key, key))
 		{
 			tmp_a = tmp->next;
 			tmp->next = tmp->next->next;
+			free(tmp_a->key);
+			free(tmp_a->value);
 			free(tmp_a);
 		}
 		tmp = tmp->next;

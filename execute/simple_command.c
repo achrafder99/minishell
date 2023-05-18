@@ -222,7 +222,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	flags = 0;
 	built_in = 0;
 
-	return;
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);
@@ -260,11 +259,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		{
 			free_things(env->env_arr);
 			env->env_arr = NULL;
-		}
-		if (command->data_lst)
-		{
-			free_data(command->data_lst);
-			command->data_lst = NULL;
 		}
 	}
 	unlink(".heredoc");

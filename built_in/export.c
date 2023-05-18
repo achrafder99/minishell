@@ -116,9 +116,15 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 			tmp->value = ft_strjoin("", get_value(str));
 	}
 	else if (str && !flag)
-		tmp->value = strdup(get_value(str));
+	{
+		free(tmp->value);
+		tmp->value = ft_strdup(get_value(str));
+	}
 	else
-		tmp->value = strdup("\0");
+	{
+		free(tmp->value);
+		tmp->value = ft_strdup("\0");
+	}
 }
 void	add_key_with_value(t_lst *lst, char *str, char **split)
 {
@@ -250,6 +256,7 @@ int	if_valid_identifier(char **arg, t_env *env)
 			ft_putstr_fd(": not a valid identifier\n", 2);
 		}
 			// printf("bash: export: '%s': not a valid identifier\n", arg[i]);
+		free_things(split);
 		i++;
 	}
 	if (flag)

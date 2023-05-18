@@ -24,5 +24,6 @@ void	free_things(char **spliting)
 		free(spliting[i]);
 		i++;
 	}
+	free(spliting[i]);
 	free(spliting);
 }

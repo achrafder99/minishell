@@ -12,23 +12,6 @@
 
 #include "../minishell.h"
 
-void	free_pipe(t_piped *pipe)
-{
-
-	int i = 0;
-	if (pipe == NULL)
-		return;
-	while (i < pipe->number_of_commands - 1)
-	{
-		if (&pipe->command[i])
-		{
-			free(&pipe->command[i]);
-
-		}
-		i++;
-	}
-}
-
 void	free_heredoc(t_here_lst *lst_heredoc)
 {
 	if (lst_heredoc == NULL)
@@ -52,10 +35,7 @@ void free_command(t_command *command)
     if (command == NULL)
         return;
     if (command->args != NULL)
-	{
-        free(command->args);
-		command->args = NULL;
-    }
+        free_things(command->args);
     free(command);
 	command = NULL;
 }
@@ -67,6 +47,11 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 	if (!pipe_line)
 	{
 		simple_command(command, info,env);
+		if (command->heredoc_lst)
+		{
+			free_heredoc(command->heredoc_lst);
+			free_data(command->data_lst);
+		}
 		if (command->last_in && command->in_type)
 		{
 			free(command->last_in);
@@ -77,7 +62,8 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 			free(command->last_out);
 			free(command->out_type);
 		}
-		free(command->args);
+		if(command->args)
+			free_things(command->args);
 		free(command);
 		command = NULL;
 		return;
@@ -97,5 +83,38 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		pipe_line->command = new_commands;
 	}
 	if (pipe_line)
+	{
+		int i;
+		i = 0;
 		execute_pipe(pipe_line, info, env);
+		if (pipe_line)
+		{
+			while (i < pipe_line->number_of_commands)
+			{
+				free_things(pipe_line->command[i].args);
+				if(pipe_line->command[i].heredoc_lst)
+				{
+					free_heredoc(pipe_line->command[i].heredoc_lst);
+					free_data(pipe_line->command[i].data_lst);
+				}
+				if (pipe_line->command[i].last_in && pipe_line->command[i].in_type)
+				{
+					free(pipe_line->command[i].last_in);
+					free(pipe_line->command[i].in_type);
+				}
+				if (pipe_line->command[i].last_out && pipe_line->command[i].out_type)
+				{
+					free(pipe_line->command[i].last_out);
+					free(pipe_line->command[i].out_type);
+				}
+				i++;
+			}
+		}
+		free(pipe_line->command);
+		pipe_line->command = NULL;
+		free(pipe_line);
+		pipe_line = NULL;
+		free(command);
+		command = NULL;
+	}
 }

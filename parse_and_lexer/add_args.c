@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:42:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 21:03:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:18:24 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char **add_args(t_command *command, char *cut_str)
     new_args[command->argc - 1] = cut_str;
     new_args[command->argc] = NULL;
 
-    free(command->args);  // Free the existing command->args
-    command->args = new_args;  // Assign new_args to command->args
-
+    if (command->args)
+        free(command->args);  
+    command->args = new_args;
     return new_args;
 }

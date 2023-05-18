@@ -6,22 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 18:53:08 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/18 14:32:00 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_pipe(t_piped *pipe)
-{
-	int i = 0;
-	while (i < pipe->number_of_commands - 1)
-	{
-		free_command(&pipe->command[i]);
-		i++;
-	}
-	free(pipe);
-}
 
 int	open_fds(const char *type, const char *filename, int *fd)
 {
@@ -240,16 +229,21 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			{
 				handle_pipe(node, &pipe_line, &command);
 				info->flags = 0;
+				free_command(command);
+				command = NULL;
 			}
 			node = node->next;
 		}
 		if (command != NULL)
-			piped(pipe_line, command, info, env);
-		if (pipe_line)
 		{
-			free_pipe(pipe_line);
-			free_command(command);
-			command = NULL;
+			piped(pipe_line, command, info, env);
+			if (pipe_line)
+			{
+				free_command(command);
+				command = NULL;
+				free(pipe_line);
+				pipe_line = NULL;
+			}
 		}
 	}
 }

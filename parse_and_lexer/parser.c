@@ -235,9 +235,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			node = node->next;
 		}
 		if (command != NULL)
-		{
 			piped(pipe_line, command, info, env);
-		}
 		if (command)
 		{
 			free(command->args);

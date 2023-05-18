@@ -38,6 +38,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	int infile;
 	int flag;
 
+	return;
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
 	if (!fd)
 	{

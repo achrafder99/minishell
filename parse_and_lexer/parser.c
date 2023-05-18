@@ -12,17 +12,6 @@
 
 #include "../minishell.h"
 
-void	free_pipe(t_piped *pipe)
-{
-	int i = 0;
-	while (i < pipe->number_of_commands - 1)
-	{
-		free_command(&pipe->command[i]);
-		i++;
-	}
-	free(pipe);
-}
-
 int	open_fds(const char *type, const char *filename, int *fd)
 {
 	if (!ft_strcmp(type, "REDIRECT_out"))
@@ -240,15 +229,20 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 			{
 				handle_pipe(node, &pipe_line, &command);
 				info->flags = 0;
+				free(command);
+				command = NULL;
 			}
 			node = node->next;
 		}
 		if (command != NULL)
-			piped(pipe_line, command, info, env);
-		if (pipe_line)
 		{
-			free_pipe(pipe_line);
-			free_command(command);
+			piped(pipe_line, command, info, env);
+		}
+		if (command)
+		{
+			free(command->args);
+			command->args = NULL;
+			free(command);
 			command = NULL;
 		}
 	}

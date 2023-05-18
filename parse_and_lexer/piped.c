@@ -12,8 +12,26 @@
 
 #include "../minishell.h"
 
+void	free_pipe(t_piped *pipe)
+{
+	int i = 0;
+	if (pipe == NULL)
+		return;
+	while (i < pipe->number_of_commands - 1)
+	{
+		if (&pipe->command[i])
+		{
+			free(&pipe->command[i]);
+
+		}
+		i++;
+	}
+}
+
 void	free_heredoc(t_here_lst *lst_heredoc)
 {
+	if (lst_heredoc == NULL)
+		return;
 	t_heredoc *list;
 	list = lst_heredoc->top;
 	while (list)
@@ -27,16 +45,17 @@ void	free_heredoc(t_here_lst *lst_heredoc)
 	free(lst_heredoc);
 }
 
-void free_command(t_command *command) {
-
-    if (command == NULL) {
+void free_command(t_command *command)
+{
+    if (command == NULL)
         return;
-    }
-    if (command->args != NULL){
-        free(command->args);
-        command->args = NULL; 
+    if (command->args != NULL)
+	{
+        free_things(command->args);
+		command->args = NULL;
     }
     free(command);
+	command = NULL;
 }
 
 void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
@@ -56,9 +75,6 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 			free(command->last_out);
 			free(command->out_type);
 		}
-		if (command)
-			free_command(command);
-		return;
 	}
 	else
 	{
@@ -69,10 +85,38 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		{
 			ft_memcpy(new_commands, pipe_line->command, \
 			(pipe_line->number_of_commands -1) * sizeof(t_command));
-			free(pipe_line->command);
+			// free(pipe_line->command);
 		}
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
+	}
+	if (pipe_line)
+	{
 		execute_pipe(pipe_line, info, env);
+		int i = 0;
+		while (i < pipe_line->number_of_commands)
+		{
+			if (pipe_line->command[i].last_in && pipe_line->command[i].in_type)
+			{
+				free(pipe_line->command[i].last_in);
+				free(pipe_line->command[i].in_type);
+			}
+			if (pipe_line->command[i].last_out && pipe_line->command[i].out_type)
+			{
+				free(pipe_line->command[i].last_out);
+				free(pipe_line->command[i].out_type);
+			}
+			if (pipe_line->command[i].heredoc_lst)
+			{
+				free_heredoc(pipe_line->command[i].heredoc_lst);
+			}
+			if (pipe_line->command[i].data_lst)
+			{
+				free_data(pipe_line->command[i].data_lst);
+			}
+			i++;
+		}
+		free(pipe_line->command);
+		free(pipe_line);
 	}
 }

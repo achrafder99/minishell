@@ -217,7 +217,8 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	int		flags;
 	int		built_in;
 	char 	**spliting;
-
+	
+	return;
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;

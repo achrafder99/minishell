@@ -12,19 +12,18 @@
 
 #include "../minishell.h"
 
-char	**add_args(t_command *command, char *cut_str)
+char **add_args(t_command *command, char *cut_str)
 {
-	char	**new_args;
+    char **new_args;
 
-	command->argc += 1;
-	new_args = (char **) malloc((command->argc + 1) * sizeof(char *));
-	if (command->args)
-	{
-		ft_memcpy(new_args, command->args, \
-		(command->argc - 1) * sizeof(char *));
-		free(command->args);
-	}
-	new_args[command->argc -1] = cut_str;
-	new_args[command->argc] = NULL;
-	return (new_args);
+    command->argc += 1;
+    new_args = (char **)malloc((command->argc + 1) * sizeof(char *));
+    ft_memcpy(new_args, command->args, (command->argc - 1) * sizeof(char *));
+    new_args[command->argc - 1] = cut_str;
+    new_args[command->argc] = NULL;
+
+    free(command->args);  // Free the existing command->args
+    command->args = new_args;  // Assign new_args to command->args
+
+    return new_args;
 }

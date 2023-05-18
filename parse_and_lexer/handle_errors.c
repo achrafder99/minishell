@@ -75,7 +75,7 @@ int	handle_errors(t_components *tokens)
 	node = tokens;
 	if (check_option(node))
 		return (1);
-		
+
 	while (node != NULL)
 	{	
 		if (ft_strchr(node->token,'\\'))

@@ -143,4 +143,5 @@ t_heredoc	*last_heredoc(t_here_lst *lst);
 t_heredoc	*new_heredoc(char *heredoc, char *delimit);
 t_here_data	*open_heredoc(t_here_lst *list);
 int	ft_isdigit(int c);
+void	free_command(t_command *command);
 #endif

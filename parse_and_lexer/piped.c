@@ -27,11 +27,16 @@ void	free_heredoc(t_here_lst *lst_heredoc)
 	free(lst_heredoc);
 }
 
-void	free_command(t_command *command)
-{
-	if(command->heredoc_lst)
-		free_heredoc(command->heredoc_lst);
-	free(command);
+void free_command(t_command *command) {
+
+    if (command == NULL) {
+        return;
+    }
+    if (command->args != NULL){
+        free(command->args);
+        command->args = NULL; 
+    }
+    free(command);
 }
 
 void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
@@ -69,6 +74,5 @@ void	piped(t_piped *pipe_line, t_command *command, t_info *info,t_env *env)
 		new_commands[pipe_line->number_of_commands - 1] = *command;
 		pipe_line->command = new_commands;
 		execute_pipe(pipe_line, info, env);
-		return;
 	}
 }

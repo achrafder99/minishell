@@ -14,16 +14,15 @@
 
 void	free_things(char **spliting)
 {
+	if (spliting == NULL)
+		return;
 	int	i;
 
 	i = 0;
-	if (spliting == NULL)
-		return ;
 	while (spliting[i])
 	{
 		free(spliting[i]);
 		i++;
 	}
 	free(spliting);
-	spliting = NULL;
 }

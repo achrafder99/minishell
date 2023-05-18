@@ -37,7 +37,7 @@ includes.c \
 ./linked_list/add_front.c ./linked_list/delete_node_by_type.c ./linked_list/creat_list.c \
 ./heredoc/heredoc_list.c
 
-CC		= cc
+CC		= cc -g
 RM		= rm -rf
 CFLAGS = -Wall -Wextra -Werror -g
 

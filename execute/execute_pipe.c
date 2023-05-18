@@ -37,7 +37,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	int outfile;
 	int infile;
 	int flag;
-	
+
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
 	if (!fd)
 	{
@@ -134,6 +134,15 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	while(waitpid(-1, NULL, 0) > 0)
 	;
 	unlink(".heredoc");
+	i = 0;
+	while (i < piping->number_of_commands)
+	{
+		free(fd[i]);
+		i++;
+	}
+	// free(fd[i]);
+	free(fd);
+	
 	// {
 	// 	if (WIFEXITED(info->status_code))
 	// 	  info->status_code =  WEXITSTATUS(info->status_code);

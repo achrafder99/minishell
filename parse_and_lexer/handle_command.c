@@ -74,7 +74,7 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 		*command = init_command(*command, node->token);
 	else if (!ft_strcmp(node->type.type, "OPTION") \
 		|| !ft_strcmp(node->type.type, "ARG"))
-		(*command)->args = add_args(*command, node->token);
+			(*command)->args = add_args(*command, node->token);
 	else if (check_type(node->type.type))
 	{
 		if (!ft_strcmp(node->token, "<") || !ft_strcmp(node->token, ">"))

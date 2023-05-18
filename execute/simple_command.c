@@ -250,21 +250,21 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 			info->status_code = WTERMSIG(info->status_code) + 128;
 		else
 			info->status_code = WEXITSTATUS(info->status_code);
-	}
-	if (argv)
-	{
-		free_things(argv);
-		argv = NULL;
-	}
-	if (env->env_arr)
-	{
-		free_things(env->env_arr);
-		env->env_arr = NULL;
-	}
-	if (command->data_lst)
-	{
-		free_data(command->data_lst);
-		command->data_lst = NULL;
+		if (argv)
+		{
+			free_things(argv);
+			argv = NULL;
+		}
+		if (env->env_arr)
+		{
+			free_things(env->env_arr);
+			env->env_arr = NULL;
+		}
+		if (command->data_lst)
+		{
+			free_data(command->data_lst);
+			command->data_lst = NULL;
+		}
 	}
 	unlink(".heredoc");
 }

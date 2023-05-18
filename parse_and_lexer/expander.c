@@ -81,7 +81,6 @@ t_env *env, t_info *info)
 	int							position;
 	char						*token;
 
-	
 	components1 = NULL;
 	position = 0;
 	components = node;

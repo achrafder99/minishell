@@ -64,7 +64,7 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 		flag = 0;
 		if (ft_strlen(piping->command[i].name))
 		{
-			if (!ft_strcmp(piping->command[i].name, "<<"))
+			if (check_is_redirection(piping->command[i].name))
 			{
 				flag = 1;
 				info->status_code = 0;
@@ -85,13 +85,6 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 					dup2(fd[i - 1][0], 0);
 				if (fd[i] != NULL && !flag)
 					dup2(fd[i][1], 1);
-				// if (piping->command[i].outfile)
-				// {
-				// 	int outfile;
-				// 	outfile = open(piping->command[i].outfile, O_RDWR,777);
-				// 	dup2(outfile, fd[i - 1][1]);
-				// }
-				// printf("child %d: stdin=%d, stdout=%d\n", i, dup(0), dup(1));
 				j = 0;
 				while (j < (piping->number_of_commands - 1))
 				{
@@ -142,50 +135,4 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	}
 	free(fd[i]);
 	free(fd);
-	
-	// {
-	// 	if (WIFEXITED(info->status_code))
-	// 	  info->status_code =  WEXITSTATUS(info->status_code);
-
-	// }
-	// {
-	// 	printf("after%d\n", info->status_code);
-	// }
-	// 	;
-	// {
-	// 	if (info->status_code != 0 || info->status_code != 127 )
-	// 		info->status_code =1;
-	// }
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (i < piping->number_of_commands)
-// 	{
-// 		printf("Command (%d)\n", i);
-// 		printf("command name :%s\n", piping->command[i].name);
-// 		if (piping->command[i].argc)
-// 		{			printf("Args ");
-// 			j = 0;
-// 			while (j < piping->command[i].argc)
-// 			{
-// 				printf("%s\t", piping->command[i].args[j]);
-// 				j++;
-// 			}}
-// 		printf("\n");
-// 		if (piping->command[i].heredoc_lst)
-// 		{t_heredoc *tmp;
-// 		tmp = piping->command[i].heredoc_lst->top;
-// 		while(tmp)
-// 		{
-// 			printf("heredoc delimiter %s\n", tmp->delimit);
-// 			tmp = tmp->next;
-// 		}}
-// 		// printf("last %s\n", piping->command[i].last->in_type);
-// 		if (piping->command[i].last)
-// {	printf("last in %s\n", piping->command[i].last->last_in);
-// 	printf("last out %s\n", piping->command[i].last->last_out);
-// 	}
-// 		i++;
-// 	}
 }

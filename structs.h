@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/14 14:37:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:18:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-# include <stdio.h>
 # include "heredoc.h"
+# include <stdio.h>
 
 typedef struct s_type
 {
@@ -52,14 +52,13 @@ typedef struct s_heredoc
 {
 	char				*heredoc;
 	char				*delimit;
-	struct s_heredoc				*next;
+	struct s_heredoc	*next;
 }						t_heredoc;
 
 typedef struct s_here_lst
 {
-	t_heredoc				*top;
+	t_heredoc			*top;
 }						t_here_lst;
-
 
 typedef struct s_command
 {

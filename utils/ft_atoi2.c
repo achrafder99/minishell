@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:31:52 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/12 19:32:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/18 23:14:19 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 unsigned long long	ft_atoi2(const char *str)
 {
 	unsigned long long	ret;
-	int			sign;
-	int			i;
+	int					sign;
+	int					i;
 
 	i = 0;
 	ret = 0;

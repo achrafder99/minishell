@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_list.c                                     :+:      :+:    :+:   */
+/*   exec_heredoc_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/11 14:17:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 20:15:53 by aalami           ###   ########.fr       */
+/*   Created: 2023/05/19 18:50:13 by aalami            #+#    #+#             */
+/*   Updated: 2023/05/19 20:13:52 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_heredoc	*new_heredoc(char *heredoc, char *delimit)
+void	free_data(t_here_data *data)
 {
-	t_heredoc	*node;
+	t_here_node	*top;
 
-	node = malloc(sizeof(t_heredoc));
-	if (!(node))
-		return (0);
-	node->heredoc = ft_strdup(heredoc);
-	node->delimit = ft_strdup(delimit);
-	node->next = NULL;
-	return (node);
+	top = data->top;
+	while (top)
+	{
+		free(top->data);
+		free(top);
+		top = top->next;
+	}
+	free(top);
+	free(data);
 }
 
-t_heredoc	*last_heredoc(t_here_lst *lst)
+t_here_node	*last_here_node(t_here_data *lst)
 {
-	t_heredoc	*tmp;
+	t_here_node	*tmp;
 
 	if (lst->top == NULL)
 		return (0);
@@ -37,22 +39,34 @@ t_heredoc	*last_heredoc(t_here_lst *lst)
 	return (tmp);
 }
 
-void	ft_add_heredoc(t_here_lst *lst, t_heredoc *new)
+t_here_node	*new_here_node(char *data)
 {
-	t_heredoc	*tmp;
+	t_here_node	*node;
+
+	node = malloc(sizeof(t_here_node));
+	if (!(node))
+		return (0);
+	node->data = ft_strdup(data);
+	node->next = NULL;
+	return (node);
+}
+
+void	ft_add_here_data(t_here_data *lst, t_here_node *new)
+{
+	t_here_node	*tmp;
 
 	if (!new)
 		return ;
 	if (!lst->top)
 		lst->top = new;
-	tmp = last_heredoc(lst);
+	tmp = last_here_node(lst);
 	tmp->next = new;
 	new->next = 0;
 }
 
-t_here_lst	*creat_heredoc_list(void)
+t_here_data	*creat_heredoc_data_list(void)
 {
-	t_here_lst	*lst;
+	t_here_data	*lst;
 
 	lst = malloc(sizeof(t_here_lst));
 	if (!lst)

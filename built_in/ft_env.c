@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 00:34:42 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 13:55:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	push_list(t_lst *lst, char **env)
 	set_oldpwd(lst);
 }
 
-t_lst   *get_env(char **env)
+t_lst	*get_env(char **env)
 {
-	t_lst   *env_lst;
+	t_lst	*env_lst;
 
 	env_lst = creat_list();
 	if (env_lst)
@@ -48,16 +48,17 @@ t_lst   *get_env(char **env)
 	return (env_lst);
 }
 
-int 	ft_env(t_lst *env_lst, t_command *command)
+int	ft_env(t_lst *env_lst, t_command *command)
 {
 	t_node	*tmp;
+
 	if (command->argc)
 		return (1);
 	tmp = env_lst->top;
 	while (tmp)
 	{
 		if (tmp->value)
-			printf("%s=%s\n",tmp->key, tmp->value);
+			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 	return (0);

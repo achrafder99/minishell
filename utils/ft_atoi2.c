@@ -6,15 +6,15 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:31:52 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/12 19:32:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:34:19 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-unsigned long long	ft_atoi2(const char *str)
+long long	ft_atoi2(const char *str)
 {
-	unsigned long long	ret;
+	long long	ret;
 	int			sign;
 	int			i;
 

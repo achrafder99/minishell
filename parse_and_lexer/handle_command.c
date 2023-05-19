@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 17:29:48 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 23:51:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,13 @@ void	handle_command(t_components *node, t_command **command, t_info *info)
 		*command = init_command(*command, node->token);
 		info->flags = 1;
 	}
-	else if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
+	if (!ft_strcmp(node->type.type, "COMMAND") && info->flags)
 	{
 		*command = init_command(*command, node->token);
 		(*command)->args = add_argument(&node,node->token);
 		(*command)->argc = get_size_of_args((*command)->args);
 	}
-	else if (check_type(node->type.type))
+	if (check_type(node->type.type))
 	{
 		if (!ft_strcmp(node->token, "<") || !ft_strcmp(node->token, ">"))
 			handle_redirect(command, node, &fd, info);

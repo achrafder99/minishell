@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 00:40:47 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 21:09:05 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	push_component(t_components **head, char *type, char **spliting, int *i,t_i
 void		lex_redirection(t_data *data);
 char		*get_cmd(char *command_name);
 void		open_file(t_command *command, t_fds *fds);
-void		redirection(t_command *command, t_here_data *data_lst);
+int		redirection(t_command *command, t_here_data *data_lst);
 void	handle_command(t_components *node, t_command **command, t_info *info);
 void	handle_pipe(t_components *node,
 					t_piped **pipe_line,
@@ -118,11 +118,11 @@ void		push_list(t_lst *lst, char **env);
 int 		ft_env(t_lst *env_lst,t_command *command);
 t_lst		*get_env(char **env);
 t_lst *sort_env(char **env);
-unsigned long long	ft_atoi2(const char *str);
+long long	ft_atoi2(const char *str);
 int	ft_atoi(const char *str);
 char	*ft_itoa(int c);
-void	run_child(t_command *command, int flags, int built_in, char **argv, t_env *env);
-void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env);
+void	run_child(t_command *command, int flags, char **argv, t_env *env);
+void	first_step(t_command *command, t_info *info, int *flags, t_env *env);
 char	**get_new_env(t_lst *env);
 int		get_list_size(t_lst *lst);
 int		ft_unset(t_command *cmd, t_env *env);
@@ -161,4 +161,15 @@ void	append_value(t_lst *lst, char *str, char **split);
 int	if_valid_identifier(char **arg, t_env *env);
 char	*update_shell_level(char *value);
 void	set_oldpwd(t_lst *lst);
+void    add_new_env_variables(t_lst *env, char **new);
+void	free_data(t_here_data *data);
+t_here_node	*last_here_node(t_here_data *lst);
+t_here_node	*new_here_node(char *data);
+void	ft_add_here_data(t_here_data *lst, t_here_node *new);
+t_here_data	*creat_heredoc_data_list();
+void    fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst);
+void	handle_command_not_found(t_info *info, t_command *command, int *flags);
+int	save_and_redirect(t_command *command, int *save_in, int *save_out);
+void	free_execution_args(char **argv, t_env *env);
+void    reset_std_in_out(t_command *command , int save_in, int save_out);
 #endif

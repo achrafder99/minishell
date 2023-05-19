@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/18 14:28:55 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 23:52:26 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	argv = get_argv(cmd, cmd->argc);
 	flags = 0;
 	built_in = 0;
-	first_step(cmd, info, &built_in, &flags, env);
-	if (built_in || flags == 127)
+	first_step(cmd, info, &flags, env);
+	if (check_is_built_in(cmd->name) || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, flags, built_in, argv,env);
+	run_child(cmd, flags, argv, env);
 }
 
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
@@ -182,9 +182,9 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 // 			tmp = tmp->next;
 // 		}}
 // 		// printf("last %s\n", piping->command[i].last->in_type);
-// 		if (piping->command[i].last)
-// {	printf("last in %s\n", piping->command[i].last->last_in);
-// 	printf("last out %s\n", piping->command[i].last->last_out);
+	
+// {	printf("last in %s\n", piping->command[i].last_in);
+// 	printf("last out %s\n", piping->command[i].last_out);
 // 	}
 // 		i++;
 // 	}

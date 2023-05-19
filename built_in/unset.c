@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 12:49:13 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/06 15:09:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/19 13:56:28 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	remove_variable(char *key, t_lst *lst)
 	t_node	*tmp_a;
 
 	tmp = lst->top;
-	while(tmp)
+	while (tmp)
 	{
 		if (tmp == lst->top && !ft_strcmp(lst->top->key, key))
 		{
@@ -37,19 +37,20 @@ void	remove_variable(char *key, t_lst *lst)
 			free(tmp_a);
 		}
 		tmp = tmp->next;
-	}	
+	}
 }
 
 int	ft_unset(t_command *cmd, t_env *env)
 {
 	int	i;
+
 	if (cmd->args)
 	{
 		i = 0;
 		while (cmd->args[i])
 		{
-			remove_variable(cmd->args[i],env->exp);
-			remove_variable(cmd->args[i],env->env);
+			remove_variable(cmd->args[i], env->exp);
+			remove_variable(cmd->args[i], env->env);
 			i++;
 		}
 	}

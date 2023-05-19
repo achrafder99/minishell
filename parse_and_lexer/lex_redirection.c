@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_redirection.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:38:41 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 22:24:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 12:45:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	handle_heredoc(t_data *data)
 		push(head, spliting[1], "END_HEREDOC");
 		*i += 1;
 	}
-	if (spliting[2] != NULL && !check_is_redirection(spliting[*i]) && ft_strcmp(spliting[*i],"|"))
+	if (spliting[2] != NULL && !check_is_redirection(spliting[*i])
+		&& ft_strcmp(spliting[*i], "|"))
 	{
 		push(head, spliting[2], "COMMAND");
 		*i += 1;

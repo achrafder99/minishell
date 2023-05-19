@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/18 14:28:55 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 14:01:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,18 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	if (built_in || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, flags, built_in, argv,env);
+	run_child(cmd, flags, built_in, argv, env);
 }
 
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
-	int	i, j;
 	int	**fd;
-	int outfile;
-	int infile;
-	int flag;
+	int	outfile;
+	int	infile;
+	int	flag;
+	int	id[piping->number_of_commands];
 
+	int i, j;
 	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
 	if (!fd)
 	{
@@ -47,11 +48,10 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	j = 0;
 	while (j < piping->number_of_commands - 1)
 	{
-		fd[j] = malloc(sizeof (int) * 2);
+		fd[j] = malloc(sizeof(int) * 2);
 		j++;
 	}
 	fd[j] = NULL;
-	int	id[piping->number_of_commands];
 	j = 0;
 	while (j < (piping->number_of_commands - 1))
 	{
@@ -76,11 +76,11 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 			{
 				if (!flag && !check_command(piping->command[i].name, env))
 				{
-					printf("minishell: %s: No such file or directory\n", piping->command[i].name);
-					info->status_code= 127;
-					exit (127);
+					printf("minishell: %s: No such file or directory\n",
+							piping->command[i].name);
+					info->status_code = 127;
+					exit(127);
 				}
-				
 				if (i > 0)
 					dup2(fd[i - 1][0], 0);
 				if (fd[i] != NULL && !flag)
@@ -97,8 +97,10 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 				if (flag || check_is_built_in(piping->command[i].name))
 					exit(info->status_code);
 			}
-			if ((check_is_built_in(piping->command[i].name) || i + 1 == piping->number_of_commands))
-			{	if (!check_is_built_in(piping->command[i].name))
+			if ((check_is_built_in(piping->command[i].name) || i
+					+ 1 == piping->number_of_commands))
+			{
+				if (!check_is_built_in(piping->command[i].name))
 				{
 					j = 0;
 					while (j < (piping->number_of_commands - 1))
@@ -108,11 +110,11 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 						j++;
 					}
 				}
-						waitpid(id[i], &info->status_code,0);
-						if (WIFSIGNALED(info->status_code))
-							info->status_code = WTERMSIG(info->status_code) + 128;
-						else
-							info->status_code = WEXITSTATUS(info->status_code);
+				waitpid(id[i], &info->status_code, 0);
+				if (WIFSIGNALED(info->status_code))
+					info->status_code = WTERMSIG(info->status_code) + 128;
+				else
+					info->status_code = WEXITSTATUS(info->status_code);
 			}
 		}
 		i++;
@@ -124,8 +126,8 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 		close(fd[j][1]);
 		j++;
 	}
-	while(waitpid(-1, NULL, 0) > 0)
-	;
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	unlink(".heredoc");
 	i = 0;
 	while (i < piping->number_of_commands - 1)

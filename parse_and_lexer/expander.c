@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 01:17:09 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/19 13:36:44 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
 			i = 0;
 			while (spliting[++i])
 				push(&components1, spliting[i], "ARG");
+			free(temp);
 		}
 		else
 			push(&components1, "", components->type.type);

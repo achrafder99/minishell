@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:31:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 23:05:44 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 12:58:32 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	handle_pipe_errors(t_components *node)
 			write(2, error, ft_strlen(error));
 			return (1);
 		}
-		if (ft_strcmp(node->next->type.type, "COMMAND") && !check_is_redirection(node->next->token))
+		if (ft_strcmp(node->next->type.type, "COMMAND")
+			&& !check_is_redirection(node->next->token))
 		{
 			error = "parse error: Pipe must be followed by Command\n";
 			write(2, error, ft_strlen(error));
@@ -75,12 +76,11 @@ int	handle_errors(t_components *tokens)
 	node = tokens;
 	if (check_option(node))
 		return (1);
-
 	while (node != NULL)
-	{	
-		if (ft_strchr(node->token,'\\'))
+	{
+		if (ft_strchr(node->token, '\\'))
 		{
-			write(2,"error\n",6);
+			write(2, "error\n", 6);
 			return (1);
 		}
 		if (handle_pipe_errors(node))

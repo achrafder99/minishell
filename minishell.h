@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 00:57:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/19 14:09:03 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 # define ANSI_COLOR_GREEN "\x1b[32m"
 # define ANSI_COLOR_RESET "\x1b[0m"
 # define MAX_PATH_LENGTH 1024
-
-// # define BLUE "\033[38;2;105;210;231m"
-// # define GREEN "\033[32m"
-// # define RESET "\033[0m"
 
 # include "heredoc.h"
 # include "structs.h"
@@ -86,7 +82,6 @@ void				piped(t_piped *pipe_line, t_command *command, t_info *info,
 						t_env *env);
 int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
-char				**add_args(t_command *command, char *cut_str);
 int					open_in(t_command *command, char *infile);
 void				ft_lstadd_front(t_components **lst, t_components *new);
 void				delete_node_by_type(t_components **head, char *type);
@@ -165,4 +160,18 @@ void				free_components(t_components *head);
 void				extract_matched_file(char *pattern, char *type,
 						t_components **components1);
 int					check_is_matched(char *pattern);
+t_components		*insert_at_position(t_components *node);
+void				without_command(t_components *node, t_info *info);
+t_components		*insert_command_at_front(t_components *tokens);
+int					not_pipe(t_components *node);
+void				handler_heredoc(t_command **command, int *fd,
+						t_components *node);
+void				handle_append(t_command **command, int *fd,
+						t_components *node);
+void	handle_redirect(t_command **command,
+						t_components *node,
+						int *fd,
+						t_info *info);
+char				**found_args(t_components **node, char *cmd);
+
 #endif

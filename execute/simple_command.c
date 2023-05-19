@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 20:41:27 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 18:53:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 13:04:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 void	free_data(t_here_data *data)
 {
-	t_here_node *top;
+	t_here_node	*top;
+
 	top = data->top;
 	while (top)
 	{
 		free(top->data);
 		free(top);
-		top =  top->next;
+		top = top->next;
 	}
 	free(top);
 	free(data);
@@ -37,6 +38,7 @@ t_here_node	*last_here_node(t_here_data *lst)
 		tmp = tmp->next;
 	return (tmp);
 }
+
 t_here_node	*new_here_node(char *data)
 {
 	t_here_node	*node;
@@ -62,12 +64,13 @@ void	ft_add_here_data(t_here_data *lst, t_here_node *new)
 	new->next = 0;
 }
 
-t_here_data	*creat_heredoc_data_list()
+t_here_data	*creat_heredoc_data_list(void)
 {
 	t_here_data	*lst;
+
 	lst = malloc(sizeof(t_here_lst));
 	if (!lst)
-		return 0;
+		return (0);
 	lst->top = NULL;
 	return (lst);
 }
@@ -77,8 +80,8 @@ t_here_data	*open_heredoc(t_here_lst *list)
 	t_heredoc	*tmp;
 	t_here_data	*data_lst;
 	t_here_node	*node;
-	char *data;
-	int	flag;
+	char		*data;
+	int			flag;
 
 	tmp = list->top;
 	flag = 0;
@@ -94,25 +97,29 @@ t_here_data	*open_heredoc(t_here_lst *list)
 		{
 			data = readline(">");
 			if (!data)
-				break;
+				break ;
 			if (ft_strcmp(data, tmp->delimit))
 			{
 				if (flag)
 				{
 					node = new_here_node(data);
 					ft_add_here_data(data_lst, node);
-				}	
+				}
 			}
 			else
-				{free (data);
-				break;}
+			{
+				free(data);
+				break ;
+			}
 			free(data);
 		}
 		tmp = tmp->next;
 	}
 	return (data_lst);
 }
-void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_env *env)
+
+void	first_step(t_command *command, t_info *info, int *built_in, int *flags,
+		t_env *env)
 {
 	int		save;
 	t_fds	*fds;
@@ -124,7 +131,6 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 		*flags = 127;
 		return ;
 	}
-	
 	save = -1;
 	if (check_type(command->in_type) || check_type(command->out_type))
 		*flags = 1;
@@ -150,9 +156,8 @@ void	first_step(t_command *command, t_info *info, int *built_in, int *flags, t_e
 	}
 }
 
-
-void	run_child(t_command *command, int flags, \
-int built_in, char **argv, t_env *env)
+void	run_child(t_command *command, int flags, int built_in, char **argv,
+		t_env *env)
 {
 	t_fds	*fds;
 	char	*cmd;
@@ -165,12 +170,12 @@ int built_in, char **argv, t_env *env)
 
 int	get_list_size(t_lst *lst)
 {
-	int	i;
+	int		i;
 	t_node	*tmp;
 
 	i = 0;
 	tmp = lst->top;
-	while(tmp)
+	while (tmp)
 	{
 		i++;
 		tmp = tmp->next;
@@ -182,10 +187,9 @@ char	**get_new_env(t_lst *env)
 	char	**new;
 	char	*key;
 	t_node	*tmp;
+	int		size;
+	int		i;
 
-	int	size;
-	int	i;
-	
 	size = get_list_size(env);
 	tmp = env->top;
 	i = 0;
@@ -195,7 +199,7 @@ char	**get_new_env(t_lst *env)
 		perror("");
 		exit(1);
 	}
-	while(tmp)
+	while (tmp)
 	{
 		key = ft_strjoin(tmp->key, "=");
 		if (tmp->value)
@@ -211,17 +215,16 @@ char	**get_new_env(t_lst *env)
 }
 
 void	simple_command(t_command *command, t_info *info, t_env *env)
-{	
+{
 	char	**argv;
 	int		fid;
 	int		flags;
 	int		built_in;
-	char 	**spliting;
-		
+	char	**spliting;
+
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	built_in = 0;
-
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst);
 	first_step(command, info, &built_in, &flags, env);
@@ -241,11 +244,11 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	if (fid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
-		run_child(command, flags, built_in, argv,env);
+		run_child(command, flags, built_in, argv, env);
 	}
 	else
 	{
-		waitpid(fid, &info->status_code,0);
+		waitpid(fid, &info->status_code, 0);
 		if (WIFSIGNALED(info->status_code))
 			info->status_code = WTERMSIG(info->status_code) + 128;
 		else

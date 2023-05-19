@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:12:24 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/12 21:39:59 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 14:07:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 
 int	check_limit(unsigned long long nbr)
 {
-	if (nbr <= LLONG_MAX )
+	if (nbr <= LLONG_MAX)
 	{
 		return (1);
-		
 	}
-		return (0);
-	
+	return (0);
 }
+
 int	check_if_numeric_arg(char *arg, unsigned long long nbr)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
@@ -38,13 +39,13 @@ int	check_if_numeric_arg(char *arg, unsigned long long nbr)
 
 int	exit_shell(t_command *cmd)
 {
-	unsigned char status;
+	unsigned char		status;
 	unsigned long long	nbr;
-	int	ret;
+	int					ret;
 
 	ret = 0;
 	write(1, "exit\n", 5);
-	if ( cmd->argc == 1)
+	if (cmd->argc == 1)
 	{
 		nbr = ft_atoi2(cmd->args[0]);
 		if (!check_if_numeric_arg(cmd->args[0], nbr))

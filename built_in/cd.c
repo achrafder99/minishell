@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:34:12 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/14 05:01:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/19 14:04:39 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,35 @@
 void	update_oldpwd(t_lst *lst)
 {
 	t_node	*tmp;
-	
+
 	tmp = lst->top;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "OLDPWD"))
 		{
 			tmp->value = getcwd(tmp->value, 256);
-			// printf("%s\n",tmp->value);
-			break;
+			break ;
 		}
-		tmp = tmp->next;	
+		tmp = tmp->next;
 	}
 }
 
 void	update_pwd(t_lst *lst)
 {
 	t_node	*tmp;
-	
+
 	tmp = lst->top;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "PWD"))
 		{
 			tmp->value = getcwd(tmp->value, 256);
-			break;
+			break ;
 		}
-		tmp = tmp->next;	
+		tmp = tmp->next;
 	}
 }
+
 void	update_dir(t_env *env, int flag)
 {
 	if (flag == 0)
@@ -56,8 +56,8 @@ void	update_dir(t_env *env, int flag)
 		update_pwd(env->env);
 		update_pwd(env->exp);
 	}
-		
 }
+
 int	cd(t_command *cmd, t_env *env)
 {
 	char	*home_dir;
@@ -85,8 +85,8 @@ int	cd(t_command *cmd, t_env *env)
 		write(2, cmd->name, ft_strlen(cmd->name));
 		write(2, ": ", 2);
 		write(2, cmd->args[0], ft_strlen(cmd->args[0]));
-		write(2, ": no such file or directory", \
-		ft_strlen(": no such file or directory"));
+		write(2, ": no such file or directory",
+				ft_strlen(": no such file or directory"));
 		write(2, "\n", 1);
 		return (1);
 	}

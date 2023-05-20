@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 23:04:26 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 18:43:32 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	save_and_redirect(t_command *command, int *save_in, int *save_out)
 	return (redirection(command, command->data_lst));
 }
 
-void    reset_std_in_out(t_command *command , int save_in, int save_out)
+void	reset_std_in_out(t_command *command, int save_in, int save_out)
 {
-    if (command->last_in)
+	if (command->last_in)
 		dup2(save_in, STDIN_FILENO);
 	if (command->last_out)
 		dup2(save_out, STDOUT_FILENO);

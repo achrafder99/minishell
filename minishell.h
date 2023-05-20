@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 21:09:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 18:40:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,4 +172,18 @@ void	handle_command_not_found(t_info *info, t_command *command, int *flags);
 int	save_and_redirect(t_command *command, int *save_in, int *save_out);
 void	free_execution_args(char **argv, t_env *env);
 void    reset_std_in_out(t_command *command , int save_in, int save_out);
+int	check_rederict_in(t_command *cmd);
+int	check_rederict_out(t_command *cmd);
+int	save_heredoc_data(t_command *cmd, t_here_data *data_lst);
+int	**creat_pipes(t_piped *piping);
+void	open_pipes(t_piped *piping, int **fd);
+void	close_pipes(int **fd);
+void	check_command_not_found(int flag, t_info *info, t_env *env, char *cmd_name);
+void	duplicate_read_write(int i, int **fd, int flag);
+void	check_for_heredoc(t_command *command, t_info *info);
+void	complete_pipes_ex(int flag, t_command *command, t_info *info, t_env *env);
+void	process_buit_in_pipes(int id, int **fd, t_info *info, t_command *command);
+int	*allocate_for_ids(t_piped *piping);
+void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env);
+void	wait_for_exit_state(int id, t_info *info);
 #endif

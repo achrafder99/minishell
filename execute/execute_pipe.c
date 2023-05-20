@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 23:52:26 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 18:41:02 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,110 +30,49 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	run_child(cmd, flags, argv, env);
 }
 
-void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
+void	wait_for_exit_state(int id, t_info *info)
 {
-	int	i, j;
-	int	**fd;
-	int outfile;
-	int infile;
-	int flag;
+	waitpid(id, &info->status_code, 0);
+	if (WIFSIGNALED(info->status_code))
+		info->status_code = WTERMSIG(info->status_code) + 128;
+	else
+		info->status_code = WEXITSTATUS(info->status_code);
+}
 
-	fd = (int **)malloc(sizeof(int *) * piping->number_of_commands);
-	if (!fd)
+void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
+		int **fd)
+{
+	int	i;
+	int	*id;
+
+	i = -1;
+	id = allocate_for_ids(piping);
+	while (++i < piping->number_of_commands)
 	{
-		perror("");
-		exit(1);
-	}
-	j = 0;
-	while (j < piping->number_of_commands - 1)
-	{
-		fd[j] = malloc(sizeof (int) * 2);
-		j++;
-	}
-	fd[j] = NULL;
-	int	id[piping->number_of_commands];
-	j = 0;
-	while (j < (piping->number_of_commands - 1))
-	{
-		pipe(fd[j]);
-		j++;
-	}
-	i = 0;
-	while (i < piping->number_of_commands)
-	{
-		flag = 0;
+		info->flags = 0;
 		if (ft_strlen(piping->command[i].name))
 		{
-			if (!ft_strcmp(piping->command[i].name, "<<"))
-			{
-				flag = 1;
-				info->status_code = 0;
-			}
-			if (piping->command[i].heredoc_lst)
-				piping->command[i].data_lst = open_heredoc(piping->command[i].heredoc_lst);
+			check_for_heredoc(&piping->command[i], info);
 			id[i] = fork();
 			if (id[i] == 0)
 			{
-				if (!flag && !check_command(piping->command[i].name, env))
-				{
-					printf("minishell: %s: No such file or directory\n", piping->command[i].name);
-					info->status_code= 127;
-					exit (127);
-				}
-				
-				if (i > 0)
-					dup2(fd[i - 1][0], 0);
-				if (fd[i] != NULL && !flag)
-					dup2(fd[i][1], 1);
-				// if (piping->command[i].outfile)
-				// {
-				// 	int outfile;
-				// 	outfile = open(piping->command[i].outfile, O_RDWR,777);
-				// 	dup2(outfile, fd[i - 1][1]);
-				// }
-				// printf("child %d: stdin=%d, stdout=%d\n", i, dup(0), dup(1));
-				j = 0;
-				while (j < (piping->number_of_commands - 1))
-				{
-					close(fd[j][0]);
-					close(fd[j][1]);
-					j++;
-				}
-				if (!flag)
-					exec_pipe_commande(&piping->command[i], info, env);
-				if (flag || check_is_built_in(piping->command[i].name))
-					exit(info->status_code);
+				check_command_not_found(info->flags, info, env,
+					piping->command[i].name);
+				duplicate_read_write(i, fd, info->flags);
+				complete_pipes_ex(info->flags, &piping->command[i], info, env);
 			}
-			if ((check_is_built_in(piping->command[i].name) || i + 1 == piping->number_of_commands))
-			{	if (!check_is_built_in(piping->command[i].name))
-				{
-					j = 0;
-					while (j < (piping->number_of_commands - 1))
-					{
-						close(fd[j][0]);
-						close(fd[j][1]);
-						j++;
-					}
-				}
-						waitpid(id[i], &info->status_code,0);
-						if (WIFSIGNALED(info->status_code))
-							info->status_code = WTERMSIG(info->status_code) + 128;
-						else
-							info->status_code = WEXITSTATUS(info->status_code);
-			}
+			if ((check_is_built_in(piping->command[i].name) || i
+					+ 1 == piping->number_of_commands))
+				process_buit_in_pipes(id[i], fd, info, &piping->command[i]);
 		}
-		i++;
 	}
-	j = 0;
-	while (j < (piping->number_of_commands - 1))
-	{
-		close(fd[j][0]);
-		close(fd[j][1]);
-		j++;
-	}
-	while(waitpid(-1, NULL, 0) > 0)
-	;
-	unlink(".heredoc");
+	free(id);
+}
+
+void	free_pipes(int **fd, t_piped *piping)
+{
+	int	i;
+
 	i = 0;
 	while (i < piping->number_of_commands - 1)
 	{
@@ -142,50 +81,18 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	}
 	free(fd[i]);
 	free(fd);
-	
-	// {
-	// 	if (WIFEXITED(info->status_code))
-	// 	  info->status_code =  WEXITSTATUS(info->status_code);
+}
 
-	// }
-	// {
-	// 	printf("after%d\n", info->status_code);
-	// }
-	// 	;
-	// {
-	// 	if (info->status_code != 0 || info->status_code != 127 )
-	// 		info->status_code =1;
-	// }
-// 	int	i;
-// 	int	j;
+void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
+{
+	int	**fd;
 
-// 	i = 0;
-// 	while (i < piping->number_of_commands)
-// 	{
-// 		printf("Command (%d)\n", i);
-// 		printf("command name :%s\n", piping->command[i].name);
-// 		if (piping->command[i].argc)
-// 		{			printf("Args ");
-// 			j = 0;
-// 			while (j < piping->command[i].argc)
-// 			{
-// 				printf("%s\t", piping->command[i].args[j]);
-// 				j++;
-// 			}}
-// 		printf("\n");
-// 		if (piping->command[i].heredoc_lst)
-// 		{t_heredoc *tmp;
-// 		tmp = piping->command[i].heredoc_lst->top;
-// 		while(tmp)
-// 		{
-// 			printf("heredoc delimiter %s\n", tmp->delimit);
-// 			tmp = tmp->next;
-// 		}}
-// 		// printf("last %s\n", piping->command[i].last->in_type);
-	
-// {	printf("last in %s\n", piping->command[i].last_in);
-// 	printf("last out %s\n", piping->command[i].last_out);
-// 	}
-// 		i++;
-// 	}
+	fd = creat_pipes(piping);
+	open_pipes(piping, fd);
+	start_pipe_execution(piping, info, env, fd);
+	close_pipes(fd);
+	while (waitpid(-1, NULL, 0) > 0)
+		;
+	unlink(".heredoc");
+	free_pipes(fd, piping);
 }

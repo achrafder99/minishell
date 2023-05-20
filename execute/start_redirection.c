@@ -6,44 +6,11 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:20:50 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 23:31:24 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 18:42:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	check_rederict_in(t_command *cmd)
-{
-	if (cmd->last_in)
-		return (1);
-	return (0);
-}
-
-int	check_rederict_out(t_command *cmd)
-{
-	if (cmd->last_out)
-		return (1);
-	return (0);
-}
-
-int	save_heredoc_data(t_command *cmd, t_here_data *data_lst)
-{
-	t_here_node	*tmp;
-	int fd;
-
-	fd =  open(".heredoc", O_CREAT | O_RDWR, 0777);
-	if (fd == -1)
-		return (fd);
-	tmp = data_lst->top;
-	while (tmp)
-	{
-		write(fd, tmp->data, ft_strlen(tmp->data));
-		write(fd, "\n", 1);
-		tmp = tmp->next;
-	}
-	close(fd);
-		return (fd);
-}
 
 int	redirect_out(t_command *cmd)
 {
@@ -51,7 +18,7 @@ int	redirect_out(t_command *cmd)
 
 	fd = 1;
 	if (!ft_strcmp(cmd->out_type, "REDIRECT_out"))
-		fd = open(cmd->last_out, O_CREAT | O_RDWR | O_TRUNC , 0777);
+		fd = open(cmd->last_out, O_CREAT | O_RDWR | O_TRUNC, 0777);
 	else
 		fd = open(cmd->last_out, O_CREAT | O_RDWR | O_APPEND, 0777);
 	if (fd == -1)
@@ -62,7 +29,6 @@ int	redirect_out(t_command *cmd)
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (fd);
-	
 }
 
 void	complet_redirect_in(int fd)
@@ -76,7 +42,7 @@ int	redirect_in(t_command *cmd, t_here_data *data_lst)
 {
 	int	fd;
 
-	fd = 1;	
+	fd = 1;
 	if (!ft_strcmp(cmd->in_type, "REDIRECT_in"))
 	{
 		fd = open(cmd->last_in, O_RDWR, 0777);
@@ -89,19 +55,19 @@ int	redirect_in(t_command *cmd, t_here_data *data_lst)
 		complet_redirect_in(fd);
 	}
 	if (fd != -1)
-		close (fd);
+		close(fd);
 	return (fd);
 }
 
 int	redirection(t_command *cmd, t_here_data *data_lst)
 {
-	int	fd_in;
-	int	fd_out;
-	t_command *l_fs;
+	int			fd_in;
+	int			fd_out;
+	t_command	*l_fs;
 
 	l_fs = cmd;
-	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out") \
-	|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
+	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out")
+			|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
 		fd_out = redirect_out(l_fs);
 	if (check_rederict_in(cmd))
 		fd_in = redirect_in(cmd, data_lst);

@@ -3,38 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 16:52:08 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/21 12:29:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/20 15:21:03 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static char	*no_occurence(void)
+{
+	char	*new;
+
+	new = malloc(sizeof(char));
+	if (!new)
+		return (0);
+	*new = '\0';
+	return (new);
+}
+
+static int	start(char const *s1, char const *set)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (s1[i])
+	{
+		j = 0;
+		while (set[j])
+		{
+			if (set[j] == s1[i])
+				break ;
+			j++;
+		}
+		if (j == ft_strlen(set))
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+static int	end(char const *s1, char const *set)
+{
+	int	i;
+	int	j;
+
+	i = ft_strlen(s1) - 1;
+	while (i >= 0)
+	{
+		j = ft_strlen(set) - 1;
+		while (j >= 0)
+		{
+			if (set[j] == s1[i])
+				break ;
+			j--;
+		}
+		if (j < 0)
+			break ;
+		i--;
+	}
+	return (i);
+}
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	s1_len;
-	size_t	set_len;
-	size_t	start;
-	size_t	end;
-	char	*trimmed_str;
+	size_t	i;
+	int		j;
+	size_t	len;
+	int		index;
+	char	*new;
 
-	if (!s1 || !set)
+	if (!s1)
+		return (0);
+	index = 0;
+	i = start(s1, set);
+	if (i == ft_strlen(s1))
+	{
+		new = no_occurence();
+		return (new);
+	}
+	j = end(s1, set);
+	len = (j - i) + 1;
+	new = (char *)malloc(sizeof(char) * (len + 1));
+	if (!new)
 		return (NULL);
-	s1_len = strlen(s1);
-	set_len = strlen(set);
-	start = 0;
-	end = s1_len - 1;
-	while (start < s1_len && ft_strchr(set, s1[start]))
-		start++;
-	while (end > start && ft_strchr(set, s1[end]))
-		end--;
-	trimmed_str = (char *)malloc(sizeof(char) * (end - start + 2));
-	if (!trimmed_str)
-		return (NULL);
-	strncpy(trimmed_str, s1 + start, end - start + 1);
-	trimmed_str[end - start + 1] = '\0';
-	return (trimmed_str);
+	while (len--)
+		new[index++] = *(s1 + (i++));
+	new[index] = '\0';
+	return (new);
 }

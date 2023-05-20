@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   free_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 00:09:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/30 01:05:40 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/19 23:27:32 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void free_node(t_components *head){
-    t_components *node;
-    node = head;
-    while (node != NULL)
-    {
-        free(node->token);
-        free(node->type.type);
-        free(node);
-        node->token = NULL;
-        node->type.type = NULL;
-        node = node->next;
-    }
-    free(node);
-    node = NULL;
+void	free_node(t_components *head)
+{
+	t_components	*node;
+	t_components	*next;
+
+	node = head;
+	while (node != NULL)
+	{
+		next = node->next;
+		free(node->token);
+		free(node->type.type);
+		free(node);
+		node = next;
+	}
 }

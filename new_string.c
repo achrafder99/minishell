@@ -3,61 +3,97 @@
 /*                                                        :::      ::::::::   */
 /*   new_string.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 21:59:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/20 22:59:12 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
-char *new_str(char *str,int count){
-    int i;
-    i = 0;
+void	add_before_and_after(char *restring, char *str, int i, int *j)
+{
+	restring[(*j)++] = ' ';
+	restring[(*j)++] = str[i];
+	restring[(*j)++] = str[i + 1];
+	restring[(*j)++] = ' ';
+}
 
-    int j;
-    j = 0;
-    
-    char *new_str;
-    int length = ft_strlen(str) + count * 2;
-    new_str = malloc(length + 1);
-    while (i < length - 1)
-    {
-        if(str[i] == '>' && str[i + 1] == '>'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = '>';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-		else if(str[i] == '<' && str[i + 1] == '<'){
-            new_str[j] = ' ';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = '<';
-            j++;
-            new_str[j] = ' ';
-            i++;
-        }
-        else{
-			if(includes(str[i])){
-                new_str[j] = ' ';
-                j++;
-                new_str[j] = str[i];
-                j++;
-                new_str[j] = ' ';
-            }
-			else
-				new_str[j] = str[i];
+char	*allocation(char *str, int count)
+{
+	char	*restring;
+
+	restring = malloc(sizeof(char) * (strlen(str) + count + 1));
+	if (!restring)
+	{
+		perror("");
+		exit(1);
+	}
+	return (restring);
+}
+
+char	*handleincludes(char *str, int i, char *restring, int *j)
+{
+	if (i > 0 && str[i - 1] != ' ')
+		restring[(*j)++] = ' ';
+	restring[(*j)++] = str[i];
+	if ((size_t)i < ft_strlen(str) - 1 && str[i + 1] != ' ')
+		restring[(*j)++] = ' ';
+	return (restring);
+}
+
+char	*handledoublearrow(char *str, int i, char *restring, int *j)
+{
+	if (i > 0 && str[i - 1] != ' ' && str[i + 2] != ' ')
+		add_before_and_after(restring, str, i, j);
+	else if (i > 0 && str[i - 1] != ' ' && str[i + 2] == ' ')
+	{
+		restring[(*j)++] = ' ';
+		restring[(*j)++] = str[i++];
+		restring[(*j)++] = str[i++];
+		restring[(*j)++] = ' ';
+	}
+	else if (i > 0 && str[i - 1] == ' ' && str[i + 2] != ' ')
+	{
+		restring[(*j)++] = str[i++];
+		restring[(*j)++] = str[i++];
+		restring[(*j)++] = ' ';
+	}
+	else
+	{
+		restring[(*j)++] = str[i++];
+		restring[(*j)++] = str[i++];
+		restring[*j] = ' ';
+	}
+	return (restring);
+}
+
+char	*new_str(char *str, int count)
+{
+	char	*restring;
+	int		j;
+	int		i;
+
+	j = 0;
+	i = 0;
+	restring = allocation(str, count);
+	while ((size_t)i < ft_strlen(str))
+	{
+		if (includes(str[i]) && str[i + 1] != '>' && str[i + 1] != '<')
+		{
+			restring = handleincludes(str, i, restring, &j);
+			i++;
 		}
-        i++;
-        j++;
-    }
-
-    return (new_str);
+		else if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
+					+ 1] == '<'))
+		{
+			restring = handledoublearrow(str, i, restring, &j);
+			i += 2;
+		}
+		else
+			restring[j++] = str[i++];
+	}
+	restring[j] = '\0';
+	return (restring);
 }

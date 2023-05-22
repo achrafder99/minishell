@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:49:16 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:08:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:46:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	count_args(t_components **node)
 char	**found_args(t_components **node)
 {
 	t_components	*temp;
+	char 			*temp_string;
 	char			**args;
 	int				number_of_args;
 	int				i;
@@ -58,7 +59,8 @@ char	**found_args(t_components **node)
 		if (!ft_strcmp(temp->type.type, "OPTION") || !ft_strcmp(temp->type.type,
 				"ARG"))
 		{
-			args[i] = ft_strdup(temp->token);
+			temp_string = ft_strtrim(temp->token,"\'\"");
+			args[i] = temp_string;
 			i++;
 		}
 		temp = temp->next;

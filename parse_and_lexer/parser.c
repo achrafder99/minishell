@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 15:01:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:48:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	int				exit_status;
 
 	node = tokens;
+	while (node)
+	{
+		printf("Token (%s) Type (%s)\n",node->token,node->type.type);
+		node = node->next;
+	}
+	return;
 	info->flags = 0;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)

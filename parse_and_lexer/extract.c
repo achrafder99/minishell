@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 15:13:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:37:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,30 @@ char	*until_dollar_sign(char *token)
 	return (before_dollar);
 }
 
+char	*proccess(char *token, t_env *env, t_info *info)
+{
+	char	*concat;
+	char	*ss1;
+	char	**spliting;
+
+	ss1 = ft_strchr(token, '$');
+	spliting = ft_split(ss1, '$');
+	concat = extract_value(info, env, spliting);
+	return (concat);
+}
+
 char	*extract(char *compo, t_env *env, t_info *info)
 {
 	char	*join;
 	char	*ss1;
 	char	*concat;
 	char	*token;
-	char	**spliting;
 
 	token = ft_strdup(compo);
 	join = NULL;
 	if (compo[0] != '$')
 		join = until_dollar_sign(compo);
-	ss1 = ft_strchr(token, '$');
-	spliting = ft_split(ss1, '$');
-	concat = extract_value(info, env, spliting);
+	concat = proccess(token, env, info);
 	if (concat == NULL || ft_strlen(concat) == 0)
 	{
 		free(token);
@@ -111,5 +120,8 @@ char	*extract(char *compo, t_env *env, t_info *info)
 		return (concat);
 	}
 	free(token);
-	return (ft_strjoin(join, concat));
+	token = ft_strjoin(join, concat);
+	free(join);
+	free(concat);
+	return (token);
 }

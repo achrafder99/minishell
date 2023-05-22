@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/10 13:51:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:37:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*get_exit_status(char *string, t_info *info)
 	length = (ft_strlen(string) - 1) + ft_strlen(status_exit);
 	str = malloc(sizeof(char) * (length + 1));
 	i = 0;
-	while (i < ft_strlen(status_exit))
+	while ((size_t)i < ft_strlen(status_exit))
 	{
 		str[i] = status_exit[i];
 		i++;
@@ -40,26 +40,17 @@ char	*get_exit_status(char *string, t_info *info)
 	return (str);
 }
 
-char	*extract(t_components *node, t_env *env, t_info *info)
-{	
-	int		i;
-	char	*join;
-	t_node	*tmp;
-	char	**spliting;
+char	*extract_value(t_info *info, t_env *env, char **spliting)
+{
 	char	*concat;
-	char 	*ss1;
-	char 	*temp;
+	t_node	*tmp;
+	int		i;
 
-	concat = ft_strdup("");
-	temp = ft_strdup(node->token);
+	concat = "";
 	i = 0;
 	tmp = env->env->top;
-	if (node->token[0] != '$')
-		join = ft_strtok(node->token, "$");
-	ss1 = ft_strchr(temp, '$');
-	spliting = ft_split(ss1, '$');
 	while (spliting[i] != NULL)
-	{	
+	{
 		if (ft_strchr(spliting[i], '?'))
 			concat = ft_strjoin(concat, get_exit_status(spliting[i], info));
 		while (tmp)
@@ -74,10 +65,63 @@ char	*extract(t_components *node, t_env *env, t_info *info)
 		tmp = env->env->top;
 		i++;
 	}
-	free(temp);
-	if (ft_strlen(concat) == 0)
+	free_things(spliting);
+	return (concat);
+}
+
+char	*until_dollar_sign(char *token)
+{
+	char	*before_dollar;
+	int		string_size;
+
+	string_size = ft_strcspn(token, "$");
+	before_dollar = malloc((sizeof(char) * string_size) + 1);
+	if (!before_dollar)
+	{
+		perror("");
+		exit(1);
+	}
+	ft_strncpy(before_dollar, token, string_size);
+	return (before_dollar);
+}
+
+char	*proccess(char *token, t_env *env, t_info *info)
+{
+	char	*concat;
+	char	*ss1;
+	char	**spliting;
+
+	ss1 = ft_strchr(token, '$');
+	spliting = ft_split(ss1, '$');
+	concat = extract_value(info, env, spliting);
+	return (concat);
+}
+
+char	*extract(char *compo, t_env *env, t_info *info)
+{
+	char	*join;
+	char	*ss1;
+	char	*concat;
+	char	*token;
+
+	token = ft_strdup(compo);
+	join = NULL;
+	if (compo[0] != '$')
+		join = until_dollar_sign(compo);
+	concat = proccess(token, env, info);
+	if (concat == NULL || ft_strlen(concat) == 0)
+	{
+		free(token);
 		return (NULL);
+	}
 	if (!join)
+	{
+		free(token);
 		return (concat);
-	return (ft_strjoin(join, concat));
+	}
+	free(token);
+	token = ft_strjoin(join, concat);
+	free(join);
+	free(concat);
+	return (token);
 }

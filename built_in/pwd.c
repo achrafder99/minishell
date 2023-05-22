@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:28:19 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 21:37:04 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/20 23:34:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	pwd(t_command *cmd)
+int	pwd(void)
 {
-	char	*buf;
 	char	*pwd;
 
 	pwd = malloc(MAX_PATH_LENGTH);

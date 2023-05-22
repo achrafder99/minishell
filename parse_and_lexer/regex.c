@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   regex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 04:56:34 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/07 21:29:03 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/20 14:05:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,25 @@ t_regex	*compile_regex(const char *pattern)
 	return (regex);
 }
 
-int	is_match(const char *pattern, int \
-pattern_len, const char *input, int input_len)
+int	find_matching_character(const char *input, int input_len, char character)
+{
+	int	i;
+
+	i = 0;
+	while (i < input_len && input[i] != character)
+		i++;
+	return (i);
+}
+
+int	handle_asterisk(const char *pattern, int pattern_len, int p)
+{
+	while (p < pattern_len && pattern[p] == '*')
+		p++;
+	return (p);
+}
+
+int	is_match(const char *pattern, int pattern_len, const char *input,
+		int input_len)
 {
 	int	p;
 	int	i;
@@ -35,17 +52,15 @@ pattern_len, const char *input, int input_len)
 	{
 		if (pattern[p] == '*')
 		{
-			while (p < pattern_len && pattern[p] == '*')
-				p++;
+			p = handle_asterisk(pattern, pattern_len, p);
 			if (p == pattern_len)
 				return (1);
-			while (i < input_len && input[i] != pattern[p])
-				i++;
+			i = find_matching_character(input, input_len, pattern[p]);
 		}
 		else if (pattern[p] == input[i])
 		{
-				p++;
-				i++;
+			p++;
+			i++;
 		}
 		else
 			return (0);

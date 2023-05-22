@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:32:37 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 00:33:34 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/22 18:52:17 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@ int	get_env_size(char **env)
 		i++;
 	return (i);
 }
+void	handle_exp_not_found(t_lst *env_lst)
+{
+	char	**env;
+
+	env = creat_basic_env();
+	if (!env )
+		return ;
+	push_list(env_lst, env);
+	free_things(env); 
+}
 
 t_lst	*get_export_env(char **env)
 {
@@ -28,19 +38,25 @@ t_lst	*get_export_env(char **env)
 	t_lst	*exp;
 	int		i;
 
-	i = 0;
-	ret = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
-	if (!ret)
-		return (0);
-	while (env[i])
+	if (env[0] != NULL && env != NULL)
 	{
-		ret[i] = ft_strdup(env[i]);
-		i++;
+		i = -1;
+		ret = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
+		if (!ret)
+			return (0);
+		while (env[++i])
+			ret[i] = ft_strdup(env[i]);
+		ret[i] = NULL;
+		exp = sort_env(ret);
+		exp->flag = 0;
+		free_things(ret);
 	}
-	ret[i] = NULL;
-	exp = sort_env(ret);
-	exp->flag = 0;
-	free_things(ret);
+	else
+	{
+		// printf("66\n");
+		exp = creat_list();
+		handle_exp_not_found(exp);
+	}
 	return (exp);
 }
 

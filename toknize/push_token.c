@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:01:20 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 20:55:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:14:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	push(t_components **head, char *command, char *type_command)
 	new_node = (t_components *)malloc(sizeof(t_components));
 	if (new_node == NULL)
 	{
-		write(2, "Memory allocation failed\n",25);
+		write(2, "Memory allocation failed\n", 25);
 		exit(EXIT_FAILURE);
 	}
 	new_node->token = ft_strdup(command);

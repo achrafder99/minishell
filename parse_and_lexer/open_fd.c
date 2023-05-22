@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   open_fd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:44:14 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 14:48:15 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:01:49 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	open_in(t_command *command, char *infile)
+int	open_in(t_command *command)
 {
 	char	*error;
 	int		fd;

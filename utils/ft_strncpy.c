@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_redirect.c                                      :+:      :+:    :+:   */
+/*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 19:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/11 14:49:13 by aalami           ###   ########.fr       */
+/*   Created: 2023/05/20 13:53:01 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/20 22:59:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../minishell.h"
 
-int	is_redirect(t_command *command)
+char	*ft_strncpy(char *dst, const char *src, size_t len)
 {
-	// if (command->infile || command->outfile || command->append_mode)
-	// 	return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	while ((size_t)i < len && *src != '\0')
+	{
+		dst[i] = *src;
+		i++;
+		src++;
+	}
+	dst[i] = '\0';
+	return (dst);
 }

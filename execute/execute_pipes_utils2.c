@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:14:31 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 18:41:13 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/22 23:06:28 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	check_for_heredoc(t_command *command, t_info *info)
 		info->status_code = 0;
 	}
 	if (command->heredoc_lst)
-		command->data_lst = open_heredoc(command->heredoc_lst);
+		command->data_lst = open_heredoc(command->heredoc_lst, info);
 }
 
 void	complete_pipes_ex(int flag, t_command *command, t_info *info,

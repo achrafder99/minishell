@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_redirection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:20:50 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 18:42:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:27:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	redirect_in(t_command *cmd, t_here_data *data_lst)
 	}
 	else if (!ft_strcmp(cmd->in_type, "HEREDOC") && data_lst)
 	{
-		save_heredoc_data(cmd, data_lst);
+		save_heredoc_data(data_lst);
 		fd = open(".heredoc", O_RDWR, 0777);
 		complet_redirect_in(fd);
 	}
@@ -66,6 +66,8 @@ int	redirection(t_command *cmd, t_here_data *data_lst)
 	t_command	*l_fs;
 
 	l_fs = cmd;
+	fd_in = 0;
+	fd_out = 0;
 	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out")
 			|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
 		fd_out = redirect_out(l_fs);

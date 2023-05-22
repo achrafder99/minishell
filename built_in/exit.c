@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:12:24 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 16:04:21 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:12:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	handle_multiple_args(void)
 
 int	exit_shell(t_command *cmd)
 {
-	long long	nbr;
 	int			ret;
 
 	ret = 0;

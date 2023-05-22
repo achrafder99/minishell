@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 18:44:47 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:26:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,17 @@ void	handle_command_not_found(t_info *info, t_command *command, int *flags)
 	printf("minishell: %s: No such file or directory\n", command->name);
 	info->status_code = 127;
 	*flags = 127;
+}
+
+int	check_empty_command(char *command, t_info *info, int *flag)
+{
+	if (ft_strlen(command) == 0)
+	{
+		info->status_code = 0;
+		*flag = 2;
+		return (1);
+	}
+	return (0);
 }
 
 void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
@@ -47,9 +58,8 @@ void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
 		info->status_code = 1;
 }
 
-void	run_child(t_command *command, int flags, char **argv, t_env *env)
+void	run_child(t_command *command, char **argv, t_env *env)
 {
-	t_fds	*fds;
 	char	*cmd;
 	int		redirect;
 

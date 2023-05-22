@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 17:49:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 00:10:04 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:13:43 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_lst	*sort_env(char **env)
 {
 	int		i;
 	int		j;
-	char	*tmp;
 	t_lst	*exp;
 
 	i = 0;
@@ -64,13 +63,15 @@ void	swap_nodes(t_node *tmp_a, t_node *tmp_b, char *tmp_key, char *tmp_value)
 	free(tmp_value);
 }
 
-void	*sort_exp_list(t_lst *exp)
+void	sort_exp_list(t_lst *exp)
 {
 	t_node	*tmp_a;
 	t_node	*tmp_b;
 	char	*tmp_key;
 	char	*tmp_value;
 
+	tmp_key = NULL;
+	tmp_value = NULL;
 	tmp_a = exp->top;
 	while (tmp_a)
 	{
@@ -93,21 +94,18 @@ int	ft_export(t_command *cmd, t_env *env)
 	lst = env->exp;
 	if (cmd->argc)
 		return (if_valid_identifier(cmd->args, env));
-	else
+	sort_exp_list(lst);
+	tmp = lst->top;
+	while (tmp)
 	{
-		sort_exp_list(lst);
-		tmp = lst->top;
-		while (tmp)
+		if (tmp->value == NULL)
 		{
-			if (tmp->value == NULL)
-			{
-				if (!lst->flag)
-					printf("declare -x %s\n", tmp->key);
-			}
-			else
-				printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
-			tmp = tmp->next;
+			if (!lst->flag)
+				printf("declare -x %s\n", tmp->key);
 		}
-		return (0);
+		else
+			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		tmp = tmp->next;
 	}
+	return (0);
 }

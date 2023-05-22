@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:42:46 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 18:46:01 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:26:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_rederict_out(t_command *cmd)
 	return (0);
 }
 
-int	save_heredoc_data(t_command *cmd, t_here_data *data_lst)
+int	save_heredoc_data(t_here_data *data_lst)
 {
 	t_here_node	*tmp;
 	int			fd;

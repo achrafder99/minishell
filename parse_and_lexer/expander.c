@@ -3,154 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/18 22:47:21 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/22 15:50:27 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_is_matched(char *pattern)
-{
-	int				flag;
-	DIR				*dir;
-	t_regex			*regex;
-	struct dirent	*entry;
+void	dont_expand(t_components *components, t_components **components1)
+{	
+	char	*token;
 
-	regex = compile_regex(pattern);
-	dir = opendir(".");
-	entry = readdir(dir);
-	flag = 0;
-	while (entry != NULL)
-	{
-		if (match_regex(regex, entry->d_name))
-		{
-			free(regex);
-			free(regex->pattern);	
-			closedir(dir);
-			return (1);
-		}
-		entry = readdir(dir);
-	}
-	free(regex);
-	free(regex->pattern);
-	closedir(dir);
-	return (0);
+	token = cut_string(components->token);
+	push(components1, token, components->type.type);
+	free(token);
 }
 
-void	extract_matched_file(char *pattern,char *type,t_components **components1)
-{
-	int				flag;
-	DIR				*dir;
-	t_regex			*regex;
-	struct dirent	*entry;
-
-	regex = compile_regex(pattern);
-	dir = opendir(".");
-	entry = readdir(dir);
-	flag = 0;
-	while (entry != NULL)
-	{
-		if (match_regex(regex, entry->d_name))	
-		{
-			if (!flag)
-			{
-				push(components1,entry->d_name,type);
-				flag = 1;
-			}
-			else
-				push(components1,entry->d_name,"ARG");
-		}
-		entry = readdir(dir);
-	}
-	free(regex);
-	free(regex->pattern);
-	closedir(dir);
-}
-
-void	expand_util(t_components *components, t_components *components1, t_env *env, t_info *info)
+void	split_value(t_components *components, char *temp,
+		t_components **components1)
 {
 	char	**spliting;
-	char	*token;
-	char *temp;
-	int	i;
+	int		i;
 
-	token = components->token;
-	if (token[0] != '\'' && token[ft_strlen(token) - 1] != '\'')
+	spliting = ft_split(temp, ' ');
+	push(components1, spliting[0], components->type.type);
+	i = 1;
+	while (spliting[i])
 	{
-		components->token = ft_strtrim(components->token, "\"");
-		temp = extract(components, env, info);
-		if (temp)
-		{
-			spliting = ft_split(temp, ' ');
-			push(&components1, spliting[0], components->type.type);
-			i = 1;
-			while (spliting[i])
-			{
-				push(&components1, spliting[i], "ARG");
-				i++;
-			}
-		}
-		else
-			push(&components1, "", components->type.type);
+		push(components1, spliting[i], "ARG");
+		i++;
 	}
-	else
-		push(&components1, ft_strtrim(token, "\'\""), components->type.type);
+	free_things(spliting);
 }
 
-void    expander(t_components *node, \
-t_env *env, t_info *info)
+void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
+		t_components **components1)
 {
-	t_components				*components;
-	t_components				*components1;
-	char						*temp;
-	char						**spliting;
-	int							i;
-	int							position;
-	char						*token;
+	char	*temp;
+	char	*trim;
 
-	components1 = NULL;
-	position = 0;
-	components = node;
-	while (components != NULL)
-	{	
-		if (ft_strchr(components->token,'*') && check_is_matched(components->token))
-			extract_matched_file(components->token,components->type.type,&components1);
-		else if (ft_strchr(components->token, '$') \
-		&& ft_strcmp(components->type.type, "END_HEREDOC"))
-		{	
-			token = components->token;
-			if (token[0] != '\'' && token[ft_strlen(token) - 1] != '\'')
-			{
-				components->token = ft_strtrim(components->token,"\"");
-				temp = extract(components, env,info);
-				if (temp)
-				{
-					spliting = ft_split(temp, ' ');
-					push(&components1, spliting[0], components->type.type);
-					i = 1;
-					while (spliting[i])
-					{
-						push(&components1, spliting[i], "ARG");
-						i++;
-					}
-				}
-				else
-					push(&components1, "", components->type.type);
-			}
-			else
-				push(&components1, ft_strtrim(token,"\'\""), components->type.type);
+	if (components->token[0] != '\''
+		&& components->token[ft_strlen(components->token) - 1] != '\'')
+	{
+		info->token = ft_strtrim(components->token, "\"");
+		temp = extract(info->token, env, info);
+		if (temp && ft_strlen(temp) > 0)
+		{
+			split_value(components, temp, components1);
+			free(temp);
 		}
 		else
-		{
-			token = ft_strtrim(components->token,"\'\"");
-			push(&components1, token, components->type.type);
-			free(token);
-		}
+			push(components1, "", components->type.type);
+		free(info->token);
+	}
+	else
+	{
+		trim = ft_strtrim(components->token, "\'\"");
+		push(components1, trim ,
+			components->type.type);
+		free(trim);
+	}
+}
+
+void	expander(t_components *node,
+				t_env *env,
+				t_info *info)
+{
+	t_components	*components;
+	t_components	*components1;
+
+	components1 = NULL;
+	components = node;
+	while (components != NULL)
+	{
+		if (ft_strchr(components->token, '*')
+			&& check_is_matched(components->token))
+			extract_matched_file(components->token, components->type.type,
+				&components1);
+		else if (ft_strchr(components->token, '$')
+			&& ft_strcmp(components->type.type, "END_HEREDOC")
+			&& strcmp(components->token, "$"))
+			extract_dollar_sign(components, env, info, &components1);
+		else
+			dont_expand(components, &components1);
 		components = components->next;
 	}
-	parser(components1, info, env);
-	free_node(components1);
+	return (remove_empty_command(&components1), parser(components1, info, env),
+		free_node(components1));
 }

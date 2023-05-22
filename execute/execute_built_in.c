@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/17 18:33:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:24:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	execute_built_in(t_command *cmd, t_info *info, t_env *env)
 	if (!ft_strcmp(cmd->name, "cd"))
 		return (info->status_code = cd(cmd, env));
 	else if (!ft_strcmp(cmd->name, "pwd"))
-		return (info->status_code = pwd(cmd));
+		return (info->status_code = pwd());
 	else if (!ft_strcmp(cmd->name, "echo"))
-		return (info->status_code = echo(cmd, info));
+		return (info->status_code = echo(cmd));
 	else if (!ft_strcmp(cmd->name, "export"))
 		return (info->status_code = ft_export(cmd, env));
 	else if (!ft_strcmp(cmd->name, "unset"))

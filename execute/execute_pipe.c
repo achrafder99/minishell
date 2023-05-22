@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 18:41:02 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/22 22:54:16 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 {
 	char	**argv;
-	char	**new_env;
-	int		fid;
 	int		flags;
 	int		built_in;
 
@@ -27,7 +25,7 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	if (check_is_built_in(cmd->name) || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, flags, argv, env);
+	run_child(cmd, argv, env);
 }
 
 void	wait_for_exit_state(int id, t_info *info)
@@ -53,6 +51,8 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		if (ft_strlen(piping->command[i].name))
 		{
 			check_for_heredoc(&piping->command[i], info);
+			if (g_heredoc_flag == -1)
+				break;
 			id[i] = fork();
 			if (id[i] == 0)
 			{

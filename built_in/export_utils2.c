@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:04:05 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 00:05:13 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:17:39 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	add_key_with_value(t_lst *lst, char *str, char **split)
 	}
 }
 
-void	add_key_with_no_value(t_lst *lst, char *str, char **split)
+void	add_key_with_no_value(t_lst *lst, char **split)
 {
 	t_node	*new;
 	int		flag;
@@ -65,14 +65,12 @@ void	add_key(t_lst *exp, char *str)
 
 void	append_value(t_lst *lst, char *str, char **split)
 {
-	t_node	*new;
-
 	if (if_key_exist(ft_strtrim(split[0], "+"), lst))
 		update_value(split, lst, str, 1);
 	else
 	{
 		if (!split[1])
-			add_key_with_no_value(lst, str, split);
+			add_key_with_no_value(lst, split);
 		else
 			add_key_with_value(lst, str, split);
 	}
@@ -81,7 +79,6 @@ void	append_value(t_lst *lst, char *str, char **split)
 int	if_valid_identifier(char **arg, t_env *env)
 {
 	int		i;
-	int		j;
 	int		invalid;
 	char	**split;
 	int		flag;

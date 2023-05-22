@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:57:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/18 23:59:50 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:18:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	add_keys_and_values(t_env *env, char *arg, char **split, int i)
 		}
 		else
 		{
-			add_key_with_no_value(env->exp, arg, split);
-			add_key_with_no_value(env->env, arg, split);
+			add_key_with_no_value(env->exp, split);
+			add_key_with_no_value(env->env, split);
 		}
 	}
 	else if (arg[i] == '+' && arg[i + 1] == '=' && i != 0)

@@ -6,22 +6,29 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 20:15:02 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/22 23:05:24 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst)
+void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst, t_info *info)
 {
 	t_here_node	*node;
 	char		*data;
+	int	fd;
 
+	fd = dup(STDIN_FILENO);
+	g_heredoc_flag = 1;
 	while (1)
 	{
 		data = readline(">");
-		if (!data)
+		if (!data || g_heredoc_flag == -1)
+		{
+			dup2(fd, STDIN_FILENO);
+			info->status_code = 1;
 			break ;
+		}
 		if (ft_strcmp(data, tmp->delimit))
 		{
 			if (*flag)
@@ -39,25 +46,22 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst)
 	}
 }
 
-t_here_data	*open_heredoc(t_here_lst *list)
+t_here_data	*open_heredoc(t_here_lst *list, t_info *info)
 {
 	t_heredoc	*tmp;
 	t_here_data	*data_lst;
-	t_here_node	*node;
-	char		*data;
 	int			flag;
-
 	tmp = list->top;
 	flag = 0;
 	data_lst = NULL;
-	while (tmp)
+	while (tmp && g_heredoc_flag != -1)
 	{
 		if (!tmp->next)
 		{
 			data_lst = creat_heredoc_data_list();
 			flag = 1;
 		}
-		fill_heredoc(tmp, &flag, data_lst);
+		fill_heredoc(tmp, &flag, data_lst, info);
 		tmp = tmp->next;
 	}
 	return (data_lst);

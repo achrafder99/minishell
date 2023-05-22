@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:11:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 18:42:19 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:29:09 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	duplicate_read_write(int i, int **fd, int flag)
 	int	in;
 	int	out;
 
+	in = 0;
+	out = 0;
 	if (i > 0)
 		in = dup2(fd[i - 1][0], 0);
 	if (fd[i] != NULL && !flag)

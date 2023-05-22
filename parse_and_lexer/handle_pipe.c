@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:49:36 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/18 14:19:10 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/20 23:03:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void	add_command_to_pipeline(t_piped **pipeline, t_command **command)
 	(*pipeline)->command = new_commands;
 }
 
-void	handle_pipe(t_components *node, \
-		t_piped **pipe_line, t_command **command)
+void	handle_pipe(t_piped **pipe_line, t_command **command)
 {
 	if (!*pipe_line)
 		*pipe_line = create_new_pipeline(command);

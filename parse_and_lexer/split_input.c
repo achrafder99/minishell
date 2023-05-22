@@ -6,11 +6,40 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:29:17 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 16:28:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 14:13:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	**split_token(char *str)
+{
+	char	**tokens;
+	int		number_of_token;
+	int		i;
+
+	i = 0;
+	number_of_token = count_token(str);
+	tokens = allocate_tokens(str);
+	while (*str != '\0' && i < number_of_token)
+	{
+		if (*str != ' ' && *str != '\0')
+		{
+			tokens[i] = malloc(sizeof(char) * count_length_token(str) + 1);
+			if (!tokens[i])
+			{
+				perror("");
+				exit(1);
+			}
+			fill(&str, i, tokens);
+		}
+		if (*str == ' ' && *str != '\0')
+			str++;
+		i++;
+	}
+	tokens[i] = NULL;
+	return (tokens);
+}
 
 void	check_qoutaions(char *str, int *i)
 {
@@ -24,10 +53,11 @@ void	check_qoutaions(char *str, int *i)
 			(*i)++;
 			while (str[(*i)] != qoute)
 				(*i)++;
-			if (str[(*i)] == qoute)
+			if ((str[(*i + 1)] == ' ' || (str[(*i + 1)] == '\'' \
+			|| str[(*i + 1)] == '\"')))
 			{
 				(*i)++;
-				return ;
+				break ;
 			}
 		}
 		(*i)++;

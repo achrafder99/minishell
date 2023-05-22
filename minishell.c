@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 22:57:44 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 00:48:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*display_name(void)
 	username = getenv("USER");
 	if (username == NULL)
 	{
-		write(2, "Could not get username", strlen("Could not get username"));
+		write(2, "Could not get username", ft_strlen("Could not get username"));
 		return (NULL);
 	}
 	display = ft_strjoin(username, "@:> ");

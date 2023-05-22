@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:01:10 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 01:01:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	token_lex1(char **spliting, int *i, t_components **head, t_info *info)
 	{
 		redirect_componenets(spliting, i, head, info);
 		if (spliting[*i + 1] != NULL && !info->flags
-			&& !check_is_redirection(spliting[*i + 1]) && ft_strcmp(spliting[*i
-					+ 1], "|"))
+			&& !check_is_redirection(spliting[*i + 1])
+			&& ft_strcmp(spliting[*i + 1], "|"))
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			i++;
@@ -69,12 +69,13 @@ void	token_input(char **spliting, int *i, t_components **head, t_info *info)
 	else if (!ft_strcmp(spliting[*i], "|"))
 	{
 		info->flags = 0;
-		if (!check_is_redirection(spliting[*i + 1]))
+		if (!check_is_redirection(spliting[*i + 1]) && spliting[*i + 1] != NULL
+			&& ft_strcmp(spliting[*i + 1], "|"))
 			info->flags = 1;
 		info->type = "PIPE";
 		push_component(head, spliting, i, info);
 	}
-	else if (check_is_redirection(spliting[*i]))
+	else if (check_is_redirection(spliting[*i]) && spliting[*i] != NULL)
 		redirect_componenets(spliting, i, head, info);
 	else
 		push(head, spliting[*i], "ARG");
@@ -96,6 +97,14 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 		i = 1;
 		while (spliting[i] != NULL)
 			token_input(spliting, &i, head, info);
+		if (!ft_strcmp(spliting[i - 1], "|") && !check_command_pipe(head))
+		{
+			if (open_pipe(head, info) == 258)
+			{
+				info->status_code = 258;
+				return (free_things(spliting), free_node(*head));
+			}
+		}
 	}
 	return (free_things(spliting), expander(*head, env, info),
 		free_node(*head));

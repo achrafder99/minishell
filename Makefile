@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/20 23:24:49 by adardour         ###   ########.fr        #
+#    Updated: 2023/05/22 13:31:04 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,15 +24,15 @@ includes.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
 ./parse_and_lexer/expander.c ./parse_and_lexer/extract.c \
-./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c \
-./parse_and_lexer/found_args.c ./parse_and_lexer/utils_redirection.c ./parse_and_lexer/open_fds.c \
+./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c ./parse_and_lexer/get_command.c \
+./parse_and_lexer/found_args.c ./parse_and_lexer/utils_redirection.c ./parse_and_lexer/open_fds.c ./parse_and_lexer/open_pipe.c\
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c ./built_in/export_utils.c ./built_in/export_utils2.c ./built_in/env_utils2.c ./built_in/env_utils3.c\
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/get_cmd.c \
 ./execute/start_redirection.c  ./execute/execution_utils.c ./execute/redirection_utils.c ./execute/execute_pipes_utils.c ./execute/execute_pipes_utils2.c\
 ./free/free_things.c ./free/free_node.c ./free/free_utils.c \
 ./check/check_command.c ./check/check_is_space.c ./check/check_quotes.c ./check/check_option.c \
 ./check/check_redirection.c ./check/check_type.c ./check/is_qouted.c ./check/check_is_type_command.c \
-./check/is_wildcard.c ./check/check_pipe.c \
+./check/is_wildcard.c ./check/check_pipe.c ./check/check_command_pipe.c ./check/check_number_of_forks.c \
 ./execute/execute_pipe.c \
 ./linked_list/add_front.c ./linked_list/delete_node_by_type.c ./linked_list/creat_list.c \
 ./heredoc/heredoc_list.c ./heredoc/exec_heredoc.c ./heredoc/exec_heredoc_utils.c wildcard.c\
@@ -47,10 +47,10 @@ OBJS = ${SRCS:%.c=%.o}
 all:	${NAME}
 
 %.o:%.c minishell.h
-		${CC} ${CFLAGS}  -I$(shell brew --prefix readline)/include -c  $< -o ${<:%.c=%.o}
+		${CC}  -I$(shell brew --prefix readline)/include -c  $< -o ${<:%.c=%.o}
 		
 $(NAME): ${OBJS} 
-		${CC} ${CFLAGS}  ${OBJS} -o ${EXECUTABLE} -L$(shell brew --prefix readline)/lib -lreadline
+		${CC}  ${OBJS} -o ${EXECUTABLE} -L$(shell brew --prefix readline)/lib -lreadline
 clean:
 		${RM}  ${OBJS} 
 

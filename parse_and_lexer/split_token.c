@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:17:54 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 16:53:51 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:02:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**allocate_tokens(char *str)
 {
 	char	**tokens;
 
-	tokens = malloc(sizeof(char **) * count_token(str) + 1);
+	tokens = (char **)malloc(sizeof(char *) * count_token(str) + 1);
 	if (!tokens)
 	{
 		perror("");
@@ -36,37 +36,67 @@ char	**allocate_tokens(char *str)
 	return (tokens);
 }
 
+int	count_quote_length(char *str)
+{
+	int		allocations;
+	char	quote;
+
+	allocations = 1;
+	quote = *str;
+	str++;
+	while (*str != quote && *str != '\0')
+	{
+		allocations++;
+		str++;
+	}
+	if (*str != '\0' && (*str == quote || (*str == ' ' && (*(str + 1) != '\''
+					|| *(str + 1) == '\"'))))
+		allocations++;
+	return (allocations);
+}
+
 int	count_length_token(char *str)
 {
 	int		allocations;
 	char	*temp;
-	char	qoute;
 
 	allocations = 0;
 	temp = str;
 	while (*temp != ' ' && *temp != '\0')
 	{
-		allocations++;
-		if (*temp == '\'' || (*temp == '\"' && *temp != '\0'))
+		if (*temp == '\0')
+			break ;
+		if ((*temp == '\'' || *temp == '\"') && *temp != '\0')
 		{
-			qoute = *temp;
-			temp++;
-			allocations += 1;
-			while (*temp != qoute && *temp != '\0')
-			{
-				allocations++;
-				temp++;
-			}
+			allocations += count_quote_length(temp);
+			temp += count_quote_length(temp);
 		}
-		temp++;
+		else
+		{
+			allocations++;
+			temp++;
+		}
 	}
 	return (allocations);
+}
+
+int	proccess_qouted(char *str, char **tokens, int *i, int *j)
+{
+	if (*str + 1 == ' ' || *str + 1 == '\'' || *str + 1 == '\"')
+	{
+		tokens[*i][(*j)++] = *str;
+		(*str)++;
+		return (1);
+	}
+	else
+		tokens[*i][(*j)++] = *str;
+	return (0);
 }
 
 void	fill(char **str, int i, char **tokens)
 {
 	int		j;
-	char	qoute;
+	char	quote;
 
 	j = 0;
 	while (**str != ' ' && **str != '\0')
@@ -74,46 +104,17 @@ void	fill(char **str, int i, char **tokens)
 		tokens[i][j++] = **str;
 		if (**str == '\'' || **str == '\"')
 		{
-			qoute = **str;
+			quote = **str;
 			(*str)++;
-			while (**str != qoute)
+			while (**str != quote && **str != '\0')
 			{
 				tokens[i][j++] = **str;
 				(*str)++;
 			}
-			if (**str == qoute)
-				tokens[i][j++] = **str;
+			if (proccess_qouted(*str, tokens, &i, &j))
+				break ;
 		}
 		(*str)++;
 	}
 	tokens[i][j] = '\0';
-}
-
-char	**split_token(char *str)
-{
-	char	**tokens;
-	int		number_of_token;
-	int		i;
-
-	i = 0;
-	number_of_token = count_token(str);
-	tokens = allocate_tokens(str);
-	while (*str != '\0' && i < number_of_token)
-	{
-		if (*str != ' ')
-		{
-			tokens[i] = malloc(sizeof(char) * count_length_token(str) + 1);
-			if (!tokens[i])
-			{
-				perror("");
-				exit(1);
-			}
-			fill(&str, i, tokens);
-		}
-		while (*str == ' ' && *str != '\0')
-			str++;
-		i++;
-	}
-	tokens[i] = NULL;
-	return (tokens);
 }

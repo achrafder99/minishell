@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:38:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 14:21:57 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,4 +225,11 @@ void				exec_pipe_commande(t_command *cmd, t_info *info,
 void				wait_for_exit_state(int id, t_info *info);
 int					check_empty_command(char *command, t_info *info, int *flag);
 void				hanlde_quite(int signal);
+int					open_pipe(t_components **head, t_info *info);
+int					check_command_pipe(t_components **head);
+int					check_number_forks(t_components *node);
+void				remove_empty_command(t_components **components);
+void				fill(char **str, int i, char **tokens);
+char				**allocate_tokens(char *str);
+int					count_length_token(char *str);
 #endif

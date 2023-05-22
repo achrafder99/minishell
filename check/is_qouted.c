@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_qouted.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:51:43 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 22:06:41 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/21 15:38:05 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_if_qouted(char *string)
 	{
 		if (string[i] == '\'' || string[i] == '\"')
 			return (1);
-			i++;
+		i++;
 	}
 	return (0);
 }

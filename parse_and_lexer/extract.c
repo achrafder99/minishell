@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:02:42 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:13:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ char	*extract(char *compo, t_env *env, t_info *info)
 		free(token);
 		return (concat);
 	}
+	free(token);
 	return (ft_strjoin(join, concat));
 }

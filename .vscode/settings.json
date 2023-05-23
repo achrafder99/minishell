@@ -1,5 +1,13 @@
 {
     "files.associations": {
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "__locale": "c",
+        "ios": "c",
+        "__bit_reference": "c",
+        "algorithm": "c",
+        "array": "c",
+        "bitset": "c",
+        "ostream": "c",
+        "sstream": "c"
     }
 }

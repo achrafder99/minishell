@@ -3,92 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/01 17:40:55 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/22 00:48:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	interrupt_handler(int signal)
+{
+	if (signal == 3)
+		printf("");
+	else
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
 char	*display_name(void)
 {
 	char	*username;
-	char	*full_username;
-	char	*temp;
-	char	*dd;
+	char	*display;
 
-	username = ft_strjoin(getenv("USER"), "@:");
-	temp = username;
-	free(username);
-	if (temp == NULL)
+	username = getenv("USER");
+	if (username == NULL)
 	{
 		write(2, "Could not get username", ft_strlen("Could not get username"));
+		return (NULL);
 	}
-	dd = ft_strjoin(temp, " > ");
-	return (dd);
-}
-
-char	*lowercase(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] >= 65 && input[i] <= 90)
-			input[i] = input[i] + 32;
-		i++;
-	}
-	return (input);
+	display = ft_strjoin(username, "@:> ");
+	return (display);
+	free(display);
 }
 
 char	*get_input(void)
 {
-	char	*input;
 	char	*full_username;
-	char	*tt;
+	char	*input;
 
-	input = NULL;
 	full_username = display_name();
-	tt = ft_strjoin(full_username, "");
+	if (full_username == NULL)
+	{
+		return (NULL);
+	}
+	input = readline(full_username);
 	free(full_username);
-	full_username = NULL;
-	input = readline(tt);
-	free(tt);
 	return (input);
 }
 
-void	process_input(char *input, t_info *info)
+void	process_input(char *input, t_env *env, t_info *info)
 {
 	t_components	*head;
 
 	if (input == NULL)
 	{
-		write(1, " ", 1);
-		write(1, "exit\n", 5);
-		exit(1);
-	}
-	else if (strlen(input) == 0)
+		write(1, " exit\n", 6);
 		return ;
-	head = NULL;
-	add_history(input);
-	lexer(input, &head, info);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_info	info;
-	char	*input;
-
-	signal(SIGINT, handle_signals);
-	while (1)
-	{
-		input = get_input();
-		process_input(input, &info);
-		free(input);
-		input = NULL;
 	}
-	return (0);
+	if (ft_strlen(input) == 0)
+		return ;
+	add_history(input);
+	head = NULL;
+	lexer(input, &head, info, env);
 }

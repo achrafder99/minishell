@@ -1,20 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_redirect.c                                      :+:      :+:    :+:   */
+/*   delete_node_by_type.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/27 19:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/03/27 20:22:36 by adardour         ###   ########.fr       */
+/*   Created: 2023/04/04 22:48:13 by adardour          #+#    #+#             */
+/*   Updated: 2023/04/08 22:02:54 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../minishell.h"
 
-int is_redirect(t_command *command)
+void	delete_node_by_type(t_components **head, char *type)
 {
-	if(command->infile || command->outfile || command->append_mode)
-		return (1);
-	return (0);	
+	t_components	*prev;
+	t_components	*curr;
+
+	prev = NULL;
+	curr = *head;
+	while (curr != NULL && strcmp(curr->type.type, type) != 0)
+	{
+		prev = curr;
+		curr = curr->next;
+	}
+	if (curr == NULL)
+		return ;
+	if (prev == NULL)
+		*head = curr->next;
+	else
+		prev->next = curr->next;
+	free(curr);
 }

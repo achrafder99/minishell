@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 15:44:22 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 20:17:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 t_command	*init_command(t_command *command, char *str)
 {
-	command = (t_command *) malloc(sizeof(t_command));
+	char	*cmd;
+
+	command = (t_command *)malloc(sizeof(t_command));
 	if (!command)
 	{
 		return (NULL);
 		exit(1);
 	}
-	command->name = str;
+	cmd = cut_string(str);
+	command->name = ft_strdup(cmd);
+	free(cmd);
+	cmd = NULL;
 	command->argc = 0;
 	command->args = NULL;
 	command->heredoc_lst = NULL;

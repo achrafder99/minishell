@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes_utils2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:14:31 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 18:41:13 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 20:19:13 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	check_for_heredoc(t_command *command, t_info *info)
 		info->status_code = 0;
 	}
 	if (command->heredoc_lst)
-		command->data_lst = open_heredoc(command->heredoc_lst);
+		command->data_lst = open_heredoc(command->heredoc_lst, info);
 }
 
 void	complete_pipes_ex(int flag, t_command *command, t_info *info,
@@ -32,11 +32,10 @@ void	complete_pipes_ex(int flag, t_command *command, t_info *info,
 		exit(info->status_code);
 }
 
-void	process_buit_in_pipes(int id, int **fd, t_info *info,
+void	wait_for_last_exit(int id, int **fd, t_info *info,
 		t_command *command)
 {
-	if (!check_is_built_in(command->name))
-		close_pipes(fd);
+	close_pipes(fd);
 	wait_for_exit_state(id, info);
 }
 

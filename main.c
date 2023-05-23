@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 22:47:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 15:58:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:18:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	process_input_loop(t_env *env, t_info *info)
 
 	while (1)
 	{
+		g_heredoc_flag = 0;
 		input = get_input();
 		start_proccesing(input, info, env);
 		free(input);

@@ -6,11 +6,32 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:58:05 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:18:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*end_process(char *concat, char *join, char *token)
+{
+	char	*end;
+
+	if (concat == NULL || ft_strlen(concat) == 0)
+	{
+		free(token);
+		return (NULL);
+	}
+	if (!join)
+	{
+		free(token);
+		return (concat);
+	}
+	end = ft_strjoin(join, concat);
+	free(concat);
+	free(token);
+	free(join);
+	return (end);
+}
 
 int	count(char *str)
 {
@@ -92,6 +113,7 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	char	*concat;
 	char	*token;
 	char	*ss1;
+	char	*end;
 
 	join = NULL;
 	if (ft_strchr(compo, '?'))
@@ -99,17 +121,13 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	else
 		token = ft_strdup(compo);
 	if (token[0] != '$' && ft_strchr(token, '$'))
-		join = until_dollar_sign(compo);
-	else
-		return (token);
+		join = until_dollar_sign(token);
 	ss1 = ft_strchr(token, '$');
-	concat = proccess(token, env, info, ss1);
-	if (concat == NULL || ft_strlen(concat) == 0)
+	if (!ss1)
+		return (token);
+	concat = proccess(env, info, ss1);
+	end = end_process(concat, join, token);
+	if (end == NULL)
 		return (NULL);
-	if (!join)
-		return (concat);
-	info->token = ft_strjoin(join, concat);
-	free(token);
-	free(join);
-	return (info->token);
+	return (end);
 }

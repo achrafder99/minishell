@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 12:42:59 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:05:06 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:34:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*proccess2(char *token, t_info *info, t_env *env)
 		ft_strncpy(substr, token, str_cspn);
 		concat = extract_value(info, env, substr);
 		free(substr);
+		substr = NULL;
 		temp = ft_strjoin(concat, token + str_cspn);
 	}
 	else
@@ -64,30 +65,30 @@ char	*proccess2(char *token, t_info *info, t_env *env)
 	return (temp);
 }
 
-char	*proccess(char *token, t_env *env, t_info *info, char *ss1)
+char	*proccess(t_env *env, t_info *info, char *ss1)
 {
 	char	**spliting;
 	int		i;
 	char	*result;
-	char	*ttt;
+	char	*temp;
 
-	info->token = NULL;
+	info->token = ft_strdup("");
 	spliting = ft_split(ss1, '$');
 	i = 0;
 	result = NULL;
 	while (spliting[i])
 	{
 		result = proccess2(spliting[i], info, env);
-		if (result != NULL)
+		if (result)
 		{
-			ttt = ft_strjoin(info->token, result);
+			temp = ft_strjoin(info->token, result);
 			free(info->token);
-			info->token = ttt;
+			info->token = temp;
+			free(result);
+			result = NULL;
 		}
 		i++;
 	}
-	if (result)
-		free(result);
 	free_things(spliting);
 	return (info->token);
 }

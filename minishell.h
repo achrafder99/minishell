@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 14:39:00 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 20:18:58 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+int		g_heredoc_flag;
 
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
@@ -140,7 +142,7 @@ t_here_lst			*creat_heredoc_list(void);
 void				ft_add_heredoc(t_here_lst *lst, t_heredoc *new);
 t_heredoc			*last_heredoc(t_here_lst *lst);
 t_heredoc			*new_heredoc(char *heredoc, char *delimit);
-t_here_data			*open_heredoc(t_here_lst *list);
+t_here_data			*open_heredoc(t_here_lst *list, t_info *info);
 int					ft_isdigit(int c);
 void				free_command(t_command *command);
 void				free_data(t_here_data *data);
@@ -197,7 +199,7 @@ t_here_node			*new_here_node(char *data);
 void				ft_add_here_data(t_here_data *lst, t_here_node *new);
 t_here_data			*creat_heredoc_data_list(void);
 void				fill_heredoc(t_heredoc *tmp, int *flag,
-						t_here_data *data_lst);
+						t_here_data *data_lst, t_info *info);
 void				handle_command_not_found(t_info *info, t_command *command,
 						int *flags);
 int					save_and_redirect(t_command *command, int *save_in,
@@ -217,7 +219,7 @@ void				duplicate_read_write(int i, int **fd, int flag);
 void				check_for_heredoc(t_command *command, t_info *info);
 void				complete_pipes_ex(int flag, t_command *command,
 						t_info *info, t_env *env);
-void				process_buit_in_pipes(int id, int **fd, t_info *info,
+void				wait_for_last_exit(int id, int **fd, t_info *info,
 						t_command *command);
 int					*allocate_for_ids(t_piped *piping);
 void				exec_pipe_commande(t_command *cmd, t_info *info,
@@ -232,5 +234,11 @@ void				remove_empty_command(t_components **components);
 void				fill(char **str, int i, char **tokens);
 char				**allocate_tokens(char *str);
 int					count_length_token(char *str);
-char				*proccess(char *token, t_env *env, t_info *info, char *ss1);
+char				*proccess(t_env *env, t_info *info, char *ss1);
+void				handle_env_not_found(t_lst *env_lst);
+void				handle_exp_not_found(t_lst *env_lst);
+char				**creat_basic_env(void);
+void				update_oldpwd(t_lst *lst);
+void				update_pwd(t_lst *lst);
+void				update_dir(t_env *env, int flag);
 #endif

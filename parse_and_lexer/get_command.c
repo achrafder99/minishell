@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 13:30:22 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 13:45:40 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 20:58:22 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	remove_empty_command(t_components **components)
 	t_components	*temp;
 	int				i;
 
+	if ((*components)->next == NULL)
+		return ;
 	i = 0;
 	if (ft_strlen((*components)->token) == 0)
 	{

@@ -6,11 +6,21 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 13:55:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 15:58:46 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	get_env_size(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);
+}
 
 void	push_list(t_lst *lst, char **env)
 {
@@ -42,7 +52,10 @@ t_lst	*get_env(char **env)
 	env_lst = creat_list();
 	if (env_lst)
 	{
-		push_list(env_lst, env);
+		if (env[0] != NULL && env != NULL)
+			push_list(env_lst, env);
+		else
+			handle_env_not_found(env_lst);
 		env_lst->flag = 0;
 	}
 	return (env_lst);

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 21:04:59 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:16:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	free_command(t_command *command)
 	if (command->heredoc_lst)
 	{
 		free_heredoc(command->heredoc_lst);
-		free_data(command->data_lst);
+		if (command->data_lst)
+			free_data(command->data_lst);
 	}
 	if (command->last_in && command->in_type)
 	{
@@ -67,6 +68,8 @@ void	free_command(t_command *command)
 	}
 	if (command->args != NULL)
 		free_things(command->args);
+	if (command->name)
+		free(command->name);
 	free(command);
 	command = NULL;
 }
@@ -76,7 +79,8 @@ void	free_all_data(t_piped *pipe_line, int i)
 	if (pipe_line->command[i].heredoc_lst)
 	{
 		free_heredoc(pipe_line->command[i].heredoc_lst);
-		free_data(pipe_line->command[i].data_lst);
+		if (pipe_line->command[i].data_lst)
+			free_data(pipe_line->command[i].data_lst);
 	}
 	if (pipe_line->command[i].last_in && pipe_line->command[i].in_type)
 	{

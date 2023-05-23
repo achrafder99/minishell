@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:33:23 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 16:07:35 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:19:22 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*ft_itoa(int c)
 		return (p);
 	}
 	else if (c == 0)
-		return ("0");
+		return (ft_strdup("0"));
 	else
 	{
 		p = is_negatif(c);

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:29:17 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 14:13:00 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:45:46 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	**split_token(char *str)
 	tokens = allocate_tokens(str);
 	while (*str != '\0' && i < number_of_token)
 	{
+		while (*str == ' ' && *str != '\0')
+			str++;
 		if (*str != ' ' && *str != '\0')
 		{
 			tokens[i] = malloc(sizeof(char) * count_length_token(str) + 1);
@@ -33,8 +35,6 @@ char	**split_token(char *str)
 			}
 			fill(&str, i, tokens);
 		}
-		if (*str == ' ' && *str != '\0')
-			str++;
 		i++;
 	}
 	tokens[i] = NULL;

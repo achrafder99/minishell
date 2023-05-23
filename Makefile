@@ -6,7 +6,7 @@
 #    By: adardour <adardour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/22 13:31:04 by adardour         ###   ########.fr        #
+#    Updated: 2023/05/23 12:43:54 by adardour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ includes.c \
 ./parse_and_lexer/lexer.c ./parse_and_lexer/parser.c ./parse_and_lexer/handle_errors.c ./parse_and_lexer/piped.c ./parse_and_lexer/init_command.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
-./parse_and_lexer/expander.c ./parse_and_lexer/extract.c \
+./parse_and_lexer/expander.c ./parse_and_lexer/extract.c ./parse_and_lexer/extract_utils.c \
 ./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c ./parse_and_lexer/get_command.c \
 ./parse_and_lexer/found_args.c ./parse_and_lexer/utils_redirection.c ./parse_and_lexer/open_fds.c ./parse_and_lexer/open_pipe.c\
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c ./built_in/export_utils.c ./built_in/export_utils2.c ./built_in/env_utils2.c ./built_in/env_utils3.c\

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 20:46:06 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:40:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,11 @@ int	check_command(char *command, t_env *env)
 	char	*path;
 
 	path = get_path(env->env);
-	if (!path && !check_is_built_in(command))
-		return (0);
+	if (ft_strstr(command, "./") == NULL)
+	{
+		if (!path && !check_is_built_in(command))
+			return (0);
+	}
 	if (!check_is_built_in(command))
 	{
 		if (ft_strchr(command, '/'))

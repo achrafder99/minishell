@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 04:59:19 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 15:54:50 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 13:19:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,28 @@
 
 int	count_quotes(char *s)
 {
-	int	count;
-	int	i;
+	int		count;
+	char	qoute;
+	int		i;
 
 	count = 0;
 	i = 0;
 	while (s[i] != '\0')
 	{
 		if (s[i] == '\'' || s[i] == '\"')
-			count++;
+		{
+			count += 1;
+			qoute = s[i];
+			i++;
+			while (s[i] != qoute && s[i] != '\0')
+				i++;
+			if (s[i] == qoute)
+			{
+				count++;
+			}
+		}
+		if (s[i] == '\0')
+			break ;
 		i++;
 	}
 	return (count);
@@ -31,8 +44,8 @@ int	count_quotes(char *s)
 char	*cut_string(char *s)
 {
 	int		i;
-	char 	*qoute;
 	int		j;
+	char	qoute;
 	int		size;
 	char	*s1;
 
@@ -41,21 +54,17 @@ char	*cut_string(char *s)
 	size = ft_strlen(s) - count_quotes(s);
 	s1 = malloc(sizeof(char) * (size + 1));
 	if (!s1)
-		return (NULL);
+		return (0);
 	while (s[i])
 	{
-		if (s[i] == '\"' || s[i] == '\'')
+		if (s[i] == '"' || s[i] == '\'')
 		{
-			qoute = s[i];
-			while (s[i] != qoute && s[i] != '\0')
-			{
-				s1[j] = s[i];
-				i++;
-			}
+			qoute = s[i++];
+			while (qoute != s[i] && s[i] != '\0')
+				s1[j++] = s[i++];
+			i++;
 		}
-		s1[j] = s[i];
-		i++;
-		j++;
+		s1[j++] = s[i++];
 	}
 	s1[j] = '\0';
 	return (s1);

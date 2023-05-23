@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 14:21:57 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 14:39:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,4 +232,5 @@ void				remove_empty_command(t_components **components);
 void				fill(char **str, int i, char **tokens);
 char				**allocate_tokens(char *str);
 int					count_length_token(char *str);
+char				*proccess(char *token, t_env *env, t_info *info, char *ss1);
 #endif

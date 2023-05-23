@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 22:47:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 22:57:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:58:33 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	initialize_environment(t_env **env, t_info **info, char **envp)
 		perror("");
 		exit(1);
 	}
+	(*info)->status_code = 0;
 }
 
 void	start_proccesing(char *input, t_info *info, t_env *env)

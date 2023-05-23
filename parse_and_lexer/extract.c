@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:36:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:58:05 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_exit_status(char *string, t_info *info)
 	char	*status_exit;
 	int		kkk;
 
-	status_exit = ft_strdup(ft_itoa(info->status_code));
+	status_exit = ft_itoa(info->status_code);
 	length = (ft_strlen(string) - count(string)) + ft_strlen(status_exit);
 	info->token = malloc(sizeof(char) * (length + 1));
 	i = 0;

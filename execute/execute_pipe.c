@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 22:54:16 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 17:23:04 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		{
 			check_for_heredoc(&piping->command[i], info);
 			if (g_heredoc_flag == -1)
-				break;
+				break ;
 			id[i] = fork();
 			if (id[i] == 0)
 			{
@@ -61,9 +61,8 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 				duplicate_read_write(i, fd, info->flags);
 				complete_pipes_ex(info->flags, &piping->command[i], info, env);
 			}
-			if ((check_is_built_in(piping->command[i].name) || i
-					+ 1 == piping->number_of_commands))
-				process_buit_in_pipes(id[i], fd, info, &piping->command[i]);
+			if (i + 1 == piping->number_of_commands)
+				wait_for_last_exit(id[i], fd, info, &piping->command[i]);
 		}
 	}
 	free(id);

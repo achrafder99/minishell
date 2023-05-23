@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 23:01:08 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 17:26:17 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	free_all_data(t_piped *pipe_line, int i)
 void	free_pipe_line(t_piped *pipe_line)
 {
 	int	i;
+
 	i = 0;
 	if (pipe_line)
 	{

@@ -6,30 +6,21 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:32:37 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/22 18:52:17 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 15:58:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	get_env_size(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-		i++;
-	return (i);
-}
 void	handle_exp_not_found(t_lst *env_lst)
 {
 	char	**env;
 
 	env = creat_basic_env();
-	if (!env )
+	if (!env)
 		return ;
 	push_list(env_lst, env);
-	free_things(env); 
+	free_things(env);
 }
 
 t_lst	*get_export_env(char **env)
@@ -53,7 +44,6 @@ t_lst	*get_export_env(char **env)
 	}
 	else
 	{
-		// printf("66\n");
 		exp = creat_list();
 		handle_exp_not_found(exp);
 	}

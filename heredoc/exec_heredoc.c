@@ -6,17 +6,28 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/22 23:05:24 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 15:45:24 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst, t_info *info)
+void	fill_last_heredoc(t_here_node *node, char *data, int *flag,
+		t_here_data *data_lst)
+{
+	if (*flag)
+	{
+		node = new_here_node(data);
+		ft_add_here_data(data_lst, node);
+	}
+}
+
+void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
+		t_info *info)
 {
 	t_here_node	*node;
 	char		*data;
-	int	fd;
+	int			fd;
 
 	fd = dup(STDIN_FILENO);
 	g_heredoc_flag = 1;
@@ -30,13 +41,7 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst, t_info *info
 			break ;
 		}
 		if (ft_strcmp(data, tmp->delimit))
-		{
-			if (*flag)
-			{
-				node = new_here_node(data);
-				ft_add_here_data(data_lst, node);
-			}
-		}
+			fill_last_heredoc(node, data, flag, data_lst);
 		else
 		{
 			free(data);
@@ -51,6 +56,7 @@ t_here_data	*open_heredoc(t_here_lst *list, t_info *info)
 	t_heredoc	*tmp;
 	t_here_data	*data_lst;
 	int			flag;
+
 	tmp = list->top;
 	flag = 0;
 	data_lst = NULL;

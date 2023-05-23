@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:14:31 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/22 23:06:28 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 16:54:16 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void	complete_pipes_ex(int flag, t_command *command, t_info *info,
 		exit(info->status_code);
 }
 
-void	process_buit_in_pipes(int id, int **fd, t_info *info,
+void	wait_for_last_exit(int id, int **fd, t_info *info,
 		t_command *command)
 {
-	if (!check_is_built_in(command->name))
-		close_pipes(fd);
+
+	close_pipes(fd);
 	wait_for_exit_state(id, info);
 }
 

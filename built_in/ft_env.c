@@ -6,11 +6,21 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:08:51 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/22 18:51:59 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 15:58:46 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	get_env_size(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);
+}
 
 void	push_list(t_lst *lst, char **env)
 {

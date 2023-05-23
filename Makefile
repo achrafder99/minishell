@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adardour <adardour@student.42.fr>          +#+  +:+       +#+         #
+#    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/22 13:31:04 by adardour         ###   ########.fr        #
+#    Updated: 2023/05/23 15:32:55 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ includes.c \
 ./parse_and_lexer/expander.c ./parse_and_lexer/extract.c \
 ./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c ./parse_and_lexer/get_command.c \
 ./parse_and_lexer/found_args.c ./parse_and_lexer/utils_redirection.c ./parse_and_lexer/open_fds.c ./parse_and_lexer/open_pipe.c\
-./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c ./built_in/export_utils.c ./built_in/export_utils2.c ./built_in/env_utils2.c ./built_in/env_utils3.c\
+./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c ./built_in/export_utils.c ./built_in/export_utils2.c ./built_in/env_utils2.c ./built_in/env_utils3.c ./built_in/cd_utils.c\
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/get_cmd.c \
 ./execute/start_redirection.c  ./execute/execution_utils.c ./execute/redirection_utils.c ./execute/execute_pipes_utils.c ./execute/execute_pipes_utils2.c\
 ./free/free_things.c ./free/free_node.c ./free/free_utils.c \

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:45:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/22 18:49:46 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 17:25:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ char	**creat_basic_env(void)
 void	handle_env_not_found(t_lst *env_lst)
 {
 	char	**env;
+
 	env = creat_basic_env();
-	if (!env )
+	if (!env)
 		return ;
 	push_list(env_lst, env);
-	free_things(env); 
+	free_things(env);
 }

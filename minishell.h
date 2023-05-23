@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 23:06:02 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 16:55:03 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define ANSI_COLOR_GREEN "\x1b[32m"
 # define ANSI_COLOR_RESET "\x1b[0m"
 # define MAX_PATH_LENGTH 1024
-int	g_heredoc_flag;
+int		g_heredoc_flag;
 # include "heredoc.h"
 # include "structs.h"
 # include <dirent.h>
@@ -217,8 +217,8 @@ void				duplicate_read_write(int i, int **fd, int flag);
 void				check_for_heredoc(t_command *command, t_info *info);
 void				complete_pipes_ex(int flag, t_command *command,
 						t_info *info, t_env *env);
-void				process_buit_in_pipes(int id, int **fd, t_info *info,
-						t_command *command);
+void	wait_for_last_exit(int id, int **fd, t_info *info,
+		t_command *command);
 int					*allocate_for_ids(t_piped *piping);
 void				exec_pipe_commande(t_command *cmd, t_info *info,
 						t_env *env);
@@ -235,4 +235,7 @@ int					count_length_token(char *str);
 void				handle_env_not_found(t_lst *env_lst);
 void				handle_exp_not_found(t_lst *env_lst);
 char				**creat_basic_env(void);
+void	update_oldpwd(t_lst *lst);
+void	update_pwd(t_lst *lst);
+void	update_dir(t_env *env, int flag);
 #endif

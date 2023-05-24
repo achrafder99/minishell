@@ -6,35 +6,39 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 17:30:05 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/24 23:25:10 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	open_her(t_components *tokens)
+void	open_her(t_components *tokens, t_info *info)
 {
 	int		fd;
 	char	*line;
 	char	*deli;
 
 	deli = tokens->next->token;
-	fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
+	fd = dup(STDIN_FILENO);
 	if (fd == -1)
-		return (perror(""), exit(0));
+		return (perror("dup"));
+	g_heredoc_flag = 1;
 	while (1)
 	{
 		line = readline("> ");
-		if (line != NULL)
+		if (!line || g_heredoc_flag == -1)
 		{
-			if (!strncmp(line, deli, ft_strlen(deli)))
-				break ;
-			write(fd, line, ft_strlen(line));
-		}
-		else
+			if (dup2(fd, STDIN_FILENO) == -1)
+				perror("dup");
+			info->status_code = 1;
 			break ;
+		}
+		else if (!ft_strcmp(line, deli))
+		{
+			free(line);
+			break ;
+		}
 		free(line);
-		line = NULL;
 	}
 }
 
@@ -48,14 +52,17 @@ void	without_command(t_components *node, t_info *info)
 	{
 		if (tokens->next == NULL)
 			break ;
-		if (ft_strcmp(tokens->type.type, "HEREDOC"))
+		if (!ft_strcmp(tokens->type.type, "APPEND_MODE")
+			|| !ft_strcmp(tokens->type.type, "REDIRECT_out")
+			|| !ft_strcmp(tokens->type.type, "REDIRECT_in"))
 		{
 			info->status_code = open_fds(tokens->type.type, tokens->next->token,
 					&fd);
 			close(fd);
 		}
-		else
-			open_her(tokens);
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && g_heredoc_flag !=
+				-1)
+			open_her(tokens, info);
 		tokens = tokens->next;
 	}
 }

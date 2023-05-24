@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 15:49:15 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/24 23:25:40 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ int	save_and_redirect(t_command *command, int *save_in, int *save_out)
 void	reset_std_in_out(t_command *command, int save_in, int save_out)
 {
 	if (command->last_in)
-		dup2(save_in, STDIN_FILENO);
+		if (dup2(save_in, STDIN_FILENO) == -1)
+			perror("dup");
 	if (command->last_out)
-		dup2(save_out, STDOUT_FILENO);
+		if (dup2(save_out, STDOUT_FILENO) == -1)
+			perror("dup");
 }
 
 void	wait_for_child(t_info *info, int fid, char **argv, t_env *env)
@@ -50,8 +52,8 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	fid = 0;
 	if (command->heredoc_lst)
 		command->data_lst = open_heredoc(command->heredoc_lst, info);
-	if (check_empty_command(command->name, info, &flags) || g_heredoc_flag ==
-		-1)
+	if (check_empty_command(command->name, info, &flags) || \
+			g_heredoc_flag == -1)
 		return (free_execution_args(argv, env));
 	first_step(command, info, &flags, env);
 	if (check_is_built_in(command->name) || flags == 127)

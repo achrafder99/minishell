@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 17:23:04 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 21:33:59 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,21 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 	while (++i < piping->number_of_commands)
 	{
 		info->flags = 0;
-		if (ft_strlen(piping->command[i].name))
+		if (!ft_strlen(piping->command[i].name))
+			continue ;
+		check_for_heredoc(&piping->command[i], info);
+		if (g_heredoc_flag == -1)
+			break ;
+		id[i] = fork();
+		if (id[i] == 0)
 		{
-			check_for_heredoc(&piping->command[i], info);
-			if (g_heredoc_flag == -1)
-				break ;
-			id[i] = fork();
-			if (id[i] == 0)
-			{
-				check_command_not_found(info->flags, info, env,
-					piping->command[i].name);
-				duplicate_read_write(i, fd, info->flags);
-				complete_pipes_ex(info->flags, &piping->command[i], info, env);
-			}
-			if (i + 1 == piping->number_of_commands)
-				wait_for_last_exit(id[i], fd, info, &piping->command[i]);
+			check_command_not_found(info->flags, info, env,
+				piping->command[i].name);
+			duplicate_read_write(i, fd, info->flags);
+			complete_pipes_ex(info->flags, &piping->command[i], info, env);
 		}
+		if (i + 1 == piping->number_of_commands)
+			wait_for_last_exit(id[i], fd, info, &piping->command[i]);
 	}
 	free(id);
 }

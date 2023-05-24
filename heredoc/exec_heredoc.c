@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 15:45:24 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/24 14:56:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 		data = readline(">");
 		if (!data || g_heredoc_flag == -1)
 		{
-			dup2(fd, STDIN_FILENO);
+			if (dup2(fd, STDIN_FILENO) == -1)
+				perror("dup");
 			info->status_code = 1;
 			break ;
 		}

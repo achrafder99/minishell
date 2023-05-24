@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:57:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:18:26 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/24 23:43:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,16 @@ t_node	*find_key_to_update(t_lst *lst, char *key)
 void	update_value(char **split, t_lst *lst, char *str, int flag)
 {
 	t_node	*tmp;
+	char	*save;
 
 	if (flag)
+	{
+		save = split[0];
 		split[0] = ft_strtrim(split[0], "+");
+		free (save);
+	}
 	tmp = find_key_to_update(lst, split[0]);
+	save = tmp->value;
 	if (str && flag)
 	{
 		if (tmp->value)
@@ -55,15 +61,10 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 			tmp->value = ft_strjoin("", get_value(str));
 	}
 	else if (str && !flag)
-	{
-		free(tmp->value);
 		tmp->value = ft_strdup(get_value(str));
-	}
 	else
-	{
-		free(tmp->value);
 		tmp->value = ft_strdup("\0");
-	}
+	free (save);
 }
 
 int	add_keys_and_values(t_env *env, char *arg, char **split, int i)

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:34:12 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 15:34:22 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/24 14:51:47 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ char	*get_old_and_pwd_value(t_lst *env, int flag)
 			break ;
 		node = node->next;
 	}
-	return (node->value);
+	if (node)
+		return (node->value);
+	else
+		return (0);
 }
 
 int	switch_dr(t_env *env)
@@ -70,11 +73,12 @@ int	switch_dr(t_env *env)
 	{
 		update_dir(env, 0);
 		chdir(oldpwd);
-		update_dir(env, 1);
+		if (pwd)
+			update_dir(env, 1);
 		printf("%s\n", oldpwd);
 		free(oldpwd);
-		return (0);
 	}
+	return (0);
 }
 
 int	cd(t_command *cmd, t_env *env)

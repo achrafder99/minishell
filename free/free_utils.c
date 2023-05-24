@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 23:16:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:00:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	free_pipe_line(t_piped *pipe_line)
 		while (i < pipe_line->number_of_commands)
 		{
 			free_things(pipe_line->command[i].args);
+			free(pipe_line->command[i].name);
 			free_all_data(pipe_line, i);
 			i++;
 		}

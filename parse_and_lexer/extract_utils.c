@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 12:42:59 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 22:34:04 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:05:35 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,20 @@ char	*extract_value(t_info *info, t_env *env, char *token)
 
 	concat = NULL;
 	tmp = env->env->top;
+	trim = ft_strtrim(token, " ");
 	while (tmp)
 	{
-		trim = ft_strtrim(token, " ");
 		if (!ft_strcmp(trim, tmp->key) && tmp->value)
 		{
 			concat = tmp->value;
 			free(trim);
+			trim = NULL;
 			return (concat);
 		}
-		free(trim);
 		tmp = tmp->next;
 	}
+	free(trim);
+	trim = NULL;
 	return (NULL);
 }
 
@@ -74,20 +76,21 @@ char	*proccess(t_env *env, t_info *info, char *ss1)
 
 	info->token = ft_strdup("");
 	spliting = ft_split(ss1, '$');
-	i = 0;
+	i = -1;
 	result = NULL;
-	while (spliting[i])
+	while (spliting[++i])
 	{
 		result = proccess2(spliting[i], info, env);
 		if (result)
 		{
+			if (info->token)
+			{
+				free(info->token);
+				info->token = NULL;
+			}
 			temp = ft_strjoin(info->token, result);
-			free(info->token);
 			info->token = temp;
-			free(result);
-			result = NULL;
 		}
-		i++;
 	}
 	free_things(spliting);
 	return (info->token);

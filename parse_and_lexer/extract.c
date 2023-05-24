@@ -6,32 +6,11 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 23:18:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/24 01:07:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*end_process(char *concat, char *join, char *token)
-{
-	char	*end;
-
-	if (concat == NULL || ft_strlen(concat) == 0)
-	{
-		free(token);
-		return (NULL);
-	}
-	if (!join)
-	{
-		free(token);
-		return (concat);
-	}
-	end = ft_strjoin(join, concat);
-	free(concat);
-	free(token);
-	free(join);
-	return (end);
-}
 
 int	count(char *str)
 {
@@ -113,7 +92,6 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	char	*concat;
 	char	*token;
 	char	*ss1;
-	char	*end;
 
 	join = NULL;
 	if (ft_strchr(compo, '?'))
@@ -126,8 +104,23 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	if (!ss1)
 		return (token);
 	concat = proccess(env, info, ss1);
-	end = end_process(concat, join, token);
-	if (end == NULL)
+	if (concat == NULL || ft_strlen(concat) == 0)
+	{
+		free(token);
 		return (NULL);
-	return (end);
+	}
+	if (!join)
+	{
+		free(token);
+		token = NULL;
+		return (concat);
+	}
+	info->token = ft_strjoin(join, concat);
+	free(concat);
+	concat = NULL;
+	free(token);
+	token = NULL;
+	free(join);
+	join = NULL;
+	return (info->token);
 }

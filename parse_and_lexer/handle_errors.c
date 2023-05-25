@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:31:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 13:48:31 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:28:58 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	handle_errors(t_components *tokens)
 	while (node != NULL)
 	{
 		if (!check_qoutes(node->token))
-			return (write(2, "tsh : close qoutation \n", 25), 1);
+			return (write(2, "tsh : close qoutation \n", 24), 1);
 		if (handle_pipe_errors(node))
 			return (258);
 		if (ft_strchr(node->token, '\\'))

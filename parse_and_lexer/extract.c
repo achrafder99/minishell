@@ -6,11 +6,35 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 01:07:59 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 21:25:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*end(char *result, char *concat, char *join, char *token)
+{
+	if (!join)
+	{
+		free(token);
+		token = NULL;
+		return (result);
+	}
+	if (result == NULL)
+		concat = NULL;
+	else
+		concat = ft_strjoin(join, result);
+	free(join);
+	join = NULL;
+	if (result)
+	{
+		free(result);
+		result = NULL;
+	}
+	free(token);
+	token = NULL;
+	return (concat);
+}
 
 int	count(char *str)
 {
@@ -91,36 +115,22 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	char	*join;
 	char	*concat;
 	char	*token;
-	char	*ss1;
+	char	*exit;
+	char	*result;
 
+	exit = NULL;
 	join = NULL;
-	if (ft_strchr(compo, '?'))
-		token = get_exit_status(compo, info);
+	result = NULL;
+	if (ft_strstr(compo, "$?"))
+		exit = get_exit_status(compo, info);
+	if (!ft_strchr(exit, '$') && exit)
+		return (exit);
+	if (exit && ft_strchr(exit, '$') == NULL)
+		token = exit;
 	else
 		token = ft_strdup(compo);
-	if (token[0] != '$' && ft_strchr(token, '$'))
+	if (token[0] != '$')
 		join = until_dollar_sign(token);
-	ss1 = ft_strchr(token, '$');
-	if (!ss1)
-		return (token);
-	concat = proccess(env, info, ss1);
-	if (concat == NULL || ft_strlen(concat) == 0)
-	{
-		free(token);
-		return (NULL);
-	}
-	if (!join)
-	{
-		free(token);
-		token = NULL;
-		return (concat);
-	}
-	info->token = ft_strjoin(join, concat);
-	free(concat);
-	concat = NULL;
-	free(token);
-	token = NULL;
-	free(join);
-	join = NULL;
-	return (info->token);
+	result = proccess(env, info, token);
+	return (end(result, concat, join, token));
 }

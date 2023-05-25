@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:26:15 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:19:34 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
 		info->status_code = 1;
 }
 
-void	run_child(t_command *command, char **argv, t_env *env)
+void	run_child(t_command *command, char **argv, t_env *env, t_info *info)
 {
 	char	*cmd;
 	int		redirect;
 
 	redirect = redirection(command, command->data_lst);
-	cmd = get_cmd(command->name);
+	cmd = get_cmd(command->name, env, info);
 	if (redirect != -1)
 		execve(cmd, argv, env->env_arr);
 	else

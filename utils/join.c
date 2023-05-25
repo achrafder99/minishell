@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:20:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 01:05:10 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:30:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	ptr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (ptr == NULL)
 		return (NULL);
-	i = 0;
+	i = -1;
 	j = 0;
-	while (s1[i] != '\0')
-	{
+	while (s1[++i] != '\0')
 		ptr[i] = s1[i];
-		i++;
-	}
 	while (s2[j] != '\0')
 	{
 		ptr[i] = s2[j];

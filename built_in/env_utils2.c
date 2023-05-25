@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:32:37 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 15:58:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/24 23:28:35 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,11 @@ t_node	*ft_new_node(char *key, char *value)
 	node = malloc(sizeof(t_node));
 	if (!(node))
 		return (0);
-	node->key = strdup(key);
+	node->key = ft_strdup(key);
 	if (!value)
 		node->value = NULL;
 	else
-		node->value = strdup(value);
+		node->value = ft_strdup(value);
 	node->next = NULL;
 	return (node);
 }

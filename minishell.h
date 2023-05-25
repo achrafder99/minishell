@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 00:49:24 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:38:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
 void				lexer(char *input, t_components **head, t_info *info,
 						t_env *env);
-int					echo(t_command *cmd);
+int					echo(t_command *cmd, t_env *env, t_info *info);
 int					cd(t_command *cmd, t_env *env);
 int					pwd(void);
 int					get_size(t_components *tokens);
@@ -93,7 +93,7 @@ t_regex				*compile_regex(const char *pattern);
 void				push_component(t_components **head, char **spliting, int *i,
 						t_info *info);
 void				lex_redirection(t_data *data);
-char				*get_cmd(char *command_name);
+char				*get_cmd(char *command_name, t_env *env, t_info *info);
 int					redirection(t_command *cmd, t_here_data *data_lst);
 void				handle_command(t_components *node, t_command **command,
 						t_info *info);
@@ -123,8 +123,8 @@ t_lst				*sort_env(char **env);
 unsigned long long	ft_atoi2(const char *str);
 int					ft_atoi(const char *str);
 char				*ft_itoa(int c);
-void				run_child(t_command *command, char **argv, t_env *env);
-
+void				run_child(t_command *command, char **argv, t_env *env,
+						t_info *info);
 void				first_step(t_command *command, t_info *info, int *flags,
 						t_env *env);
 char				**get_new_env(t_lst *env);
@@ -188,7 +188,7 @@ int					process_key_and_value(t_env *env, char **arg, char **split,
 						int i);
 void				add_key_with_value(t_lst *lst, char *str, char **split);
 void				add_key_with_no_value(t_lst *lst, char **split);
-void				add_key(t_lst *exp, char *str);
+void				add_key(t_env *env, char *str);
 void				append_value(t_lst *lst, char *str, char **split);
 int					if_valid_identifier(char **arg, t_env *env);
 char				*update_shell_level(char *value);
@@ -241,4 +241,5 @@ char				**creat_basic_env(void);
 void				update_oldpwd(t_lst *lst);
 void				update_pwd(t_lst *lst);
 void				update_dir(t_env *env, int flag);
+char				*extract_value(t_info *info, t_env *env, char *token);
 #endif

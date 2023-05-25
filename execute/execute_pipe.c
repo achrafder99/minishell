@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 22:45:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:14:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	if (check_is_built_in(cmd->name) || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, argv, env);
+	run_child(cmd, argv, env, info);
 }
 
 void	wait_for_exit_state(int id, t_info *info)

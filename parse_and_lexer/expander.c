@@ -6,14 +6,14 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 01:03:53 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:47:01 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void	dont_expand(t_components *components, t_components **components1)
-{	
+{
 	char	*token;
 
 	token = components->token;
@@ -43,12 +43,22 @@ void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
 	char	*temp;
 	char	*trim;
 
-	if (components->token[0] != '\''
+	temp = NULL;
+	if (components->token[0] == '\"'
+		&& components->token[ft_strlen(components->token) - 1] == '\"'
+		&& (components->token[1] == '\''
+			&& components->token[ft_strlen(components->token) - 2] == '\''))
+		push(components1, components->token, components->type.type);
+	else if (components->token[0] != '\''
 		&& components->token[ft_strlen(components->token) - 1] != '\'')
 	{
 		temp = extract(components->token, env, info);
 		if (temp != NULL)
+		{
 			split_value(components, temp, components1);
+			free(temp);
+			temp = NULL;
+		}
 		else
 			push(components1, "", components->type.type);
 	}
@@ -63,13 +73,13 @@ void	expander(t_components *node,
 	t_components	*components;
 	t_components	*components1;
 
-	components1 = NULL;
 	components = node;
+	components1 = NULL;
 	while (components != NULL)
 	{
 		if (ft_strchr(components->token, '*')
 			&& check_is_matched(components->token))
-			extract_matched_file(components->token, components->type.type,
+			extract_matched_file(components->token, components->type.type, \
 				&components1);
 		else if (ft_strchr(components->token, '$')
 			&& ft_strcmp(components->type.type, "END_HEREDOC")

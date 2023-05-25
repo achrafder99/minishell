@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:24:36 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:16:57 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_built_in(t_command *cmd, t_info *info, t_env *env)
 	else if (!ft_strcmp(cmd->name, "pwd"))
 		return (info->status_code = pwd());
 	else if (!ft_strcmp(cmd->name, "echo"))
-		return (info->status_code = echo(cmd));
+		return (info->status_code = echo(cmd, env, info));
 	else if (!ft_strcmp(cmd->name, "export"))
 		return (info->status_code = ft_export(cmd, env));
 	else if (!ft_strcmp(cmd->name, "unset"))

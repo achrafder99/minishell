@@ -1,7 +1,7 @@
 {
-    "files.associations": {
-        "minishell.h": "c",
-        "stdio.h": "c",
-        "__locale": "c"
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#123417",
+        "titleBar.activeBackground": "#1A4920",
+        "titleBar.activeForeground": "#F5FCF6"
     }
 }

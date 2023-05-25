@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 15:04:59 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 18:03:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ int					process_key_and_value(t_env *env, char **arg, char **split,
 						int i);
 void				add_key_with_value(t_lst *lst, char *str, char **split);
 void				add_key_with_no_value(t_lst *lst, char **split);
-void				add_key(t_lst *exp, char *str);
+void				add_key(t_env *env, char *str);
 void				append_value(t_lst *lst, char *str, char **split);
 int					if_valid_identifier(char **arg, t_env *env);
 char				*update_shell_level(char *value);

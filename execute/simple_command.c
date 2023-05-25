@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/24 23:25:40 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 21:30:57 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	char	**argv;
 	int		fid;
 	int		flags;
-
 	argv = get_argv(command, command->argc);
 	flags = 0;
 	fid = 0;
@@ -58,7 +57,6 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	first_step(command, info, &flags, env);
 	if (check_is_built_in(command->name) || flags == 127)
 		return (free_execution_args(argv, env));
-	signal(SIGQUIT, SIG_DFL);
 	if (env->env->top)
 		env->env_arr = get_new_env(env->env);
 	fid = fork();

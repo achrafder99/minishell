@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:57:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/24 23:43:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 18:01:51 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	add_keys_and_values(t_env *env, char *arg, char **split, int i)
 		append_value(env->env, arg, split);
 	}
 	else if (arg[i] == '\0')
-		add_key(env->exp, arg);
+		add_key(env, arg);
 	else
 		return (1);
 	return (0);

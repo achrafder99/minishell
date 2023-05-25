@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:34:12 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 15:28:00 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 18:09:42 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	back_to_home(t_env *env)
 	update_dir(env, 0);
 	if (chdir(home_dir) == -1)
 		perror(home_dir);
-		
 	update_dir(env, 1);
 	free(home_dir);
 	return (0);
@@ -97,7 +96,6 @@ int	cd(t_command *cmd, t_env *env)
 			perror(cmd->args[0]);
 			return (1);
 		}
-		
 		update_dir(env, 1);
 		return (0);
 	}

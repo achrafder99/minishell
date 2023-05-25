@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:04:05 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/24 23:40:10 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 18:03:20 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,17 @@ void	add_key_with_no_value(t_lst *lst, char **split)
 	}
 }
 
-void	add_key(t_lst *exp, char *str)
+void	add_key(t_env *env, char *str)
 {
-	t_node	*new;
+	t_node	*new_exp;
+	t_node	*new_env;
 
-	if (!if_key_exist(str, exp))
+	if (!if_key_exist(str, env->exp))
 	{
-		new = ft_new_node(str, NULL);
-		ft_lstadd_back(exp, new);
+		new_exp = ft_new_node(str, NULL);
+		new_env = ft_new_node(str, NULL);
+		ft_lstadd_back(env->exp, new_exp);
+		ft_lstadd_back(env->env, new_env);
 	}
 }
 

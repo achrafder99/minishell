@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:55:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 15:04:59 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define ANSI_COLOR_GREEN "\x1b[32m"
 # define ANSI_COLOR_RESET "\x1b[0m"
 # define MAX_PATH_LENGTH 1024
-int		g_heredoc_flag;
+
 # include "heredoc.h"
 # include "structs.h"
 # include <dirent.h>
@@ -32,6 +32,7 @@ int		g_heredoc_flag;
 # include <sys/wait.h>
 # include <unistd.h>
 
+int					g_heredoc_flag;
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
@@ -161,7 +162,7 @@ int					not_pipe(t_components *node);
 void				handler_heredoc(t_command **command, t_components *node);
 void				handle_append(t_command **command, int *fd,
 						t_components *node);
-void	handle_redirect(t_command **command,
+void				handle_redirect(t_command **command,
 						t_components *node,
 						int *fd,
 						t_info *info);
@@ -171,10 +172,8 @@ void				free_pipe_line(t_piped *pipe_line);
 int					open_fds(const char *type, const char *filename, int *fd);
 size_t				ft_strcspn(const char *s1, const char *charset);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
-void	process_push_redirection(char **spliting,
-								t_components **head,
-								int i,
-								t_info *info);
+void				process_push_redirection(char **spliting,
+						t_components **head, int i, t_info *info);
 void				process_push_command(char **spliting, t_components **head,
 						int i, t_info *infmao);
 int					if_key_exist(char *key, t_lst *lst);
@@ -217,8 +216,8 @@ void				duplicate_read_write(int i, int **fd, int flag);
 void				check_for_heredoc(t_command *command, t_info *info);
 void				complete_pipes_ex(int flag, t_command *command,
 						t_info *info, t_env *env);
-void	wait_for_last_exit(int id, int **fd, t_info *info,
-		t_command *command);
+void				wait_for_last_exit(int id, int **fd, t_info *info,
+						t_command *command);
 int					*allocate_for_ids(t_piped *piping);
 void				exec_pipe_commande(t_command *cmd, t_info *info,
 						t_env *env);
@@ -235,7 +234,7 @@ int					count_length_token(char *str);
 void				handle_env_not_found(t_lst *env_lst);
 void				handle_exp_not_found(t_lst *env_lst);
 char				**creat_basic_env(void);
-void	update_oldpwd(t_lst *lst);
-void	update_pwd(t_lst *lst);
-void	update_dir(t_env *env, int flag);
+void				update_oldpwd(t_lst *lst);
+void				update_pwd(t_lst *lst);
+void				update_dir(t_env *env, int flag);
 #endif

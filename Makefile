@@ -6,7 +6,7 @@
 #    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/23 15:32:55 by aalami           ###   ########.fr        #
+#    Updated: 2023/05/25 15:42:58 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ clean:
 		${RM}  ${OBJS} 
 
 fclean:	clean
-		${RM} ${NAME} 
+		${RM} ${NAME}
 		rm -rf minishell
 		
 re:		fclean all

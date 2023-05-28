@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/28 18:53:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:08:50 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
 	int	save_out;
 	int	redirect;
 
-	printf("ddd\n");
 	redirect = 0;
 	if (!check_command(command->name, env))
 		return (handle_command_not_found(info, command, flags));

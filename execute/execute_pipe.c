@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 22:14:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:55:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,13 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		if (g_heredoc_flag == -1)
 			break ;
 		id[i] = fork();
-		if (id[i] == 0)
+		if (id[i] == -1)
+		{
+			perror("");
+			info->status_code = 1;
+			return ;
+		}
+		else if (id[i] == 0)
 		{
 			check_command_not_found(info->flags, info, env,
 				piping->command[i].name);

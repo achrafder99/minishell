@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 22:33:49 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 16:02:11 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	without_command(t_components *node, t_info *info)
 {
 	t_components	*tokens;
 	int				fd;
+	char			*clear_file_name;
 
 	tokens = node;
 	while (tokens != NULL)
@@ -53,12 +54,14 @@ void	without_command(t_components *node, t_info *info)
 			|| !ft_strcmp(tokens->type.type, "REDIRECT_out")
 			|| !ft_strcmp(tokens->type.type, "REDIRECT_in"))
 		{
-			info->status_code = open_fds(tokens->type.type, tokens->next->token,
+			clear_file_name = cut_string(tokens->next->token);
+			info->status_code = open_fds(tokens->type.type, clear_file_name,
 					&fd);
 			close(fd);
+			free(clear_file_name);
 		}
-		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && \
-			g_heredoc_flag != -1)
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") \
+		&& g_heredoc_flag != -1)
 			open_her(tokens, info);
 		tokens = tokens->next;
 	}

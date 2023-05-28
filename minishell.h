@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 22:38:14 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 14:07:37 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
 int					open_in(t_command *command);
 void				ft_lstadd_front(t_components **lst, t_components *new);
-void				delete_node_by_type(t_components **head, char *type);
+t_components		*delete_node_by_type(t_components **head, char *type);
 char				*ft_strdup(const char *s1);
 int					match_regex(t_regex *regex, const char *input);
 t_regex				*compile_regex(const char *pattern);
@@ -229,7 +229,6 @@ int					check_empty_command(char *command, t_info *info, int *flag);
 void				hanlde_quite(int signal);
 int					open_pipe(t_components **head, t_info *info);
 int					check_command_pipe(t_components **head);
-int					check_number_forks(t_components *node);
 void				remove_empty_command(t_components **components);
 void				fill(char **str, int i, char **tokens);
 char				**allocate_tokens(char *str);
@@ -242,4 +241,5 @@ void				update_oldpwd(t_lst *lst);
 void				update_pwd(t_lst *lst);
 void				update_dir(t_env *env, int flag);
 char				*extract_value(t_info *info, t_env *env, char *token);
+int					check_open_heredocs(t_components *nodes);
 #endif

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 12:42:59 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 21:40:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/27 19:27:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,30 @@
 
 void	free1(char *substr, char *concat)
 {
-	free(substr);
-	substr = NULL;
-	free(concat);
-	concat = NULL;
+	if (substr)
+	{
+		free(substr);
+		substr = NULL;
+	}
+	if (concat)
+	{
+		free(concat);
+		concat = NULL;
+	}
+}
+
+void	free_2(char *result, char *concat)
+{
+	if (result)
+	{
+		free(result);
+		result = NULL;
+	}
+	if (concat)
+	{
+		free(concat);
+		concat = NULL;
+	}
 }
 
 char	*extract_value(t_info *info, t_env *env, char *token)
@@ -25,8 +45,8 @@ char	*extract_value(t_info *info, t_env *env, char *token)
 	char	*concat;
 	t_node	*tmp;
 	char	*trim;
-	int		i;
 
+	(void)info;
 	concat = NULL;
 	tmp = env->env->top;
 	trim = ft_strtrim(token, " ");
@@ -63,11 +83,6 @@ char	*proccess2(char *token, t_info *info, t_env *env)
 		}
 		ft_strncpy(substr, token, ft_strcspn(token, " \""));
 		concat = extract_value(info, env, substr);
-		if (concat == NULL)
-		{
-			free(substr);
-			return (NULL);
-		}
 		temp = ft_strjoin(concat, token + ft_strcspn(token, " \""));
 		free1(substr, concat);
 		return (temp);
@@ -79,26 +94,27 @@ char	*proccess(t_env *env, t_info *info, char *ss1)
 {
 	int		i;
 	char	*result;
-	char	**split_keys;
 	char	*concat;
 	char	*keys;
 
 	keys = ft_strchr(ss1, '$');
-	split_keys = ft_split(keys, '$');
+	info->spliting = ft_split(keys, '$');
 	concat = NULL;
 	result = NULL;
-	i = 0;
-	while (split_keys[i])
+	info->temp = NULL;
+	i = -1;
+	while (info->spliting[++i])
 	{
-		if (result)
+		result = proccess2(info->spliting[i], info, env);
+		info->temp = ft_strjoin(concat, result);
+		free_2(result, concat);
+		concat = ft_strdup(info->temp);
+		if (info->temp)
 		{
-			free(result);
-			result = NULL;
+			free(info->temp);
+			info->temp = NULL;
 		}
-		result = proccess2(split_keys[i], info, env);
-		concat = ft_strjoin(concat, result);
-		i++;
 	}
-	free_things(split_keys);
+	free_things(info->spliting);
 	return (concat);
 }

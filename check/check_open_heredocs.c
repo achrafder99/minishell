@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_number_of_forks.c                            :+:      :+:    :+:   */
+/*   check_open_heredocs.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 00:31:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 13:24:49 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/27 23:38:13 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/27 23:57:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_number_forks(t_components *node)
+int	check_open_heredocs(t_components *nodes)
 {
-	t_components	*proccess;
-	int				proc;
+	int				count;
+	t_components	*temp;
 
-	proccess = node;
-	proc = 0;
-	while (proccess)
+	temp = nodes;
+	count = 0;
+	while (temp)
 	{
-		if (!ft_strcmp(proccess->type.type, "PIPE"))
-			proc++;
-		proccess = proccess->next;
+		if (!ft_strcmp(temp->type.type, "HEREDOC"))
+			count++;
+		temp = temp->next;
 	}
-	return (proc);
+	if (count >= 17)
+	{
+		write(2, "tsh: maximum here-document count exceeded\n", 43);
+		return (1);
+	}
+	return (0);
 }

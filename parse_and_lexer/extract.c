@@ -6,33 +6,38 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 21:25:47 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/27 22:39:39 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 char	*end(char *result, char *concat, char *join, char *token)
-{
-	if (!join)
-	{
-		free(token);
-		token = NULL;
-		return (result);
-	}
+{			
 	if (result == NULL)
 		concat = NULL;
 	else
 		concat = ft_strjoin(join, result);
-	free(join);
-	join = NULL;
+	if (!join)
+	{	
+		free(token);
+		token = NULL;
+		free(result);
+		result = NULL;
+		return (concat);
+	}
 	if (result)
 	{
 		free(result);
 		result = NULL;
 	}
-	free(token);
-	token = NULL;
+	if (token)
+	{
+		free(token);
+		token = NULL;
+	}
+	free(join);
+	join = NULL;
 	return (concat);
 }
 
@@ -70,7 +75,7 @@ char	*get_exit_status(char *string, t_info *info)
 		if (string[i] == '$' && string[i + 1] == '?')
 		{
 			kkk = 0;
-			while (kkk < ft_strlen(status_exit))
+			while ((size_t)kkk < ft_strlen(status_exit))
 				info->token[i++] = status_exit[kkk++];
 			j += 2;
 		}
@@ -89,8 +94,9 @@ char	*until_dollar_sign(char *token)
 	int		i;
 
 	inside_single_quotes = 0;
-	i = 0;
-	while (token[i] != '\0')
+	string_size = 0;
+	i = -1;
+	while (token[++i] != '\0')
 	{
 		if (token[i] == '\'')
 			inside_single_quotes = !inside_single_quotes;
@@ -99,7 +105,6 @@ char	*until_dollar_sign(char *token)
 			string_size = i;
 			break ;
 		}
-		i++;
 	}
 	before_dollar = malloc(sizeof(char) * (string_size + 1));
 	if (!before_dollar)
@@ -121,11 +126,12 @@ char	*extract(char *compo, t_env *env, t_info *info)
 	exit = NULL;
 	join = NULL;
 	result = NULL;
+	concat = NULL;
 	if (ft_strstr(compo, "$?"))
 		exit = get_exit_status(compo, info);
 	if (!ft_strchr(exit, '$') && exit)
 		return (exit);
-	if (exit && ft_strchr(exit, '$') == NULL)
+	if (exit && ft_strchr(exit, '$'))
 		token = exit;
 	else
 		token = ft_strdup(compo);

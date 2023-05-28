@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 15:34:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/27 18:52:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_info
 	char				*type;
 	char				*token;
 	char				**spliting;
+	char				*temp;
 }						t_info;
 
 typedef struct s_last_file

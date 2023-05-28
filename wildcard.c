@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:56:52 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 21:01:44 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:52:04 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	check_is_matched(char *pattern)
 void	extract_matched_file(char *pattern, char *type,
 		t_components **components1)
 {
-	int		flag;
 	DIR		*dir;
 	t_regex	*regex;
 

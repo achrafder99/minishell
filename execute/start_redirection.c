@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:20:50 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:27:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 00:52:44 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	redirect_out(t_command *cmd)
 		fd = open(cmd->last_out, O_CREAT | O_RDWR | O_APPEND, 0777);
 	if (fd == -1)
 	{
-		perror("error occurred");
+		perror("");
 		return (fd);
 	}
 	dup2(fd, STDOUT_FILENO);

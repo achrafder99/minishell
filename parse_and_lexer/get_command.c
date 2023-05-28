@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 13:30:22 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 20:58:22 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:20:24 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	remove_empty_command(t_components **components)
 	t_components	*temp;
 	int				i;
 
+	temp = NULL;
 	if ((*components)->next == NULL)
 		return ;
 	i = 0;

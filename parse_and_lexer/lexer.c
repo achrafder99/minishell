@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:51:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:32:01 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	token_lex1(char **spliting, int *i, t_components **head, t_info *info)
 	{
 		redirect_componenets(spliting, i, head, info);
 		if (spliting[*i + 1] != NULL && !info->flags
-			&& !check_is_redirection(spliting[*i + 1])
-			&& ft_strcmp(spliting[*i + 1], "|"))
+			&& !check_is_redirection(spliting[*i + 1]) \
+			&& ft_strcmp(spliting[*i +1], "|"))
 		{
 			push(head, spliting[*i + 1], "COMMAND");
 			i++;
@@ -84,28 +84,21 @@ void	token_input(char **spliting, int *i, t_components **head, t_info *info)
 
 void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 {
-	int		i;
-	char	**spliting;
+	int	i;
 
 	i = 0;
-	spliting = split_input(input);
-	if (check_is_redirection(spliting[0]))
-		lex1(spliting, head, i, info);
+	info->spliting = split_input(input);
+	if (info->spliting[0] == NULL)
+		return ;
+	if (check_is_redirection(info->spliting[0]))
+		lex1(info->spliting, head, i, info);
 	else
 	{
-		push(head, spliting[0], "COMMAND");
+		push(head, info->spliting[0], "COMMAND");
 		i = 1;
-		while (spliting[i] != NULL)
-			token_input(spliting, &i, head, info);
-		if (!ft_strcmp(spliting[i - 1], "|") && !check_command_pipe(head))
-		{
-			if (open_pipe(head, info) == 258)
-			{
-				info->status_code = 258;
-				return (free_things(spliting), free_node(*head));
-			}
-		}
+		while (info->spliting[i] != NULL)
+			token_input(info->spliting, &i, head, info);
 	}
-	return (free_things(spliting), expander(*head, env, info),
+	return (free_things(info->spliting), expander(*head, env, info),
 		free_node(*head));
 }

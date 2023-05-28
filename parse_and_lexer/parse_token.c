@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:29:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:08:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:58:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_components	*insert_command_at_front(t_components *tokens)
 	if (goal != NULL)
 	{
 		temp = goal;
-		delete_node_by_type(&tokens, "COMMAND");
+		tokens = delete_node_by_type(&tokens, "COMMAND");
 		ft_lstadd_front(&tokens, temp);
 	}
 	return (tokens);

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 18:03:10 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:21:51 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 	char		*data;
 	int			fd;
 
+	node = NULL;
 	fd = dup(STDIN_FILENO);
 	g_heredoc_flag = 1;
 	while (1)
@@ -43,10 +44,7 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 		if (ft_strcmp(data, tmp->delimit))
 			fill_last_heredoc(node, data, flag, data_lst);
 		else
-		{
-			free(data);
-			break ;
-		}
+			return (free(data));
 		free(data);
 	}
 }

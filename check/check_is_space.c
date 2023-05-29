@@ -6,16 +6,16 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:51:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/28 18:26:53 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:22:42 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_next_prev(char *input, char i)
+int	check_next_prev(char *input, int i)
 {
 	return (input[i + 1] != '>' && input[i + 1] != '<'
-			&& input[i - 1] != '>' && input[i - 1] != '<');
+		&& input[i - 1] != '>' && input[i - 1] != '<');
 }
 
 int	countspaces(char *input)
@@ -32,7 +32,7 @@ int	countspaces(char *input)
 			while (input[i] != '\0' && (input[i] != '\'' || input[i] != '\"'))
 				i++;
 		}
-		if (includes(input[i]) && !check_next_prev(input, i))
+		if (includes(input[i]) && check_next_prev(input, i))
 		{
 			if (input[i + 1] == ' ' && input[i - 1] != ' ' && i > 0)
 				count += 1;

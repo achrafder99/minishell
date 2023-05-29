@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/28 14:07:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:33:08 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
 int					open_in(t_command *command);
 void				ft_lstadd_front(t_components **lst, t_components *new);
-t_components		*delete_node_by_type(t_components **head, char *type);
+t_components		*delete_node_by_type(t_components *head, int position);
 char				*ft_strdup(const char *s1);
 int					match_regex(t_regex *regex, const char *input);
 t_regex				*compile_regex(const char *pattern);

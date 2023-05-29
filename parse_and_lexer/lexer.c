@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:02:51 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/28 18:32:01 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:24:03 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	lexer(char *input, t_components **head, t_info *info, t_env *env)
 	i = 0;
 	info->spliting = split_input(input);
 	if (info->spliting[0] == NULL)
-		return ;
+		return (free(info->spliting));
 	if (check_is_redirection(info->spliting[0]))
 		lex1(info->spliting, head, i, info);
 	else

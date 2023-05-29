@@ -6,31 +6,36 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/26 18:59:06 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:26:30 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_components	*delete_node_by_type(t_components **head, char *type)
+t_components	*delete_node_by_type(t_components *head, int position)
 {
-	t_components	*prev;
 	t_components	*curr;
 	t_components	*temp;
+	t_components	*components;
+	int				current_pos;
 
-	prev = NULL;
-	curr = *head;
-	while (curr != NULL && ft_strcmp(curr->type.type, type) != 0)
+	curr = head;
+	components = NULL;
+	current_pos = 0;
+	while (curr != NULL && current_pos != position)
 	{
-		prev = curr;
+		current_pos++;
 		curr = curr->next;
 	}
-	temp = curr;
-	if (temp == NULL)
-		return (NULL);
-	if (prev == NULL)
-		*head = temp->next;
-	else
-		prev->next = temp->next;
-	return (*head);
+	push(&components, curr->token, curr->type.type);
+	temp = head;
+	current_pos = 0;
+	while (temp != NULL)
+	{
+		if (current_pos != position)
+			push(&components, temp->token, temp->type.type);
+		current_pos++;
+		temp = temp->next;
+	}
+	return (components);
 }

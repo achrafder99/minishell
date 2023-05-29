@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/28 16:02:11 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:25:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,21 +99,25 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 {
 	t_components	*node;
 	int				exit_status;
+	int				flag;
 
 	node = tokens;
 	info->flags = 0;
+	flag = 0;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
-	{
-		info->status_code = exit_status;
 		return ;
-	}
 	if (check_is_command(node) && check_is_redirection(node->token))
+	{
+		flag = 1;
 		node = insert_command_at_front(tokens);
+	}
 	if (not_pipe(node))
 		node = insert_at_position(node);
 	if (!check_is_command(node) && check_is_redirection(node->token))
 		without_command(node, info);
 	else
 		prase_tokens(node, info, env);
+	if (flag)
+		free_components(node);
 }

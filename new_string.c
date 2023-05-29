@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/27 23:45:17 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:59:50 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ char	*new_str(char *str, int count)
 		{
 			restring = handledoublearrow(str, i, restring, &j);
 			i += 2;
+			if (str[i] == ' ')
+				i += 1;
 		}
 		else
 			restring[j++] = str[i++];

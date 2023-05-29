@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 22:47:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 22:19:39 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/28 14:06:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	initialize_environment(t_env **env, t_info **info, char **envp)
 		perror("");
 		exit(1);
 	}
+	(*info)->status_code = 0;
 }
 
 void	start_proccesing(char *input, t_info *info, t_env *env)
@@ -42,9 +43,11 @@ void	start_proccesing(char *input, t_info *info, t_env *env)
 		splitting = ft_split(input, ';');
 		while (splitting[i])
 		{
-			process_input(input, env, info);
+			process_input(splitting[i], env, info);
 			i++;
 		}
+		free_things(splitting);
+		add_history(input);
 	}
 	else
 		process_input(input, env, info);
@@ -60,6 +63,7 @@ void	process_input_loop(t_env *env, t_info *info)
 		input = get_input();
 		start_proccesing(input, info, env);
 		free(input);
+		input = NULL;
 	}
 }
 

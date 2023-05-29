@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 15:34:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:34:54 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ typedef struct s_info
 	char				*type;
 	char				*token;
 	char				**spliting;
+	char				*temp;
+	int					*id;
+	int					fd_in;
+	int					fd_out;
 }						t_info;
 
 typedef struct s_last_file

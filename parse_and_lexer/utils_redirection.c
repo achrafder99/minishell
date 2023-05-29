@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_redirection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:47:05 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:09:53 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:35:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	handle_append(t_command **command, int *fd, t_components *node)
 	close(*fd);
 	free((*command)->last_out);
 	free((*command)->out_type);
-	(*command)->last_out = ft_strdup(node->next->token);
-	(*command)->out_type = ft_strdup(node->type.type);
+	(*command)->last_out = cut_string(node->next->token);
+	(*command)->out_type = cut_string(node->type.type);
 }
 
 void	handle_redirect(t_command **command,
@@ -43,8 +43,8 @@ void	handle_redirect(t_command **command,
 	{
 		free((*command)->last_in);
 		free((*command)->in_type);
-		(*command)->last_in = ft_strdup(node->next->token);
-		(*command)->in_type = ft_strdup(node->type.type);
+		(*command)->last_in = cut_string(node->next->token);
+		(*command)->in_type = cut_string(node->type.type);
 		if (open_in(*command) == 1)
 		{
 			info->status_code = 1;
@@ -55,8 +55,8 @@ void	handle_redirect(t_command **command,
 	{
 		free((*command)->last_out);
 		free((*command)->out_type);
-		(*command)->last_out = ft_strdup(node->next->token);
-		(*command)->out_type = ft_strdup(node->type.type);
+		(*command)->last_out = cut_string(node->next->token);
+		(*command)->out_type = cut_string(node->type.type);
 		*fd = open((*command)->last_out, O_RDONLY | O_CREAT, 0777);
 		close(*fd);
 	}

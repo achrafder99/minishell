@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:11:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:29:09 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:28:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ void	check_command_not_found(int flag, t_info *info, t_env *env,
 {
 	if (!flag && !check_command(cmd_name, env))
 	{
-		printf("minishell: %s: No such file or directory\n", cmd_name);
+		write(2, "tsh: ", 6);
+		write(2, cmd_name, ft_strlen(cmd_name));
+		write(2, ": ", 3);
+		write(2, "command not found\n", 19);
 		info->status_code = 127;
 		exit(127);
 	}

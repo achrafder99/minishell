@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 23:25:10 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 23:50:23 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,17 @@ void	open_her(t_components *tokens, t_info *info)
 			break ;
 		}
 		else if (!ft_strcmp(line, deli))
-		{
-			free(line);
-			break ;
-		}
+			return (free(line), (void)close(fd));
 		free(line);
 	}
+	close (fd);
 }
 
 void	without_command(t_components *node, t_info *info)
 {
 	t_components	*tokens;
 	int				fd;
+	char			*clear_file_name;
 
 	tokens = node;
 	while (tokens != NULL)
@@ -56,12 +55,14 @@ void	without_command(t_components *node, t_info *info)
 			|| !ft_strcmp(tokens->type.type, "REDIRECT_out")
 			|| !ft_strcmp(tokens->type.type, "REDIRECT_in"))
 		{
-			info->status_code = open_fds(tokens->type.type, tokens->next->token,
+			clear_file_name = cut_string(tokens->next->token);
+			info->status_code = open_fds(tokens->type.type, clear_file_name,
 					&fd);
 			close(fd);
+			free(clear_file_name);
 		}
-		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && g_heredoc_flag !=
-				-1)
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") \
+		&& g_heredoc_flag != -1)
 			open_her(tokens, info);
 		tokens = tokens->next;
 	}
@@ -99,21 +100,25 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 {
 	t_components	*node;
 	int				exit_status;
+	int				flag;
 
 	node = tokens;
 	info->flags = 0;
+	flag = 0;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
-	{
-		info->status_code = exit_status;
 		return ;
-	}
 	if (check_is_command(node) && check_is_redirection(node->token))
+	{
+		flag = 1;
 		node = insert_command_at_front(tokens);
+	}
 	if (not_pipe(node))
 		node = insert_at_position(node);
 	if (!check_is_command(node) && check_is_redirection(node->token))
 		without_command(node, info);
 	else
 		prase_tokens(node, info, env);
+	if (flag)
+		free_components(node);
 }

@@ -1,42 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   join.c                                             :+:      :+:    :+:   */
+/*   check_open_heredocs.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 17:20:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/27 18:47:15 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/27 23:38:13 by adardour          #+#    #+#             */
+/*   Updated: 2023/05/27 23:57:20 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+int	check_open_heredocs(t_components *nodes)
 {
-	char	*ptr;
-	size_t	i;
-	size_t	j;
+	int				count;
+	t_components	*temp;
 
-	if (s2 == NULL)
-		return (ft_strdup(s1));
-	if (s1 == NULL)
-		return (ft_strdup(s2));
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	ptr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (ptr == NULL)
-		return (NULL);
-	i = -1;
-	j = 0;
-	while (s1[++i] != '\0')
-		ptr[i] = s1[i];
-	while (s2[j] != '\0')
+	temp = nodes;
+	count = 0;
+	while (temp)
 	{
-		ptr[i] = s2[j];
-		i++;
-		j++;
+		if (!ft_strcmp(temp->type.type, "HEREDOC"))
+			count++;
+		temp = temp->next;
 	}
-	ptr[i] = '\0';
-	return (ptr);
+	if (count >= 17)
+	{
+		write(2, "tsh: maximum here-document count exceeded\n", 43);
+		return (1);
+	}
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_string.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 22:59:12 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:02:43 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*allocation(char *str, int count)
 {
 	char	*restring;
 
-	restring = malloc(sizeof(char) * (strlen(str) + count + 1));
+	restring = malloc(sizeof(char) * (ft_strlen(str) + count + 1));
 	if (!restring)
 	{
 		perror("");
@@ -64,7 +64,8 @@ char	*handledoublearrow(char *str, int i, char *restring, int *j)
 	{
 		restring[(*j)++] = str[i++];
 		restring[(*j)++] = str[i++];
-		restring[*j] = ' ';
+		restring[(*j)++] = ' ';
+		restring[*j] = str[i++];
 	}
 	return (restring);
 }
@@ -78,7 +79,7 @@ char	*new_str(char *str, int count)
 	j = 0;
 	i = 0;
 	restring = allocation(str, count);
-	while ((size_t)i < ft_strlen(str))
+	while ((size_t)i < (ft_strlen(str) + count))
 	{
 		if (includes(str[i]) && str[i + 1] != '>' && str[i + 1] != '<')
 		{
@@ -90,6 +91,8 @@ char	*new_str(char *str, int count)
 		{
 			restring = handledoublearrow(str, i, restring, &j);
 			i += 2;
+			if (str[i] == ' ')
+				i += 1;
 		}
 		else
 			restring[j++] = str[i++];

@@ -3,32 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   delete_node_by_type.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/08 22:02:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:14:47 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	delete_node_by_type(t_components **head, char *type)
+t_components	*delete_node_by_type(t_components *head, int position)
 {
-	t_components	*prev;
 	t_components	*curr;
+	t_components	*temp;
+	t_components	*components;
+	int				current_pos;
 
-	prev = NULL;
-	curr = *head;
-	while (curr != NULL && strcmp(curr->type.type, type) != 0)
+	curr = head;
+	components = NULL;
+	current_pos = 0;
+	while (curr != NULL && current_pos != position)
 	{
-		prev = curr;
+		current_pos++;
 		curr = curr->next;
 	}
-	if (curr == NULL)
-		return ;
-	if (prev == NULL)
-		*head = curr->next;
-	else
-		prev->next = curr->next;
-	free(curr);
+	push(&components, curr->token, curr->type.type);
+	temp = head;
+	current_pos = 0;
+	while (temp != NULL)
+	{
+		if (current_pos != position)
+			push(&components, temp->token, temp->type.type);
+		current_pos++;
+		temp = temp->next;
+	}
+	return (components);
 }

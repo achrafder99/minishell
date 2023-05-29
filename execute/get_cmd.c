@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:17:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/04/09 05:17:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:35:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*get_cmd(char *command_name)
+char	*get_cmd(char *command_name, t_env *env, t_info *info)
 {
 	char	**spliting;
 	int		i;
@@ -21,7 +21,7 @@ char	*get_cmd(char *command_name)
 
 	if (ft_strchr(command_name, '/'))
 		return (command_name);
-	spliting = ft_split(getenv("PATH"), ':');
+	spliting = ft_split(extract_value(info, env, "PATH"), ':');
 	i = 0;
 	while (spliting[i] != NULL)
 	{

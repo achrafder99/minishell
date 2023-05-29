@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:33:23 by aalami            #+#    #+#             */
-/*   Updated: 2023/04/14 02:07:03 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/23 18:19:22 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@ static char	*is_positif(int c)
 		c = c / 10;
 		i--;
 	}
-	return (p);
-}
-
-static char	*is_zero(void)
-{
-	size_t	i;
-	char	*p;
-
-	i = 0;
-	p = (char *)malloc(sizeof(char) * 2);
-	if (!p)
-		return (NULL);
-	p[i] = '0';
-	p[i + 1] = '\0';
 	return (p);
 }
 
@@ -92,10 +78,7 @@ char	*ft_itoa(int c)
 		return (p);
 	}
 	else if (c == 0)
-	{
-		p = is_zero();
-		return (p);
-	}
+		return (ft_strdup("0"));
 	else
 	{
 		p = is_negatif(c);

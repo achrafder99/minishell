@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/24 14:56:25 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 23:06:41 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 	char		*data;
 	int			fd;
 
+	node = NULL;
 	fd = dup(STDIN_FILENO);
 	g_heredoc_flag = 1;
 	while (1)
@@ -36,20 +37,17 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 		data = readline(">");
 		if (!data || g_heredoc_flag == -1)
 		{
-			if (dup2(fd, STDIN_FILENO) == -1)
-				perror("dup");
+			dup2(fd, STDIN_FILENO);
 			info->status_code = 1;
 			break ;
 		}
 		if (ft_strcmp(data, tmp->delimit))
 			fill_last_heredoc(node, data, flag, data_lst);
 		else
-		{
-			free(data);
-			break ;
-		}
+			return (free(data), (void)close(fd));
 		free(data);
 	}
+	close (fd);
 }
 
 t_here_data	*open_heredoc(t_here_lst *list, t_info *info)

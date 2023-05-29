@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 18:03:57 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 23:38:18 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@
 # include <unistd.h>
 
 int					g_heredoc_flag;
-char				*ft_strjoin(char const *s1, char const *s2);
+
+char				*ft_strjoin(char *s1, char *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
 char				*ft_strchr(const char *s, int c);
@@ -41,7 +42,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
 void				lexer(char *input, t_components **head, t_info *info,
 						t_env *env);
-int					echo(t_command *cmd);
+int					echo(t_command *cmd, t_env *env, t_info *info);
 int					cd(t_command *cmd, t_env *env);
 int					pwd(void);
 int					get_size(t_components *tokens);
@@ -85,15 +86,16 @@ int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
 int					open_in(t_command *command);
 void				ft_lstadd_front(t_components **lst, t_components *new);
-void				delete_node_by_type(t_components **head, char *type);
+t_components		*delete_node_by_type(t_components *head, int position);
 char				*ft_strdup(const char *s1);
 int					match_regex(t_regex *regex, const char *input);
 t_regex				*compile_regex(const char *pattern);
 void				push_component(t_components **head, char **spliting, int *i,
 						t_info *info);
 void				lex_redirection(t_data *data);
-char				*get_cmd(char *command_name);
-int					redirection(t_command *cmd, t_here_data *data_lst);
+char				*get_cmd(char *command_name, t_env *env, t_info *info);
+int					redirection(t_command *cmd, t_here_data *data_lst,
+						t_info *info);
 void				handle_command(t_components *node, t_command **command,
 						t_info *info);
 void				handle_pipe(t_piped **pipe_line, t_command **command);
@@ -122,8 +124,8 @@ t_lst				*sort_env(char **env);
 unsigned long long	ft_atoi2(const char *str);
 int					ft_atoi(const char *str);
 char				*ft_itoa(int c);
-void				run_child(t_command *command, char **argv, t_env *env);
-
+void				run_child(t_command *command, char **argv, t_env *env,
+						t_info *info);
 void				first_step(t_command *command, t_info *info, int *flags,
 						t_env *env);
 char				**get_new_env(t_lst *env);
@@ -163,9 +165,7 @@ void				handler_heredoc(t_command **command, t_components *node);
 void				handle_append(t_command **command, int *fd,
 						t_components *node);
 void				handle_redirect(t_command **command,
-						t_components *node,
-						int *fd,
-						t_info *info);
+						t_components *node, int *fd, t_info *info);
 char				**found_args(t_components **node);
 void				free_heredoc(t_here_lst *lst_heredoc);
 void				free_pipe_line(t_piped *pipe_line);
@@ -200,10 +200,10 @@ void				fill_heredoc(t_heredoc *tmp, int *flag,
 void				handle_command_not_found(t_info *info, t_command *command,
 						int *flags);
 int					save_and_redirect(t_command *command, int *save_in,
-						int *save_out);
+						int *save_out, t_info *info);
 void				free_execution_args(char **argv, t_env *env);
 void				reset_std_in_out(t_command *command, int save_in,
-						int save_out);
+						int save_out, t_info *info);
 int					check_rederict_in(t_command *cmd);
 int					check_rederict_out(t_command *cmd);
 int					save_heredoc_data(t_here_data *data_lst);
@@ -226,15 +226,20 @@ int					check_empty_command(char *command, t_info *info, int *flag);
 void				hanlde_quite(int signal);
 int					open_pipe(t_components **head, t_info *info);
 int					check_command_pipe(t_components **head);
-int					check_number_forks(t_components *node);
 void				remove_empty_command(t_components **components);
 void				fill(char **str, int i, char **tokens);
 char				**allocate_tokens(char *str);
 int					count_length_token(char *str);
+char				*proccess(t_env *env, t_info *info, char *ss1);
 void				handle_env_not_found(t_lst *env_lst);
 void				handle_exp_not_found(t_lst *env_lst);
 char				**creat_basic_env(void);
 void				update_oldpwd(t_lst *lst);
 void				update_pwd(t_lst *lst);
 void				update_dir(t_env *env, int flag);
+char				*extract_value(t_info *info, t_env *env, char *token);
+int					check_open_heredocs(t_components *nodes);
+int					fork_id(int *id, int i, t_info *info);
+void				wait_for_last_cmd(int i, t_piped *piping, int **fd,
+						t_info *info);
 #endif

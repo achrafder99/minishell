@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:14:31 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/23 21:32:10 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 16:57:09 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	check_for_heredoc(t_command *command, t_info *info)
 {
-	if (!ft_strcmp(command->name, "<<"))
+	if (!ft_strcmp(command->name, "<<") || !ft_strcmp(command->name, ">>")
+		|| !ft_strcmp(command->name, ">") || !ft_strcmp(command->name, "<"))
 	{
 		info->flags = 1;
 		info->status_code = 0;
@@ -32,9 +33,9 @@ void	complete_pipes_ex(int flag, t_command *command, t_info *info,
 		exit(info->status_code);
 }
 
-void	wait_for_last_exit(int id, int **fd, t_info *info,
-		t_command *command)
+void	wait_for_last_exit(int id, int **fd, t_info *info, t_command *command)
 {
+	(void)command;
 	close_pipes(fd);
 	wait_for_exit_state(id, info);
 }
@@ -50,4 +51,16 @@ int	*allocate_for_ids(t_piped *piping)
 		exit(1);
 	}
 	return (id);
+}
+
+int	fork_id(int *id, int i, t_info *info)
+{
+	id[i] = fork();
+	if (id[i] == -1)
+	{
+		perror("");
+		info->status_code = 1;
+		return (1);
+	}
+	return (0);
 }

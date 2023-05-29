@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 21:12:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 23:33:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	if (check_is_built_in(cmd->name) || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, argv, env);
+	run_child(cmd, argv, env, info);
 }
 
 void	wait_for_exit_state(int id, t_info *info)
@@ -41,10 +41,9 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		int **fd)
 {
 	int	i;
-	int	*id;
 
 	i = -1;
-	id = allocate_for_ids(piping);
+	info->id = allocate_for_ids(piping);
 	while (++i < piping->number_of_commands)
 	{
 		info->flags = 0;
@@ -53,18 +52,18 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		check_for_heredoc(&piping->command[i], info);
 		if (g_heredoc_flag == -1)
 			break ;
-		id[i] = fork();
-		if (id[i] == 0)
+		if (fork_id(info->id, i, info))
+			break ;
+		else if (info->id[i] == 0)
 		{
 			check_command_not_found(info->flags, info, env,
 				piping->command[i].name);
 			duplicate_read_write(i, fd, info->flags);
 			complete_pipes_ex(info->flags, &piping->command[i], info, env);
 		}
-		if (i + 1 == piping->number_of_commands)
-			wait_for_last_exit(id[i], fd, info, &piping->command[i]);
+		wait_for_last_cmd(i, piping, fd, info);
 	}
-	free(id);
+	free(info->id);
 }
 
 void	free_pipes(int **fd, t_piped *piping)
@@ -84,6 +83,7 @@ void	free_pipes(int **fd, t_piped *piping)
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	**fd;
+	int	fd1;
 
 	fd = creat_pipes(piping);
 	open_pipes(piping, fd);
@@ -91,6 +91,12 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	close_pipes(fd);
 	while (waitpid(-1, NULL, 0) > 0)
 		;
-	unlink(".heredoc");
+	fd1 = open(".heredoc", O_RDWR);
+	if (fd1 != -1)
+	{
+		if (unlink(".heredoc") == -1)
+			perror("unlink");
+		close (fd1);
+	}
 	free_pipes(fd, piping);
 }

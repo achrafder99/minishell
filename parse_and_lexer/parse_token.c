@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:29:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:08:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:19:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_components	*insert_command_at_front(t_components *tokens)
 	t_components	*temp;
 	t_components	*check_command;
 	int				flag;
+	int				position;
 
 	flag = 0;
 	temp = NULL;
@@ -44,14 +45,13 @@ t_components	*insert_command_at_front(t_components *tokens)
 		return (NULL);
 	}
 	goal = tokens;
+	position = 0;
 	while (goal != NULL && ft_strcmp(goal->type.type, "COMMAND") != 0)
-		goal = goal->next;
-	if (goal != NULL)
 	{
-		temp = goal;
-		delete_node_by_type(&tokens, "COMMAND");
-		ft_lstadd_front(&tokens, temp);
+		goal = goal->next;
+		position++;
 	}
+	tokens = delete_node_by_type(tokens, position);
 	return (tokens);
 }
 

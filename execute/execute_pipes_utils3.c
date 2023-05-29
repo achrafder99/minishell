@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_number_of_forks.c                            :+:      :+:    :+:   */
+/*   execute_pipes_utils3.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/22 00:31:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 13:24:49 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/29 16:39:42 by aalami            #+#    #+#             */
+/*   Updated: 2023/05/29 16:56:51 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_number_forks(t_components *node)
+void	wait_for_last_cmd(int i, t_piped *piping, int **fd, t_info *info)
 {
-	t_components	*proccess;
-	int				proc;
-
-	proccess = node;
-	proc = 0;
-	while (proccess)
-	{
-		if (!ft_strcmp(proccess->type.type, "PIPE"))
-			proc++;
-		proccess = proccess->next;
-	}
-	return (proc);
+	if (i + 1 == piping->number_of_commands)
+		wait_for_last_exit(info->id[i], fd, info, &piping->command[i]);
 }

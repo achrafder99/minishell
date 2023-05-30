@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/25 22:34:35 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:49:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,12 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 	flags = 0;
 	fid = 0;
 	if (command->heredoc_lst)
+	{
+		info->env = env;
 		command->data_lst = open_heredoc(command->heredoc_lst, info);
+	}
 	if (check_empty_command(command->name, info, &flags) || \
-			g_heredoc_flag == -1)
+		g_heredoc_flag == -1)
 		return (free_execution_args(argv, env));
 	first_step(command, info, &flags, env);
 	if (check_is_built_in(command->name) || flags == 127)

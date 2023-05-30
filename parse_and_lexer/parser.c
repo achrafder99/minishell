@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/29 23:50:23 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 21:50:47 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	open_her(t_components *tokens, t_info *info)
 		line = readline("> ");
 		if (!line || g_heredoc_flag == -1)
 		{
-			if (dup2(fd, STDIN_FILENO) == -1)
-				perror("dup");
+			if (g_heredoc_flag == -1)
+				if (dup2(fd, STDIN_FILENO) == -1)
+					perror("dup");
 			info->status_code = 1;
 			break ;
 		}

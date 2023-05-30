@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/29 23:33:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:43:46 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		if (!ft_strlen(piping->command[i].name))
 			continue ;
 		check_for_heredoc(&piping->command[i], info);
-		if (g_heredoc_flag == -1)
-			break ;
-		if (fork_id(info->id, i, info))
+		if (g_heredoc_flag == -1 || fork_id(info->id, i, info))
 			break ;
 		else if (info->id[i] == 0)
 		{
@@ -61,7 +59,8 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 			duplicate_read_write(i, fd, info->flags);
 			complete_pipes_ex(info->flags, &piping->command[i], info, env);
 		}
-		wait_for_last_cmd(i, piping, fd, info);
+		if (i + 1 == piping->number_of_commands)
+			wait_for_last_exit(info->id[i], fd, info, &piping->command[i]);
 	}
 	free(info->id);
 }
@@ -83,7 +82,6 @@ void	free_pipes(int **fd, t_piped *piping)
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	**fd;
-	int	fd1;
 
 	fd = creat_pipes(piping);
 	open_pipes(piping, fd);
@@ -91,12 +89,6 @@ void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 	close_pipes(fd);
 	while (waitpid(-1, NULL, 0) > 0)
 		;
-	fd1 = open(".heredoc", O_RDWR);
-	if (fd1 != -1)
-	{
-		if (unlink(".heredoc") == -1)
-			perror("unlink");
-		close (fd1);
-	}
+	unlink(".heredoc");
 	free_pipes(fd, piping);
 }

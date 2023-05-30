@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/29 23:38:18 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:22:27 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 int					g_heredoc_flag;
 
@@ -62,7 +63,7 @@ char				*new_str(char *str, int count);
 int					includes(char car);
 int					handle_errors(t_components *tokens);
 void				free_things(char **spliting);
-int					check_command(char *command, t_env *env);
+int					check_command(char *command, t_env *env, t_info *info);
 void				execute_pipe(t_piped *pipe, t_info *info, t_env *env);
 int					check_is_space(char *input);
 int					check_quotes(char *input);

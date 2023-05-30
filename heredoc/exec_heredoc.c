@@ -6,11 +6,24 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/29 23:06:41 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 21:47:53 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*extra_in_heredoc(char *data, t_info *info)
+{
+	char	*extract_value;
+
+	extract_value = extract(data, info->env, info);
+	free(data);
+	if (extract_value == NULL)
+		data = ft_strdup("");
+	else
+		data = extract_value;
+	return (data);
+}
 
 void	fill_last_heredoc(t_here_node *node, char *data, int *flag,
 		t_here_data *data_lst)
@@ -37,7 +50,9 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 		data = readline(">");
 		if (!data || g_heredoc_flag == -1)
 		{
-			dup2(fd, STDIN_FILENO);
+			if (g_heredoc_flag == -1)
+				if (dup2(fd, STDIN_FILENO) == -1)
+					perror("dup2");
 			info->status_code = 1;
 			break ;
 		}

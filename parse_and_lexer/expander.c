@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/29 23:16:13 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 21:35:59 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
 		&& (components->token[1] == '\''
 			&& components->token[ft_strlen(components->token) - 2] == '\''))
 		push(components1, components->token, components->type.type);
-	if (components->token[0] != '\''
+	else if (components->token[0] != '\''
 		&& components->token[ft_strlen(components->token) - 1] != '\'')
 	{
 		temp = extract(components->token, env, info);
@@ -88,6 +88,6 @@ void	expander(t_components *node,
 			dont_expand(components, &components1);
 		components = components->next;
 	}
-	return (remove_empty_command(&components1), parser(components1, info, env),
+	return (parser(components1, info, env),
 		free_components(components1));
 }

@@ -6,7 +6,7 @@
 #    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/05/29 16:42:53 by aalami           ###   ########.fr        #
+#    Updated: 2023/05/30 20:29:48 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ includes.c \
 ./parse_and_lexer/split_input.c ./parse_and_lexer/push_component.c ./parse_and_lexer/lex_redirection.c \
 ./parse_and_lexer/open_fd.c ./parse_and_lexer/regex.c ./parse_and_lexer/handle_command.c \
 ./parse_and_lexer/expander.c ./parse_and_lexer/extract.c ./parse_and_lexer/extract_utils.c \
-./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c ./parse_and_lexer/get_command.c \
+./parse_and_lexer/handle_pipe.c ./parse_and_lexer/parse_token.c \
 ./parse_and_lexer/found_args.c ./parse_and_lexer/utils_redirection.c ./parse_and_lexer/open_fds.c \
 ./built_in/echo.c ./built_in/pwd.c ./built_in/cd.c ./built_in/exit.c ./built_in/env_utils.c ./built_in/export.c ./built_in/ft_env.c ./built_in/unset.c ./built_in/export_utils.c ./built_in/export_utils2.c ./built_in/env_utils2.c ./built_in/env_utils3.c ./built_in/cd_utils.c\
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/get_cmd.c \

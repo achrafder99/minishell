@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 21:48:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 00:02:43 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:16:36 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ char	*new_str(char *str, int count)
 	while ((size_t)i < (ft_strlen(str) + count))
 	{
 		if (includes(str[i]) && str[i + 1] != '>' && str[i + 1] != '<')
-		{
-			restring = handleincludes(str, i, restring, &j);
-			i++;
-		}
+			restring = handleincludes(str, i++, restring, &j);
 		else if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i
 					+ 1] == '<'))
 		{

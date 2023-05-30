@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/24 01:00:48 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 20:52:40 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_components(t_components *head)
 		free(current->token);
 		free(current->type.type);
 		free(current);
-		current = next;
+		current = current->next;
 	}
 }
 

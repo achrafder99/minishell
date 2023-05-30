@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:11:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/29 20:28:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:12:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	close_pipes(int **fd)
 void	check_command_not_found(int flag, t_info *info, t_env *env,
 		char *cmd_name)
 {
-	if (!flag && !check_command(cmd_name, env))
+	if (!flag && !check_command(cmd_name, env, info))
 	{
 		write(2, "tsh: ", 6);
 		write(2, cmd_name, ft_strlen(cmd_name));

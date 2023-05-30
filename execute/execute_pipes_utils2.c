@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:14:31 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/26 19:21:01 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:44:58 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	complete_pipes_ex(int flag, t_command *command, t_info *info,
 {
 	if (!flag)
 		exec_pipe_commande(command, info, env);
-	if (flag || check_is_built_in(command->name))
+	if (flag || check_is_built_in(command->name) || info->status_code == 126)
 		exit(info->status_code);
 }
 

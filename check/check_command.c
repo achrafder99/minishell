@@ -6,11 +6,23 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 12:40:48 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:04:56 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	check_is_dir(char *command)
+{
+	struct stat	filestat;
+
+	if (stat(command, &filestat) == 0)
+	{
+		if (S_ISDIR(filestat.st_mode))
+			return (1);
+	}
+	return (0);
+}
 
 int	from_path(char *path, char *command)
 {
@@ -65,11 +77,13 @@ int	check_path(char *path, char *command)
 	return (0);
 }
 
-int	check_command(char *command, t_env *env)
+int	check_command(char *command, t_env *env, t_info *info)
 {
 	char	*path;
 
 	path = get_path(env->env);
+	if (check_is_dir(command) && ft_strchr(command, '/'))
+		return (info->status_code = 126);
 	if (ft_strstr(command, "./") == NULL)
 	{
 		if (!path && !check_is_built_in(command))

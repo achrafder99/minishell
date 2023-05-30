@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/28 19:08:29 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:04:12 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,22 @@
 
 void	handle_command_not_found(t_info *info, t_command *command, int *flags)
 {
-	write(2, "tsh: ", 6);
-	write(2, command->name, ft_strlen(command->name));
-	write(2, ": ", 3);
-	write(2, "command not found\n", 19);
-	info->status_code = 127;
-	*flags = 127;
+	if (info->status_code == 126)
+	{
+		write(2, "tsh: ", 6);
+		write(2, command->name, ft_strlen(command->name));
+		write(2, ": ", 3);
+		write(2, "is a directory\n", 16);
+	}
+	else
+	{
+		write(2, "tsh: ", 6);
+		write(2, command->name, ft_strlen(command->name));
+		write(2, ": ", 3);
+		write(2, "command not found\n", 19);
+		info->status_code = 127;
+		*flags = 127;
+	}
 }
 
 int	check_empty_command(char *command, t_info *info, int *flag)
@@ -40,7 +50,7 @@ void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
 	int	redirect;
 
 	redirect = 0;
-	if (!check_command(command->name, env))
+	if (!check_command(command->name, env, info) || check_command(command->name, env, info) == 126)
 		return (handle_command_not_found(info, command, flags));
 	save_in = -1;
 	save_out = -1;

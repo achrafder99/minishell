@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 13:25:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:35:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
 	else if (components->token[0] != '\''
 		&& components->token[ft_strlen(components->token) - 1] != '\'')
 	{
-		printf("ddd\n");
 		temp = extract(components->token, env, info);
 		if (temp != NULL)
 		{

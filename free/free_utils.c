@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 20:52:40 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 00:19:18 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_components(t_components *head)
 	t_components	*current;
 	t_components	*next;
 
+	if (head == NULL)
+		return ;
 	current = head;
 	while (current != NULL)
 	{
@@ -26,6 +28,7 @@ void	free_components(t_components *head)
 		free(current);
 		current = current->next;
 	}
+	current = NULL;
 }
 
 void	free_heredoc(t_here_lst *lst_heredoc)

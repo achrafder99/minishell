@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 17:43:46 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 00:34:27 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	free_pipes(int **fd, t_piped *piping)
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	**fd;
-
+	
 	fd = creat_pipes(piping);
 	open_pipes(piping, fd);
 	start_pipe_execution(piping, info, env, fd);

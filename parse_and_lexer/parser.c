@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 21:50:47 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 00:34:23 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,17 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
 		return ;
-	if (check_is_command(node) && check_is_redirection(node->token))
+	if (check_is_command(tokens) && check_is_redirection(tokens->token) && !not_pipe(tokens))
 	{
 		flag = 1;
 		node = insert_command_at_front(tokens);
 	}
-	if (not_pipe(node))
-		node = insert_at_position(node);
-	if (!check_is_command(node) && check_is_redirection(node->token))
+	if (not_pipe(tokens))
+		node = insert_at_position(tokens);
+	if (!check_is_command(tokens) && check_is_redirection(tokens->token))
 		without_command(node, info);
 	else
 		prase_tokens(node, info, env);
-	if (flag)
+	if (flag && node)
 		free_components(node);
 }

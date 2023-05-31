@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/31 00:34:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:51:39 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	open_her(t_components *tokens, t_info *info)
 			return (free(line), (void)close(fd));
 		free(line);
 	}
-	close (fd);
+	close(fd);
 }
 
 void	without_command(t_components *node, t_info *info)
@@ -62,8 +62,8 @@ void	without_command(t_components *node, t_info *info)
 			close(fd);
 			free(clear_file_name);
 		}
-		else if (!ft_strcmp(tokens->type.type, "HEREDOC") \
-		&& g_heredoc_flag != -1)
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && g_heredoc_flag != \
+			-1)
 			open_her(tokens, info);
 		tokens = tokens->next;
 	}
@@ -109,7 +109,8 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
 		return ;
-	if (check_is_command(tokens) && check_is_redirection(tokens->token) && !not_pipe(tokens))
+	if (check_is_command(tokens) && check_is_redirection(tokens->token)
+		&& !not_pipe(tokens))
 	{
 		flag = 1;
 		node = insert_command_at_front(tokens);

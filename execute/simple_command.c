@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/30 21:15:21 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 00:53:27 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,30 @@ void	wait_for_child(t_info *info, int fid, char **argv, t_env *env)
 
 void	simple_command(t_command *command, t_info *info, t_env *env)
 {
+	char	**argv;
 	int		fid;
 	int		flags;
 
-	info->spliting = get_argv(command, command->argc);
+	argv = get_argv(command, command->argc);
 	flags = 0;
 	fid = 0;
-	info->env = env;
 	if (command->heredoc_lst)
+	{
+		info->env = env;
 		command->data_lst = open_heredoc(command->heredoc_lst, info);
+	}
 	if (check_empty_command(command->name, info, &flags) || \
 		g_heredoc_flag == -1)
-		return (free_execution_args(info->spliting, env));
+		return (free_execution_args(argv, env));
 	first_step(command, info, &flags, env);
-	if (check_is_built_in(command->name) || flags == 127
-		|| info->status_code == 126)
-		return (free_execution_args(info->spliting, env));
+	if (check_is_built_in(command->name) || flags == 127 || info->status_code)
+		return (free_execution_args(argv, env));
 	if (env->env->top)
 		env->env_arr = get_new_env(env->env);
 	fid = fork();
 	if (fid == 0)
-		run_child(command, info->spliting, env, info);
+		run_child(command, argv, env, info);
 	else
-		wait_for_child(info, fid, info->spliting, env);
-	if (command->data_lst && unlink(".heredoc") == -1)
-		perror("unlink");
+		wait_for_child(info, fid, argv, env);
+	unlink(".heredoc");
 }

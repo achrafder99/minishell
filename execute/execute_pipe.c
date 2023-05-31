@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/31 00:34:27 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:46:02 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 	int	i;
 
 	i = -1;
+	info->env = env;
 	info->id = allocate_for_ids(piping);
 	while (++i < piping->number_of_commands)
 	{
@@ -82,7 +83,7 @@ void	free_pipes(int **fd, t_piped *piping)
 void	execute_pipe(t_piped *piping, t_info *info, t_env *env)
 {
 	int	**fd;
-	
+
 	fd = creat_pipes(piping);
 	open_pipes(piping, fd);
 	start_pipe_execution(piping, info, env, fd);

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 15:15:41 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 23:46:31 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct s_info
 	char				*type;
 	char				*token;
 	char				**spliting;
+	char				**args;
 	char				*temp;
 	int					*id;
 	int					fd_in;

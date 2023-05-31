@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:12:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/31 00:53:27 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 01:03:05 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,4 @@ void	simple_command(t_command *command, t_info *info, t_env *env)
 		run_child(command, argv, env, info);
 	else
 		wait_for_child(info, fid, argv, env);
-	unlink(".heredoc");
 }

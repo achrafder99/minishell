@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/31 00:51:55 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/31 01:09:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	close_things(t_info *info, int fd, char *data)
+{
+	if (!data || g_heredoc_flag == -1)
+	{
+		if (g_heredoc_flag == -1)
+			dup2(fd, STDIN_FILENO);
+		info->status_code = 1;
+		return (1);
+	}
+	return (0);
+}
 
 char	*extra_in_heredoc(char *data, t_info *info)
 {
@@ -48,13 +60,8 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 	while (1)
 	{
 		data = readline(">");
-		if (!data || g_heredoc_flag == -1)
-		{
-			if (g_heredoc_flag == -1)
-				dup2(fd, STDIN_FILENO);
-			info->status_code = 1;
+		if (close_things(info, fd, data))
 			break ;
-		}
 		if (ft_strcmp(data, tmp->delimit))
 		{
 			if (ft_strchr(data, '$'))

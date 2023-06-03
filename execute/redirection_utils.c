@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:42:46 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/25 18:34:12 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/29 20:54:30 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	save_heredoc_data(t_here_data *data_lst)
 	fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
 	if (fd == -1)
 	{
-		unlink (".heredoc");
+		if (unlink (".heredoc") == -1)
+			perror("unlink");
 		fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
 	}
 	if (fd == -1)

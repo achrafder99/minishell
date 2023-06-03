@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/29 21:34:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 22:30:52 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,26 @@ char	*get_val(char *string, t_info *info, t_env *env)
 	free(key);
 	key = NULL;
 	return (value_env);
+}
+
+int	validate_echo_option(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[i] != '-')
+		return (0);
+	else if (arg[i] == '-' && arg[i + 1] == '\0')
+		return (0);
+	else
+		i++;
+	while (arg[i] != '\0')
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 char	*get_env_val(char *string, t_info *info, t_env *env)
@@ -69,7 +89,7 @@ int	echo(t_command *cmd, t_env *env, t_info *info)
 	flags = 0;
 	if (cmd->argc == 0)
 		return (write(1, "\n", 1), 1);
-	while (cmd->args[++i] != NULL && !ft_strcmp(cmd->args[i], "-n"))
+	while (cmd->args[++i] != NULL && validate_echo_option(cmd->args[i]))
 		flags = 1;
 	while (cmd->args[i] != NULL)
 	{
@@ -77,11 +97,10 @@ int	echo(t_command *cmd, t_env *env, t_info *info)
 			- 1] == '\'' && ft_strchr(cmd->args[i], '$'))
 			cmd->args[i] = get_env_val(cmd->args[i], info, env);
 		if (cmd->args[i][0] != '.')
-		{
 			write(1, cmd->args[i], ft_strlen(cmd->args[i]));
-			write(1, " ", 1);
-		}
 		i++;
+		if (cmd->args[i] != NULL)
+			write(1, " ", 1);
 	}
 	if (!flags)
 		write(1, "\n", 1);

@@ -6,11 +6,39 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 15:35:36 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:06:53 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	removeemptynodes(t_components **head)
+{
+	char			*type;
+	t_components	*temp;
+
+	if (ft_strlen((*head)->token) != 0)
+		return ;
+	type = ft_strdup((*head)->type.type);
+	while (*head != NULL)
+	{
+		if (ft_strlen((*head)->token) != 0)
+			break ;
+		temp = *head;
+		free(temp->token);
+		free(temp->type.type);
+		free(temp);
+		*head = (*head)->next;
+	}
+	if (*head)
+	{
+		free((*head)->type.type);
+		(*head)->type.type = ft_strdup(type);
+		free(type);
+	}
+	else
+		free(type);
+}
 
 void	dont_expand(t_components *components, t_components **components1)
 {
@@ -78,8 +106,8 @@ void	expander(t_components *node,
 	{
 		if (ft_strchr(components->token, '*')
 			&& check_is_matched(components->token))
-			extract_matched_file(components->token, components->type.type, \
-		&components1);
+			extract_matched_file(components->token, components->type.type,
+				&components1);
 		else if (ft_strchr(components->token, '$')
 			&& ft_strcmp(components->type.type, "END_HEREDOC")
 			&& ft_strcmp(components->token, "$"))
@@ -88,6 +116,5 @@ void	expander(t_components *node,
 			dont_expand(components, &components1);
 		components = components->next;
 	}
-	return (remove_empty_command(&components1), parser(components1, info, env),
-		free_components(components1));
+	return (removeemptynodes(&components1), parser(components1, info, env));
 }

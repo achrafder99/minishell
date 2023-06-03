@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:47:05 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/28 01:17:28 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:26:28 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	handle_redirect(t_command **command,
 		(*command)->last_out = cut_string(node->next->token);
 		(*command)->out_type = cut_string(node->type.type);
 		*fd = open((*command)->last_out, O_RDONLY | O_CREAT, 0777);
+		if (*fd == -1)
+			perror("");
 		close(*fd);
 	}
 }

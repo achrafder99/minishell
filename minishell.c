@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 23:39:47 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/29 22:59:10 by aalami            #+#    #+#             */
+/*   Updated: 2023/06/02 21:09:48 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,20 +61,4 @@ char	*get_input(void)
 	input = readline(full_username);
 	free(full_username);
 	return (input);
-}
-
-void	process_input(char *input, t_env *env, t_info *info)
-{
-	t_components	*head;
-
-	if (input == NULL)
-	{
-		write(1, " exit\n", 6);
-		return ;
-	}
-	if (ft_strlen(input) == 0)
-		return ;
-	add_history(input);
-	head = NULL;
-	lexer(input, &head, info, env);
 }

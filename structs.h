@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:34:29 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 12:48:48 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/30 23:46:31 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ typedef struct s_env
 	t_lst				*env;
 	char				**env_arr;
 }						t_env;
-
 typedef struct s_info
 {
 	char				*pwd;
@@ -125,8 +124,11 @@ typedef struct s_info
 	char				*type;
 	char				*token;
 	char				**spliting;
+	char				**args;
 	char				*temp;
+	int					*id;
+	int					fd_in;
+	int					fd_out;
 	t_env				*env;
-}						t_info;
-
+}					t_info;
 #endif

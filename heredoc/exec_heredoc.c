@@ -6,16 +6,28 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 18:52:17 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/30 13:32:27 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 01:09:17 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*extra_in_heredoc(char *data,t_info *info)
+int	close_things(t_info *info, int fd, char *data)
+{
+	if (!data || g_heredoc_flag == -1)
+	{
+		if (g_heredoc_flag == -1)
+			dup2(fd, STDIN_FILENO);
+		info->status_code = 1;
+		return (1);
+	}
+	return (0);
+}
+
+char	*extra_in_heredoc(char *data, t_info *info)
 {
 	char	*extract_value;
-	
+
 	extract_value = extract(data, info->env, info);
 	free(data);
 	if (extract_value == NULL)
@@ -48,20 +60,19 @@ void	fill_heredoc(t_heredoc *tmp, int *flag, t_here_data *data_lst,
 	while (1)
 	{
 		data = readline(">");
-		if (ft_strchr(data, '$'))
-			data = extra_in_heredoc(data, info);
-		if (!data || g_heredoc_flag == -1)
-		{
-			dup2(fd, STDIN_FILENO);
-			info->status_code = 1;
+		if (close_things(info, fd, data))
 			break ;
-		}
 		if (ft_strcmp(data, tmp->delimit))
+		{
+			if (ft_strchr(data, '$'))
+				data = extra_in_heredoc(data, info);
 			fill_last_heredoc(node, data, flag, data_lst);
+		}
 		else
-			return (free(data));
+			return (free(data), (void)close(fd));
 		free(data);
 	}
+	close(fd);
 }
 
 t_here_data	*open_heredoc(t_here_lst *list, t_info *info)

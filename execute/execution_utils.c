@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/30 17:04:12 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 18:28:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 void	handle_command_not_found(t_info *info, t_command *command, int *flags)
 {
-	if (info->status_code == 126)
+	if (check_is_dir(command->name))
 	{
 		write(2, "tsh: ", 6);
 		write(2, command->name, ft_strlen(command->name));
 		write(2, ": ", 3);
 		write(2, "is a directory\n", 16);
+		info->status_code = 126;
+		*flags = 126;
 	}
 	else
 	{
@@ -44,13 +46,13 @@ int	check_empty_command(char *command, t_info *info, int *flag)
 }
 
 void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
-{	
+{
 	int	save_in;
 	int	save_out;
 	int	redirect;
 
 	redirect = 0;
-	if (!check_command(command->name, env, info) || check_command(command->name, env, info) == 126)
+	if (!check_command(command->name, env, info))
 		return (handle_command_not_found(info, command, flags));
 	save_in = -1;
 	save_out = -1;
@@ -59,13 +61,13 @@ void	first_step(t_command *command, t_info *info, int *flags, t_env *env)
 	if (check_is_built_in(command->name))
 	{
 		if (*flags)
-			redirect = save_and_redirect(command, &save_in, &save_out);
+			redirect = save_and_redirect(command, &save_in, &save_out, info);
 		if (redirect != -1)
 			execute_built_in(command, info, env);
 		if (save_in != -1 || save_out != -1)
-			reset_std_in_out(command, save_in, save_out);
-		if (command->data_lst)
-			unlink(".heredoc");
+			reset_std_in_out(command, save_in, save_out, info);
+		if (command->data_lst && unlink(".heredoc") == -1)
+			perror("unlink");
 	}
 	if (redirect == -1)
 		info->status_code = 1;
@@ -76,7 +78,7 @@ void	run_child(t_command *command, char **argv, t_env *env, t_info *info)
 	char	*cmd;
 	int		redirect;
 
-	redirect = redirection(command, command->data_lst);
+	redirect = redirection(command, command->data_lst, info);
 	cmd = get_cmd(command->name, env, info);
 	if (redirect != -1)
 		execve(cmd, argv, env->env_arr);

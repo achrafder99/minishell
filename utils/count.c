@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   count.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 16:28:19 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 18:38:04 by aalami           ###   ########.fr       */
+/*   Created: 2023/06/02 17:18:52 by adardour          #+#    #+#             */
+/*   Updated: 2023/06/02 17:25:26 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	pwd(void)
+int	count(char *str)
 {
-	char	*pwd;
+	int	i;
+	int	count;
 
-	pwd = malloc(MAX_PATH_LENGTH);
-	if (pwd == NULL)
-		return (1);
-	if (getcwd(pwd, MAX_PATH_LENGTH) == NULL)
+	i = 0;
+	count = 0;
+	while (str[i])
 	{
-		perror("getcwd");
-		free (pwd);
-		return (1);
+		if (str[i] == '$' && str[i + 1] == '?')
+			count += 2;
+		i++;
 	}
-	write(1, pwd, ft_strlen(pwd));
-	write(1, "\n", 1);
-	free(pwd);
-	return (0);
+	return (count);
 }

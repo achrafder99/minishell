@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:11 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/25 22:16:57 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 22:17:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	execute_built_in(t_command *cmd, t_info *info, t_env *env)
 	else if (!ft_strcmp(cmd->name, "exit"))
 	{
 		info->status_code = exit_shell(cmd);
-		exit(info->status_code);
+		if (info->status_code != 1)
+			exit(info->status_code);
 	}
 	return (1);
 }

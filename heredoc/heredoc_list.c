@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 14:17:35 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 20:15:53 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:29:38 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_heredoc	*new_heredoc(char *heredoc, char *delimit)
 	if (!(node))
 		return (0);
 	node->heredoc = ft_strdup(heredoc);
-	node->delimit = ft_strdup(delimit);
+	node->delimit = cut_string(delimit);
 	node->next = NULL;
 	return (node);
 }

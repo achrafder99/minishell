@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 15:36:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:29:22 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@ void	open_her(t_components *tokens, t_info *info)
 		line = readline("> ");
 		if (!line || g_heredoc_flag == -1)
 		{
-			if (dup2(fd, STDIN_FILENO) == -1)
-				perror("dup");
+			if (g_heredoc_flag == -1)
+				if (dup2(fd, STDIN_FILENO) == -1)
+					perror("dup");
 			info->status_code = 1;
 			break ;
 		}
 		else if (!ft_strcmp(line, deli))
-			return (free(line));
+			return (free(line), (void)close(fd));
 		free(line);
 	}
+	close(fd);
 }
 
 void	without_command(t_components *node, t_info *info)
@@ -97,27 +99,27 @@ void	prase_tokens(t_components *node, t_info *info, t_env *env)
 
 void	parser(t_components *tokens, t_info *info, t_env *env)
 {
-	t_components	*node;
-	int				exit_status;
-	int				flag;
+	int	exit_status;
+	int	flag;
 
-	node = tokens;
 	info->flags = 0;
 	flag = 0;
+	if (!tokens)
+		return ;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
-		return ;
-	if (check_is_command(node) && check_is_redirection(node->token))
 	{
-		flag = 1;
-		node = insert_command_at_front(tokens);
+		free_components(tokens);
+		return ;
 	}
-	if (not_pipe(node))
-		node = insert_at_position(node);
-	if (!check_is_command(node) && check_is_redirection(node->token))
-		without_command(node, info);
+	if (check_is_command(tokens) && check_is_redirection(tokens->token))
+		insert_command_at_front(&tokens);
+	if (not_pipe(tokens))
+		tokens = insert_at_position(tokens);
+	if (!check_is_command(tokens) && check_is_redirection(tokens->token))
+		without_command(tokens, info);
 	else
-		prase_tokens(node, info, env);
-	if (flag)
-		free_components(node);
+		prase_tokens(tokens, info, env);
+	free_components(tokens);
+	unlink(".heredoc");
 }

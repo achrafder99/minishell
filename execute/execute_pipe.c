@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/30 16:52:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:37:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,19 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		int **fd)
 {
 	int	i;
-	int	*id;
 
 	i = -1;
-	id = allocate_for_ids(piping);
+	info->env = env;
+	info->id = allocate_for_ids(piping);
 	while (++i < piping->number_of_commands)
 	{
 		info->flags = 0;
 		if (!ft_strlen(piping->command[i].name))
 			continue ;
 		check_for_heredoc(&piping->command[i], info);
-		if (g_heredoc_flag == -1)
+		if (g_heredoc_flag == -1 || fork_id(info->id, i, info))
 			break ;
-		id[i] = fork();
-		if (id[i] == -1)
-		{
-			perror("");
-			info->status_code = 1;
-			return ;
-		}
-		else if (id[i] == 0)
+		else if (info->id[i] == 0)
 		{
 			check_command_not_found(info->flags, info, env,
 				piping->command[i].name);
@@ -68,9 +61,9 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 			complete_pipes_ex(info->flags, &piping->command[i], info, env);
 		}
 		if (i + 1 == piping->number_of_commands)
-			wait_for_last_exit(id[i], fd, info, &piping->command[i]);
+			wait_for_last_exit(info->id[i], fd, info, &piping->command[i]);
 	}
-	free(id);
+	free(info->id);
 }
 
 void	free_pipes(int **fd, t_piped *piping)

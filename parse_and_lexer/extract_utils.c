@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 12:42:59 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/27 19:27:02 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 20:31:47 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,17 @@ char	*proccess2(char *token, t_info *info, t_env *env)
 	char	*temp;
 
 	temp = NULL;
-	if (ft_strlen(token) != ft_strcspn(token, " \""))
+	if (ft_strlen(token) != ft_strcspn(token, " \"/"))
 	{
-		substr = malloc(sizeof(char) * (ft_strcspn(token, " \"") + 1));
+		substr = malloc(sizeof(char) * (ft_strcspn(token, " \"/") + 1));
 		if (!substr)
 		{
 			perror("");
 			exit(1);
 		}
-		ft_strncpy(substr, token, ft_strcspn(token, " \""));
+		ft_strncpy(substr, token, ft_strcspn(token, " \"/"));
 		concat = extract_value(info, env, substr);
-		temp = ft_strjoin(concat, token + ft_strcspn(token, " \""));
+		temp = ft_strjoin(concat, token + ft_strcspn(token, " \"/"));
 		free1(substr, concat);
 		return (temp);
 	}

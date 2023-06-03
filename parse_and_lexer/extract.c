@@ -6,20 +6,33 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:43:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/27 22:39:39 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 18:31:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	add_exit_status(char *status_exit, int *i, int *j, char *string)
+{
+	size_t	index;
+
+	index = 0;
+	while (index < ft_strlen(status_exit))
+	{
+		string[(*i)++] = status_exit[index];
+		index++;
+	}
+	(*j) += 2;
+}
+
 char	*end(char *result, char *concat, char *join, char *token)
-{			
-	if (result == NULL)
+{
+	if (result == NULL && !join)
 		concat = NULL;
 	else
 		concat = ft_strjoin(join, result);
 	if (!join)
-	{	
+	{
 		free(token);
 		token = NULL;
 		free(result);
@@ -41,49 +54,32 @@ char	*end(char *result, char *concat, char *join, char *token)
 	return (concat);
 }
 
-int	count(char *str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && str[i + 1] == '?')
-			count += 2;
-		i++;
-	}
-	return (count);
-}
-
 char	*get_exit_status(char *string, t_info *info)
 {
 	int		i;
 	int		length;
 	int		j;
 	char	*status_exit;
-	int		kkk;
+	char	*str;
 
 	status_exit = ft_itoa(info->status_code);
-	length = (ft_strlen(string) - count(string)) + ft_strlen(status_exit);
-	info->token = malloc(sizeof(char) * (length + 1));
+	length = (ft_strlen(string) - count(string)) + (ft_strlen(status_exit)
+			* count(string) / 2);
+	str = malloc(sizeof(char) * (length + 1));
 	i = 0;
 	j = 0;
-	while (i < length)
+	while (i < length && string[j] != '\0')
 	{
-		if (string[i] == '$' && string[i + 1] == '?')
-		{
-			kkk = 0;
-			while ((size_t)kkk < ft_strlen(status_exit))
-				info->token[i++] = status_exit[kkk++];
-			j += 2;
-		}
-		info->token[i++] = string[j++];
+		if (string[j] == '$' && string[j + 1] == '?')
+			add_exit_status(status_exit, &i, &j, str);
+		while (string[j] != '$' && string[j] != '\0')
+			str[i++] = string[j++];
+		if (string[j] == '$' && string[j + 1] != '?')
+			str[i++] = string[j++];
 	}
-	info->token[length] = '\0';
+	str[length] = '\0';
 	free(status_exit);
-	return (info->token);
+	return (str);
 }
 
 char	*until_dollar_sign(char *token)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:40:26 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/03 19:37:34 by aalami           ###   ########.fr       */
+/*   Updated: 2023/06/06 23:08:02 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	check_command(char *command, t_env *env, t_info *info)
 
 	(void)info;
 	path = get_path(env->env);
-	if (check_is_dir(command))
+	if (check_is_dir(command) || ft_strlen(command) == 0)
 		return (0);
 	if (ft_strstr(command, "./") == NULL)
 	{

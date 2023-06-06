@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 00:04:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/02 21:21:56 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 00:04:06 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	open_fds(const char *type, const char *filename, int *fd)
 	{
 		*fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		if (*fd == -1)
-			return (perror(""), -1);
+			return (perror(filename), -1);
 	}
 	else if (!ft_strcmp(type, "REDIRECT_in"))
 	{
@@ -31,7 +31,7 @@ int	open_fds(const char *type, const char *filename, int *fd)
 	{
 		*fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (*fd == -1)
-			return (perror(""), -1);
+			return (perror(filename), -1);
 	}
 	return (0);
 }

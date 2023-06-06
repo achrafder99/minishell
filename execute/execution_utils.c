@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:03:03 by aalami            #+#    #+#             */
-/*   Updated: 2023/06/04 22:02:58 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 00:00:00 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_command_not_found(t_info *info, t_command *command, int *flags)
 		write(2, "tsh: ", 6);
 		write(2, command->name, ft_strlen(command->name));
 		write(2, ": ", 3);
-		write(2, "is a directory\n", 16);
+		write(2, " directory\n", 16);
 		info->status_code = 126;
 		*flags = 126;
 	}

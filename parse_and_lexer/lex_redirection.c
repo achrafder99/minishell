@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 00:38:41 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/21 16:09:13 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:42:59 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	handle_heredoc(t_data *data)
 	{
 		push(head, spliting[1], "END_HEREDOC");
 		*i += 1;
-		if (spliting[2] != NULL && !check_is_redirection(spliting[2]))
+		if (spliting[2] != NULL && !check_is_redirection(spliting[2])
+			&& ft_strcmp(spliting[2], "|"))
 		{
 			push(head, spliting[2], "COMMAND");
 			*i += 1;
@@ -55,7 +56,8 @@ void	handle_redirect_out(t_data *data)
 	{
 		push(head, spliting[1], "FILENAME");
 		*i += 1;
-		if (spliting[2] != NULL && !check_is_redirection(spliting[2]))
+		if (spliting[2] != NULL && !check_is_redirection(spliting[2])
+			&& ft_strcmp(spliting[2], "|"))
 		{
 			push(head, spliting[2], "COMMAND");
 			*i += 1;
@@ -81,7 +83,8 @@ void	handle_redirect_in(t_data *data)
 	{
 		push(head, spliting[1], "FILENAME");
 		*i += 1;
-		if (spliting[2] != NULL && !check_is_redirection(spliting[2]))
+		if (spliting[2] != NULL && !check_is_redirection(spliting[2])
+			&& ft_strcmp(spliting[2], "|"))
 		{
 			push(head, spliting[2], "COMMAND");
 			*i += 1;
@@ -107,7 +110,8 @@ void	handle_append_mode(t_data *data)
 	{
 		push(head, spliting[1], "FILENAME");
 		*i += 1;
-		if (spliting[2] != NULL && !check_is_redirection(spliting[2]))
+		if (spliting[2] != NULL && !check_is_redirection(spliting[2])
+			&& ft_strcmp(spliting[2], "|"))
 		{
 			push(head, spliting[2], "COMMAND");
 			*i += 1;

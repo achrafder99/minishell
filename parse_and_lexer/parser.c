@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/06 20:05:45 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 00:06:38 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 
 	info->flags = 0;
 	flag = 0;
-	if (!tokens)
+	if (tokens == NULL)
 		return ;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)

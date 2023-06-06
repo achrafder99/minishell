@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:49:16 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/06 20:11:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:22:39 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	count_args(t_components **node)
 	temp = *node;
 	while (temp && ft_strcmp(temp->type.type, "PIPE"))
 	{
-		if (ft_strlen(temp->token) > 0 && (!ft_strcmp(temp->type.type, "OPTION")
+		if ((!ft_strcmp(temp->type.type, "OPTION")
 				|| !ft_strcmp(temp->type.type, "ARG")))
 			number_of_args++;
 		temp = temp->next;
@@ -56,15 +56,17 @@ char	**found_args(t_components **node)
 	i = 0;
 	while (i < number_of_args && temp && ft_strcmp(temp->type.type, "PIPE"))
 	{
-		if (ft_strlen(temp->token) > 0 && (!ft_strcmp(temp->type.type, "OPTION")
+		if ((!ft_strcmp(temp->type.type, "OPTION")
 				|| !ft_strcmp(temp->type.type, "ARG")))
 		{
 			temp_string = cut_string(temp->token);
-			args[i] = temp_string;
+			if (ft_strlen(temp_string) == 0)
+				args[i] = ft_strdup(" ");
+			else
+				args[i] = temp_string;
 			i++;
 		}
 		temp = temp->next;
 	}
-	args[i] = NULL;
-	return (args);
+	return (args[i] = NULL, args);
 }

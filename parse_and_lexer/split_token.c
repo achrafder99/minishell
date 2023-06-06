@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:17:54 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:44:19 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:37:18 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
 
 #include "../minishell.h"
 
-char	**allocate_tokens(char *str)
+char	**allocate_tokens(char *str, int del)
 {
 	char	**tokens;
 
-	tokens = (char **)malloc(sizeof(char *) * count_token(str) + 1);
+	tokens = (char **)malloc(sizeof(char *) * count_token(str, del) + 1);
 	if (!tokens)
 	{
 		perror("");

@@ -6,64 +6,73 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 21:04:05 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 20:05:45 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	open_her(t_components *tokens)
+void	open_her(t_components *tokens, t_info *info)
 {
 	int		fd;
 	char	*line;
 	char	*deli;
 
-	deli = tokens->next->token;
-	fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
+	deli = cut_string(tokens->next->token);
+	fd = dup(STDIN_FILENO);
 	if (fd == -1)
-		return (perror(""), exit(0));
+		return (perror("dup"));
+	g_heredoc_flag = 1;
 	while (1)
 	{
 		line = readline("> ");
-		if (line != NULL)
+		if (!line || g_heredoc_flag == -1)
 		{
-			if (!strncmp(line, deli, ft_strlen(deli)))
-				break ;
-			write(fd, line, ft_strlen(line));
-		}
-		else
+			if (g_heredoc_flag == -1)
+				if (dup2(fd, STDIN_FILENO) == -1)
+					perror("dup");
+			info->status_code = 1;
 			break ;
+		}
+		else if (!ft_strcmp(line, deli))
+			return (free(line), (void)close(fd), free(deli));
 		free(line);
-		line = NULL;
 	}
+	return ((void)close(fd), free (deli));
 }
 
 void	without_command(t_components *node, t_info *info)
 {
 	t_components	*tokens;
 	int				fd;
+	char			*clear_file_name;
 
 	tokens = node;
 	while (tokens != NULL)
 	{
 		if (tokens->next == NULL)
 			break ;
-		if (ft_strcmp(tokens->type.type, "HEREDOC"))
+		if (!ft_strcmp(tokens->type.type, "APPEND_MODE")
+			|| !ft_strcmp(tokens->type.type, "REDIRECT_out")
+			|| !ft_strcmp(tokens->type.type, "REDIRECT_in"))
 		{
-			info->status_code = open_fds(tokens->type.type, tokens->next->token,
+			clear_file_name = cut_string(tokens->next->token);
+			info->status_code = open_fds(tokens->type.type, clear_file_name,
 					&fd);
 			close(fd);
+			free(clear_file_name);
 		}
-		else
-			open_her(tokens);
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && g_heredoc_flag != \
+			-1)
+			open_her(tokens, info);
 		tokens = tokens->next;
 	}
 }
 
 void	prase_tokens(t_components *node, t_info *info, t_env *env)
 {
-	t_command	*command;
-	t_piped		*pipe_line;
+	t_command		*command;
+	t_piped			*pipe_line;
 
 	command = NULL;
 	pipe_line = NULL;
@@ -90,23 +99,27 @@ void	prase_tokens(t_components *node, t_info *info, t_env *env)
 
 void	parser(t_components *tokens, t_info *info, t_env *env)
 {
-	t_components	*node;
-	int				exit_status;
+	int	exit_status;
+	int	flag;
 
-	node = tokens;
 	info->flags = 0;
+	flag = 0;
+	if (!tokens)
+		return ;
 	exit_status = handle_errors(tokens);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
 	{
-		info->status_code = exit_status;
+		free_components(tokens);
 		return ;
 	}
-	if (check_is_command(node) && check_is_redirection(node->token))
-		node = insert_command_at_front(tokens);
-	if (not_pipe(node))
-		node = insert_at_position(node);
-	if (!check_is_command(node) && check_is_redirection(node->token))
-		without_command(node, info);
+	if (check_is_command(tokens) && check_is_redirection(tokens->token))
+		insert_command_at_front(&tokens);
+	if (not_pipe(tokens))
+		tokens = insert_at_position(tokens);
+	if (!check_is_command(tokens) && check_is_redirection(tokens->token))
+		without_command(tokens, info);
 	else
-		prase_tokens(node, info, env);
+		prase_tokens(tokens, info, env);
+	free_components(tokens);
+	unlink(".heredoc");
 }

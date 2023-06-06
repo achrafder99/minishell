@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 21:57:39 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 00:39:18 by aalami           ###   ########.fr       */
+/*   Updated: 2023/05/25 17:58:04 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	*update_shell_level(char *value)
 	if (number > 999)
 	{
 		new_value = ft_strdup("1");
-		printf("minishell: warning: shell level");
-		printf("(%d) too high,resetting to 1\n", number + 1);
+		ft_putstr_fd("minishell: warning: shell level too high", 2);
+		ft_putstr_fd(",resetting to 1\n", 2);
 	}
 	else if (number == 999)
 		new_value = ft_strdup("0");

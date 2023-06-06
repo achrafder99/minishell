@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 14:39:00 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 19:47:19 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
-char				*ft_strjoin(char const *s1, char const *s2);
+int					g_heredoc_flag;
+
+char				*ft_strjoin(char *s1, char *s2);
 int					ft_strcmp(const char *s1, const char *s2);
 char				**ft_split(char const *s, char c);
 char				*ft_strchr(const char *s, int c);
@@ -40,7 +43,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 void				push(t_components **head, char *command, char *type);
 void				lexer(char *input, t_components **head, t_info *info,
 						t_env *env);
-int					echo(t_command *cmd);
+int					echo(t_command *cmd, t_env *env, t_info *info);
 int					cd(t_command *cmd, t_env *env);
 int					pwd(void);
 int					get_size(t_components *tokens);
@@ -60,7 +63,7 @@ char				*new_str(char *str, int count);
 int					includes(char car);
 int					handle_errors(t_components *tokens);
 void				free_things(char **spliting);
-int					check_command(char *command, t_env *env);
+int					check_command(char *command, t_env *env, t_info *info);
 void				execute_pipe(t_piped *pipe, t_info *info, t_env *env);
 int					check_is_space(char *input);
 int					check_quotes(char *input);
@@ -83,22 +86,23 @@ void				piped(t_piped *pipe_line, t_command *command, t_info *info,
 int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
 int					open_in(t_command *command);
-void				ft_lstadd_front(t_components **lst, t_components *new);
-void				delete_node_by_type(t_components **head, char *type);
+void				addnodetofront(t_components **head, \
+					char *token, char *type);
 char				*ft_strdup(const char *s1);
 int					match_regex(t_regex *regex, const char *input);
 t_regex				*compile_regex(const char *pattern);
 void				push_component(t_components **head, char **spliting, int *i,
 						t_info *info);
 void				lex_redirection(t_data *data);
-char				*get_cmd(char *command_name);
-int					redirection(t_command *cmd, t_here_data *data_lst);
+char				*get_cmd(char *command_name, t_env *env, t_info *info);
+int					redirection(t_command *cmd, t_here_data *data_lst,
+						t_info *info);
 void				handle_command(t_components *node, t_command **command,
 						t_info *info);
 void				handle_pipe(t_piped **pipe_line, t_command **command);
 void				display_error(char *cut_str, t_command *command);
 char				**split_input(char *input);
-int					check_if_qouted(char *string);
+int					check_if_qouted(t_components *node);
 int					check_is_command(t_components *tokens);
 int					is_wildcard(char **argv);
 int					match_file(char *pattern);
@@ -121,8 +125,8 @@ t_lst				*sort_env(char **env);
 unsigned long long	ft_atoi2(const char *str);
 int					ft_atoi(const char *str);
 char				*ft_itoa(int c);
-void				run_child(t_command *command, char **argv, t_env *env);
-
+void				run_child(t_command *command, char **argv, t_env *env,
+						t_info *info);
 void				first_step(t_command *command, t_info *info, int *flags,
 						t_env *env);
 char				**get_new_env(t_lst *env);
@@ -140,31 +144,28 @@ t_here_lst			*creat_heredoc_list(void);
 void				ft_add_heredoc(t_here_lst *lst, t_heredoc *new);
 t_heredoc			*last_heredoc(t_here_lst *lst);
 t_heredoc			*new_heredoc(char *heredoc, char *delimit);
-t_here_data			*open_heredoc(t_here_lst *list);
+t_here_data			*open_heredoc(t_here_lst *list, t_info *info);
 int					ft_isdigit(int c);
 void				free_command(t_command *command);
 void				free_data(t_here_data *data);
 int					main(int argc, char **argv, char **envp);
 void				interrupt_handler(int signal);
-void				process_input(char *input, t_env *env, t_info *info);
 char				*get_input(void);
-char				**split_token(char *str);
-int					count_token(char *str);
+char				**split_token(char *str, int del);
+int					count_token(char *str, int del);
 void				free_components(t_components *head);
 void				extract_matched_file(char *pattern, char *type,
 						t_components **components1);
 int					check_is_matched(char *pattern);
 t_components		*insert_at_position(t_components *node);
 void				without_command(t_components *node, t_info *info);
-t_components		*insert_command_at_front(t_components *tokens);
+void				insert_command_at_front(t_components **tokens);
 int					not_pipe(t_components *node);
 void				handler_heredoc(t_command **command, t_components *node);
 void				handle_append(t_command **command, int *fd,
 						t_components *node);
 void				handle_redirect(t_command **command,
-						t_components *node,
-						int *fd,
-						t_info *info);
+						t_components *node, int *fd, t_info *info);
 char				**found_args(t_components **node);
 void				free_heredoc(t_here_lst *lst_heredoc);
 void				free_pipe_line(t_piped *pipe_line);
@@ -172,9 +173,7 @@ int					open_fds(const char *type, const char *filename, int *fd);
 size_t				ft_strcspn(const char *s1, const char *charset);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 void				process_push_redirection(char **spliting,
-						t_components **head,
-						int i,
-						t_info *info);
+						t_components **head, int i, t_info *info);
 void				process_push_command(char **spliting, t_components **head,
 						int i, t_info *infmao);
 int					if_key_exist(char *key, t_lst *lst);
@@ -186,7 +185,7 @@ int					process_key_and_value(t_env *env, char **arg, char **split,
 						int i);
 void				add_key_with_value(t_lst *lst, char *str, char **split);
 void				add_key_with_no_value(t_lst *lst, char **split);
-void				add_key(t_lst *exp, char *str);
+void				add_key(t_env *env, char *str);
 void				append_value(t_lst *lst, char *str, char **split);
 int					if_valid_identifier(char **arg, t_env *env);
 char				*update_shell_level(char *value);
@@ -197,14 +196,14 @@ t_here_node			*new_here_node(char *data);
 void				ft_add_here_data(t_here_data *lst, t_here_node *new);
 t_here_data			*creat_heredoc_data_list(void);
 void				fill_heredoc(t_heredoc *tmp, int *flag,
-						t_here_data *data_lst);
+						t_here_data *data_lst, t_info *info);
 void				handle_command_not_found(t_info *info, t_command *command,
 						int *flags);
 int					save_and_redirect(t_command *command, int *save_in,
-						int *save_out);
+						int *save_out, t_info *info);
 void				free_execution_args(char **argv, t_env *env);
 void				reset_std_in_out(t_command *command, int save_in,
-						int save_out);
+						int save_out, t_info *info);
 int					check_rederict_in(t_command *cmd);
 int					check_rederict_out(t_command *cmd);
 int					save_heredoc_data(t_here_data *data_lst);
@@ -217,7 +216,7 @@ void				duplicate_read_write(int i, int **fd, int flag);
 void				check_for_heredoc(t_command *command, t_info *info);
 void				complete_pipes_ex(int flag, t_command *command,
 						t_info *info, t_env *env);
-void				process_buit_in_pipes(int id, int **fd, t_info *info,
+void				wait_for_last_exit(int id, int **fd, t_info *info,
 						t_command *command);
 int					*allocate_for_ids(t_piped *piping);
 void				exec_pipe_commande(t_command *cmd, t_info *info,
@@ -227,10 +226,22 @@ int					check_empty_command(char *command, t_info *info, int *flag);
 void				hanlde_quite(int signal);
 int					open_pipe(t_components **head, t_info *info);
 int					check_command_pipe(t_components **head);
-int					check_number_forks(t_components *node);
 void				remove_empty_command(t_components **components);
 void				fill(char **str, int i, char **tokens);
-char				**allocate_tokens(char *str);
+char				**allocate_tokens(char *str, int del);
 int					count_length_token(char *str);
-char				*proccess(char *token, t_env *env, t_info *info, char *ss1);
+char				*proccess(t_env *env, t_info *info, char *ss1);
+void				handle_env_not_found(t_lst *env_lst);
+void				handle_exp_not_found(t_lst *env_lst);
+char				**creat_basic_env(void);
+void				update_oldpwd(t_lst *lst);
+void				update_pwd(t_lst *lst);
+void				update_dir(t_env *env, int flag);
+char				*extract_value(t_info *info, t_env *env, char *token);
+int					check_open_heredocs(t_components *nodes);
+int					fork_id(int *id, int i, t_info *info);
+void				wait_for_last_cmd(int i, t_piped *piping, int **fd,
+						t_info *info);
+int					count(char *str);
+int					check_is_dir(char *command);
 #endif

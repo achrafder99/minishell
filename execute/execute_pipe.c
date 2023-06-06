@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:59:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 00:26:51 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/04 22:46:40 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	exec_pipe_commande(t_command *cmd, t_info *info, t_env *env)
 	if (check_is_built_in(cmd->name) || flags == 127)
 		return ;
 	env->env_arr = get_new_env(env->env);
-	run_child(cmd, argv, env);
+	run_child(cmd, argv, env, info);
 }
 
 void	wait_for_exit_state(int id, t_info *info)
@@ -41,30 +41,29 @@ void	start_pipe_execution(t_piped *piping, t_info *info, t_env *env,
 		int **fd)
 {
 	int	i;
-	int	*id;
 
 	i = -1;
-	id = allocate_for_ids(piping);
+	info->env = env;
+	info->id = allocate_for_ids(piping);
 	while (++i < piping->number_of_commands)
 	{
 		info->flags = 0;
-		if (ft_strlen(piping->command[i].name))
+		if (!ft_strlen(piping->command[i].name))
+			continue ;
+		check_for_heredoc(&piping->command[i], info);
+		if (g_heredoc_flag == -1 || fork_id(info->id, i, info))
+			break ;
+		else if (info->id[i] == 0)
 		{
-			check_for_heredoc(&piping->command[i], info);
-			id[i] = fork();
-			if (id[i] == 0)
-			{
-				check_command_not_found(info->flags, info, env,
-					piping->command[i].name);
-				duplicate_read_write(i, fd, info->flags);
-				complete_pipes_ex(info->flags, &piping->command[i], info, env);
-			}
-			if ((check_is_built_in(piping->command[i].name) || i
-					+ 1 == piping->number_of_commands))
-				process_buit_in_pipes(id[i], fd, info, &piping->command[i]);
+			check_command_not_found(info->flags, info, env,
+				piping->command[i].name);
+			duplicate_read_write(i, fd, info->flags);
+			complete_pipes_ex(info->flags, &piping->command[i], info, env);
 		}
+		if (i + 1 == piping->number_of_commands)
+			wait_for_last_exit(info->id[i], fd, info, &piping->command[i]);
 	}
-	free(id);
+	free(info->id);
 }
 
 void	free_pipes(int **fd, t_piped *piping)

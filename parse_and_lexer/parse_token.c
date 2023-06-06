@@ -6,11 +6,28 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:29:13 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:08:07 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:12:13 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	deleteposition(t_components **head, int n)
+{
+	t_components	*temp;
+	t_components	*previous;
+
+	temp = *head;
+	while (--n)
+	{
+		previous = temp;
+		temp = temp->next;
+	}
+	previous->next = temp->next;
+	free(temp->token);
+	free(temp->type.type);
+	free(temp);
+}
 
 int	has_command(t_components **tokens)
 {
@@ -26,37 +43,34 @@ int	has_command(t_components **tokens)
 	return (0);
 }
 
-t_components	*insert_command_at_front(t_components *tokens)
+void	insert_command_at_front(t_components **tokens)
 {
 	t_components	*goal;
+	char			*type;
+	char			*token;
 	t_components	*temp;
-	t_components	*check_command;
-	int				flag;
+	int				position;
 
-	flag = 0;
 	temp = NULL;
-	check_command = tokens;
-	if (!has_command(&check_command))
-		return (tokens);
-	if (tokens == NULL)
+	if (!has_command(tokens))
+		return ;
+	if (*tokens == NULL)
+		return ;
+	goal = *tokens;
+	position = 0;
+	while (goal != NULL && strcmp(goal->type.type, "COMMAND") != 0)
 	{
-		tokens = temp;
-		return (NULL);
-	}
-	goal = tokens;
-	while (goal != NULL && ft_strcmp(goal->type.type, "COMMAND") != 0)
 		goal = goal->next;
-	if (goal != NULL)
-	{
-		temp = goal;
-		delete_node_by_type(&tokens, "COMMAND");
-		ft_lstadd_front(&tokens, temp);
+		position++;
 	}
-	return (tokens);
+	token = ft_strdup(goal->token);
+	type = ft_strdup(goal->type.type);
+	deleteposition(tokens, position + 1);
+	addnodetofront(tokens, token, type);
 }
 
 void	update(t_components *pipe_node,
-		t_components *red_node)
+			t_components *red_node)
 {
 	t_components	*tempp;
 	t_components	*tempp2;

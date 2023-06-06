@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 06:48:18 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:10:42 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 20:17:29 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	get_size_of_args(char **argument)
 	int	size;
 
 	size = 0;
-	while (argument[size])
+	while (argument[size] && ft_strlen(argument[size]) > 0)
 		size++;
 	return (size);
 }
@@ -25,7 +25,6 @@ int	get_size_of_args(char **argument)
 void	handle_command(t_components *node, t_command **command, t_info *info)
 {
 	int			fd;
-
 	if (check_is_redirection(node->token) && !info->flags)
 	{
 		*command = init_command(*command, node->token);

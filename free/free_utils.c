@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:39:48 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 21:04:59 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:39:41 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_components(t_components *head)
 	t_components	*current;
 	t_components	*next;
 
+	if (head == NULL)
+		return ;
 	current = head;
 	while (current != NULL)
 	{
@@ -24,8 +26,9 @@ void	free_components(t_components *head)
 		free(current->token);
 		free(current->type.type);
 		free(current);
-		current = next;
+		current = current->next;
 	}
+	current = NULL;
 }
 
 void	free_heredoc(t_here_lst *lst_heredoc)
@@ -53,7 +56,8 @@ void	free_command(t_command *command)
 	if (command->heredoc_lst)
 	{
 		free_heredoc(command->heredoc_lst);
-		free_data(command->data_lst);
+		if (command->data_lst)
+			free_data(command->data_lst);
 	}
 	if (command->last_in && command->in_type)
 	{
@@ -67,6 +71,8 @@ void	free_command(t_command *command)
 	}
 	if (command->args != NULL)
 		free_things(command->args);
+	if (command->name)
+		free(command->name);
 	free(command);
 	command = NULL;
 }
@@ -76,7 +82,8 @@ void	free_all_data(t_piped *pipe_line, int i)
 	if (pipe_line->command[i].heredoc_lst)
 	{
 		free_heredoc(pipe_line->command[i].heredoc_lst);
-		free_data(pipe_line->command[i].data_lst);
+		if (pipe_line->command[i].data_lst)
+			free_data(pipe_line->command[i].data_lst);
 	}
 	if (pipe_line->command[i].last_in && pipe_line->command[i].in_type)
 	{
@@ -101,6 +108,7 @@ void	free_pipe_line(t_piped *pipe_line)
 		while (i < pipe_line->number_of_commands)
 		{
 			free_things(pipe_line->command[i].args);
+			free(pipe_line->command[i].name);
 			free_all_data(pipe_line, i);
 			i++;
 		}

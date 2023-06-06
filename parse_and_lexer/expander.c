@@ -6,14 +6,42 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 16:28:30 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 19:48:53 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	removeemptynodes(t_components **head)
+{
+	char			*type;
+	t_components	*temp;
+
+	if (ft_strlen((*head)->token) != 0)
+		return ;
+	type = ft_strdup((*head)->type.type);
+	while (*head != NULL)
+	{
+		if (ft_strlen((*head)->token) != 0)
+			break ;
+		temp = *head;
+		free(temp->token);
+		free(temp->type.type);
+		free(temp);
+		*head = (*head)->next;
+	}
+	if (*head)
+	{
+		free((*head)->type.type);
+		(*head)->type.type = ft_strdup(type);
+		free(type);
+	}
+	else
+		free(type);
+}
+
 void	dont_expand(t_components *components, t_components **components1)
-{	
+{
 	char	*token;
 
 	token = components->token;
@@ -26,7 +54,7 @@ void	split_value(t_components *components, char *temp,
 	char	**spliting;
 	int		i;
 
-	spliting = split_token(temp);
+	spliting = split_token(temp, ' ');
 	push(components1, spliting[0], components->type.type);
 	i = 1;
 	while (spliting[i])
@@ -41,16 +69,22 @@ void	extract_dollar_sign(t_components *components, t_env *env, t_info *info,
 		t_components **components1)
 {
 	char	*temp;
-	char	*trim;
 
-	if (components->token[0] != '\''
+	temp = NULL;
+	if (components->token[0] == '\"'
+		&& components->token[ft_strlen(components->token) - 1] == '\"'
+		&& (components->token[1] == '\''
+			&& components->token[ft_strlen(components->token) - 2] == '\''))
+		push(components1, components->token, components->type.type);
+	else if (components->token[0] != '\''
 		&& components->token[ft_strlen(components->token) - 1] != '\'')
 	{
 		temp = extract(components->token, env, info);
-		if (temp && ft_strlen(temp) > 0)
+		if (temp != NULL)
 		{
 			split_value(components, temp, components1);
 			free(temp);
+			temp = NULL;
 		}
 		else
 			push(components1, "", components->type.type);
@@ -66,8 +100,13 @@ void	expander(t_components *node,
 	t_components	*components;
 	t_components	*components1;
 
-	components1 = NULL;
+	if (!check_if_qouted(node))
+	{
+		write(2, "tsh : close qoutation \n", 24);
+		return ;
+	}
 	components = node;
+	components1 = NULL;
 	while (components != NULL)
 	{
 		if (ft_strchr(components->token, '*')
@@ -76,12 +115,11 @@ void	expander(t_components *node,
 				&components1);
 		else if (ft_strchr(components->token, '$')
 			&& ft_strcmp(components->type.type, "END_HEREDOC")
-			&& strcmp(components->token, "$"))
+			&& ft_strcmp(components->token, "$"))
 			extract_dollar_sign(components, env, info, &components1);
 		else
 			dont_expand(components, &components1);
 		components = components->next;
 	}
-	return (remove_empty_command(&components1), parser(components1, info, env),
-		free_node(components1));
+	return (removeemptynodes(&components1), parser(components1, info, env));
 }

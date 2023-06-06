@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 19:58:32 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/19 13:58:43 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/04 22:23:36 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,14 @@ char	**get_argv(t_command *command, int number_arg)
 	j = 0;
 	while (i <= number_arg)
 	{
-		argv[i] = ft_strdup(command->args[j]);
-		i++;
-		j++;
+		if (ft_strlen(command->args[j]))
+		{
+			argv[i] = ft_strdup(command->args[j]);
+			i++;
+			j++;
+		}
+		else
+			j++;
 	}
 	argv[full_size] = NULL;
 	return (argv);

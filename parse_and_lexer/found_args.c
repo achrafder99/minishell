@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:49:16 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 12:41:11 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/06 20:11:07 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	count_args(t_components **node)
 	temp = *node;
 	while (temp && ft_strcmp(temp->type.type, "PIPE"))
 	{
-		if (!ft_strcmp(temp->type.type, "OPTION") || !ft_strcmp(temp->type.type,
-				"ARG"))
+		if (ft_strlen(temp->token) > 0 && (!ft_strcmp(temp->type.type, "OPTION")
+				|| !ft_strcmp(temp->type.type, "ARG")))
 			number_of_args++;
 		temp = temp->next;
 	}
@@ -56,8 +56,8 @@ char	**found_args(t_components **node)
 	i = 0;
 	while (i < number_of_args && temp && ft_strcmp(temp->type.type, "PIPE"))
 	{
-		if (!ft_strcmp(temp->type.type, "OPTION") || !ft_strcmp(temp->type.type,
-				"ARG"))
+		if (ft_strlen(temp->token) > 0 && (!ft_strcmp(temp->type.type, "OPTION")
+				|| !ft_strcmp(temp->type.type, "ARG")))
 		{
 			temp_string = cut_string(temp->token);
 			args[i] = temp_string;

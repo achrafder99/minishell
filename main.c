@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 22:47:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/23 15:58:33 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:09:21 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,20 @@ void	initialize_environment(t_env **env, t_info **info, char **envp)
 
 void	start_proccesing(char *input, t_info *info, t_env *env)
 {
-	char	**splitting;
-	int		i;
+	t_components	*head;
 
 	if (input == NULL)
 		return (printf("exit\n"), exit(0));
-	if (ft_strchr(input, ';'))
+	if (input == NULL)
 	{
-		i = 0;
-		splitting = ft_split(input, ';');
-		while (splitting[i])
-		{
-			process_input(input, env, info);
-			i++;
-		}
+		write(1, " exit\n", 6);
+		return ;
 	}
-	else
-		process_input(input, env, info);
+	if (ft_strlen(input) == 0)
+		return ;
+	add_history(input);
+	head = NULL;
+	lexer(input, &head, info, env);
 }
 
 void	process_input_loop(t_env *env, t_info *info)
@@ -57,9 +54,11 @@ void	process_input_loop(t_env *env, t_info *info)
 
 	while (1)
 	{
+		g_heredoc_flag = 0;
 		input = get_input();
 		start_proccesing(input, info, env);
 		free(input);
+		input = NULL;
 	}
 }
 

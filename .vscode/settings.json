@@ -9,5 +9,10 @@
         "bitset": "c",
         "ostream": "c",
         "sstream": "c"
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#183043",
+        "titleBar.activeBackground": "#22435E",
+        "titleBar.activeForeground": "#FAFCFD"
     }
 }

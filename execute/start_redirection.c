@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_redirection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 05:20:50 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:27:37 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:13:08 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	redirect_out(t_command *cmd)
 {
 	int	fd;
+	int	new_fd;
 
 	fd = 1;
 	if (!ft_strcmp(cmd->out_type, "REDIRECT_out"))
@@ -23,24 +24,23 @@ int	redirect_out(t_command *cmd)
 		fd = open(cmd->last_out, O_CREAT | O_RDWR | O_APPEND, 0777);
 	if (fd == -1)
 	{
-		perror("error occurred");
+		perror("");
 		return (fd);
 	}
-	dup2(fd, STDOUT_FILENO);
+	new_fd = dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (fd);
 }
 
-void	complet_redirect_in(int fd)
+int	complet_redirect_in(int fd)
 {
-	if (fd == -1)
-		perror("error occurred");
-	dup2(fd, STDIN_FILENO);
+	return (dup2(fd, STDIN_FILENO));
 }
 
 int	redirect_in(t_command *cmd, t_here_data *data_lst)
 {
 	int	fd;
+	int	new_fd;
 
 	fd = 1;
 	if (!ft_strcmp(cmd->in_type, "REDIRECT_in"))
@@ -52,28 +52,26 @@ int	redirect_in(t_command *cmd, t_here_data *data_lst)
 	{
 		save_heredoc_data(data_lst);
 		fd = open(".heredoc", O_RDWR, 0777);
-		complet_redirect_in(fd);
+		new_fd = complet_redirect_in(fd);
 	}
 	if (fd != -1)
 		close(fd);
 	return (fd);
 }
 
-int	redirection(t_command *cmd, t_here_data *data_lst)
+int	redirection(t_command *cmd, t_here_data *data_lst, t_info *info)
 {
-	int			fd_in;
-	int			fd_out;
 	t_command	*l_fs;
 
 	l_fs = cmd;
-	fd_in = 0;
-	fd_out = 0;
+	info->fd_out = -2;
+	info->fd_in = -2;
 	if (check_rederict_out(cmd) && (!ft_strcmp(l_fs->out_type, "REDIRECT_out")
 			|| !ft_strcmp(l_fs->out_type, "APPEND_MODE")))
-		fd_out = redirect_out(l_fs);
+		info->fd_out = redirect_out(l_fs);
 	if (check_rederict_in(cmd))
-		fd_in = redirect_in(cmd, data_lst);
-	if (fd_in == -1 || fd_out == -1)
+		info->fd_in = redirect_in(cmd, data_lst);
+	if (info->fd_in == -1 || info->fd_out == -1)
 		return (-1);
 	return (0);
 }

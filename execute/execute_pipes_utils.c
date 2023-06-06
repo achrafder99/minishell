@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 17:11:11 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:29:09 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:10:34 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,12 @@ void	close_pipes(int **fd)
 void	check_command_not_found(int flag, t_info *info, t_env *env,
 		char *cmd_name)
 {
-	if (!flag && !check_command(cmd_name, env))
+	if (!flag && !check_command(cmd_name, env, info))
 	{
-		printf("minishell: %s: No such file or directory\n", cmd_name);
+		write(2, "tsh: ", 6);
+		write(2, cmd_name, ft_strlen(cmd_name));
+		write(2, ": ", 3);
+		write(2, "command not found\n", 19);
 		info->status_code = 127;
 		exit(127);
 	}

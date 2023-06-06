@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:12:24 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/20 23:12:23 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:37:17 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,25 @@ int	handle_single_arg(t_command *cmd)
 	}
 }
 
-int	handle_multiple_args(void)
+int	handle_multiple_args(t_command *cmd)
 {
-	write(2, "minishell: exit: too many arguments", 35);
-	write(2, "\n", 1);
-	return (1);
+	int	nbr;
+
+	nbr = ft_atoi2(cmd->args[0]);
+	if (!check_if_numeric_arg(cmd->args[0], nbr))
+	{
+		write(2, "minishell: exit: ", 17);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0]));
+		write(2, ": numeric argument required", 28);
+		write(2, "\n", 1);
+		return (255);
+	}	
+	else
+	{
+		write(2, "minishell: exit: too many arguments", 35);
+		write(2, "\n", 1);
+		return (1);
+	}
 }
 
 int	exit_shell(t_command *cmd)
@@ -75,7 +89,7 @@ int	exit_shell(t_command *cmd)
 	if (cmd->argc == 1)
 		return (handle_single_arg(cmd));
 	else if (cmd->argc > 1)
-		return (handle_multiple_args());
+		return (handle_multiple_args(cmd));
 	else
 		return (0);
 }

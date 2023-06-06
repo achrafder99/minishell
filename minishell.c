@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 15:52:42 by adardour          #+#    #+#             */
-/*   Updated: 2023/05/22 00:48:48 by adardour         ###   ########.fr       */
+/*   Created: 2023/05/29 22:59:10 by aalami            #+#    #+#             */
+/*   Updated: 2023/06/05 23:25:15 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,17 @@ void	interrupt_handler(int signal)
 {
 	if (signal == 3)
 		printf("");
-	else
+	else if (signal == 2 && !g_heredoc_flag)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+	}
+	else
+	{
+		g_heredoc_flag = -1;
+		close(STDIN_FILENO);
 	}
 }
 
@@ -33,12 +38,13 @@ char	*display_name(void)
 	username = getenv("USER");
 	if (username == NULL)
 	{
-		write(2, "Could not get username", ft_strlen("Could not get username"));
-		return (NULL);
+		username = ft_strdup("minishell");
+		display = ft_strjoin(username, "@:> ");
+		free(username);
 	}
-	display = ft_strjoin(username, "@:> ");
+	else
+		display = ft_strjoin(username, "@:> ");
 	return (display);
-	free(display);
 }
 
 char	*get_input(void)
@@ -54,20 +60,4 @@ char	*get_input(void)
 	input = readline(full_username);
 	free(full_username);
 	return (input);
-}
-
-void	process_input(char *input, t_env *env, t_info *info)
-{
-	t_components	*head;
-
-	if (input == NULL)
-	{
-		write(1, " exit\n", 6);
-		return ;
-	}
-	if (ft_strlen(input) == 0)
-		return ;
-	add_history(input);
-	head = NULL;
-	lexer(input, &head, info, env);
 }

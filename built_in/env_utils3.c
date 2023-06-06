@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:45:48 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:19:16 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:25:44 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,34 @@ char	**get_new_env(t_lst *env)
 	}
 	add_new_env_variables(env, new);
 	return (new);
+}
+
+char	**creat_basic_env(void)
+{
+	char	**env;
+	char	*wd;
+
+	env = (char **)malloc(sizeof(char *) * 5);
+	wd = malloc(sizeof(char) * MAX_PATH_LENGTH);
+	if (!env && !wd)
+		return (0);
+	wd = getcwd(wd, MAX_PATH_LENGTH);
+	env[0] = ft_strjoin("OLDPWD=", wd);
+	env[1] = ft_strjoin("PWD=", wd);
+	env[2] = ft_strdup("SHLVL=1");
+	env[3] = ft_strdup("_=/usr/bin/env");
+	env[4] = NULL;
+	free(wd);
+	return (env);
+}
+
+void	handle_env_not_found(t_lst *env_lst)
+{
+	char	**env;
+
+	env = creat_basic_env();
+	if (!env)
+		return ;
+	push_list(env_lst, env);
+	free_things(env);
 }

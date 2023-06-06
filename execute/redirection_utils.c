@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:42:46 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:26:54 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:54:30 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ int	save_heredoc_data(t_here_data *data_lst)
 	int			fd;
 
 	fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
+	if (fd == -1)
+	{
+		if (unlink (".heredoc") == -1)
+			perror("unlink");
+		fd = open(".heredoc", O_CREAT | O_RDWR, 0777);
+	}
 	if (fd == -1)
 		return (fd);
 	tmp = data_lst->top;

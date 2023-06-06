@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 00:04:05 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/20 23:17:39 by adardour         ###   ########.fr       */
+/*   Updated: 2023/05/25 18:03:20 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,15 @@ void	add_key_with_no_value(t_lst *lst, char **split)
 {
 	t_node	*new;
 	int		flag;
+	char	*tmp;
 
 	flag = 0;
 	if (ft_strchr(split[0], '+'))
 	{
+		tmp = split[0];
 		split[0] = ft_strtrim(split[0], "+");
 		flag = 1;
+		free (tmp);
 	}
 	if (if_key_exist(split[0], lst))
 		update_value(split, lst, NULL, flag);
@@ -52,20 +55,28 @@ void	add_key_with_no_value(t_lst *lst, char **split)
 	}
 }
 
-void	add_key(t_lst *exp, char *str)
+void	add_key(t_env *env, char *str)
 {
-	t_node	*new;
+	t_node	*new_exp;
+	t_node	*new_env;
 
-	if (!if_key_exist(str, exp))
+	if (!if_key_exist(str, env->exp))
 	{
-		new = ft_new_node(str, NULL);
-		ft_lstadd_back(exp, new);
+		new_exp = ft_new_node(str, NULL);
+		new_env = ft_new_node(str, NULL);
+		ft_lstadd_back(env->exp, new_exp);
+		ft_lstadd_back(env->env, new_env);
 	}
 }
 
 void	append_value(t_lst *lst, char *str, char **split)
 {
-	if (if_key_exist(ft_strtrim(split[0], "+"), lst))
+	char	*tmp;
+
+	tmp = ft_strtrim(split[0], "+");
+	if (!tmp)
+		return ;
+	if (if_key_exist(tmp, lst))
 		update_value(split, lst, str, 1);
 	else
 	{
@@ -74,6 +85,7 @@ void	append_value(t_lst *lst, char *str, char **split)
 		else
 			add_key_with_value(lst, str, split);
 	}
+	free (tmp);
 }
 
 int	if_valid_identifier(char **arg, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 04:41:37 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/06 23:01:22 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 13:21:41 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ t_command	*init_command(t_command *command, char *str)
 		exit(1);
 	}
 	cmd = cut_string(str);
-	command->name = ft_strdup(cmd);
+	if (ft_strlen(cmd) > 0)
+		command->name = ft_strdup(cmd);
+	else
+		command->name = ft_strdup(" ");
 	free(cmd);
 	cmd = NULL;
 	command->argc = 0;

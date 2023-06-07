@@ -6,11 +6,27 @@
 /*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 16:21:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/02 22:30:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 13:30:01 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	ft_put_echo(char *string)
+{
+	int	i;
+
+	i = 0;
+	while (string[i] != '\0')
+	{
+		if (string[i] == '\\')
+			i++;
+		write(1, &string[i], 1);
+		i++;
+		if (string[i] == '\0')
+			break ;
+	}
+}
 
 char	*get_val(char *string, t_info *info, t_env *env)
 {
@@ -97,7 +113,7 @@ int	echo(t_command *cmd, t_env *env, t_info *info)
 			- 1] == '\'' && ft_strchr(cmd->args[i], '$'))
 			cmd->args[i] = get_env_val(cmd->args[i], info, env);
 		if (cmd->args[i][0] != '.')
-			write(1, cmd->args[i], ft_strlen(cmd->args[i]));
+			ft_put_echo(cmd->args[i]);
 		i++;
 		if (cmd->args[i] != NULL)
 			write(1, " ", 1);

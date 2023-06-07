@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:53:31 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/07 01:36:33 by aalami           ###   ########.fr       */
+/*   Updated: 2023/06/07 13:06:14 by adardour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	dont_expand(t_components *components, t_components **components1)
 	}
 	else
 		push(components1, token, components->type.type);
-	if (components->next == NULL)
+	if (components->next == NULL || !ft_strcmp(token, "|"))
 		track = 0;
 }
 

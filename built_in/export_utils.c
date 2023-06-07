@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 23:57:16 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/25 18:01:51 by aalami           ###   ########.fr       */
+/*   Updated: 2023/06/07 01:37:55 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 	{
 		save = split[0];
 		split[0] = ft_strtrim(split[0], "+");
-		free (save);
+		free(save);
 	}
 	tmp = find_key_to_update(lst, split[0]);
 	save = tmp->value;
@@ -64,7 +64,7 @@ void	update_value(char **split, t_lst *lst, char *str, int flag)
 		tmp->value = ft_strdup(get_value(str));
 	else
 		tmp->value = ft_strdup("\0");
-	free (save);
+	free(save);
 }
 
 int	add_keys_and_values(t_env *env, char *arg, char **split, int i)
@@ -99,17 +99,26 @@ int	process_key_and_value(t_env *env, char **arg, char **split, int i)
 	int	j;
 	int	ret;
 
-	j = 0;
+	j = -1;
 	ret = 0;
-	while (arg[i][j])
+	while (arg[i][++j])
 	{
-		while ((arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122)
-			|| (arg[i][j] >= 65 && arg[i][j] <= 90))
-			j++;
+		if (arg[i][j] == 95)
+		{
+			while ((arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122)
+				|| (arg[i][j] >= 65 && arg[i][j] <= 90) || (arg[i][j] >= 48
+					&& arg[i][j] <= 57))
+				j++;
+		}
+		else
+		{
+			while ((arg[i][j] && arg[i][j] >= 95 && arg[i][j] <= 122)
+				|| (arg[i][j] >= 65 && arg[i][j] <= 90))
+				j++;
+		}
 		if (add_keys_and_values(env, arg[i], split, j))
 			ret = 1;
 		break ;
-		j++;
 	}
 	return (ret);
 }

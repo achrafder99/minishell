@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:37:53 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/07 00:06:38 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 01:35:39 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	open_her(t_components *tokens, t_info *info)
 			return (free(line), (void)close(fd), free(deli));
 		free(line);
 	}
-	return ((void)close(fd), free (deli));
+	return ((void)close(fd), free(deli));
 }
 
 void	without_command(t_components *node, t_info *info)
@@ -62,8 +62,8 @@ void	without_command(t_components *node, t_info *info)
 			close(fd);
 			free(clear_file_name);
 		}
-		else if (!ft_strcmp(tokens->type.type, "HEREDOC") && g_heredoc_flag != \
-			-1)
+		else if (!ft_strcmp(tokens->type.type, "HEREDOC") \
+		&& g_heredoc_flag != -1)
 			open_her(tokens, info);
 		tokens = tokens->next;
 	}
@@ -71,8 +71,8 @@ void	without_command(t_components *node, t_info *info)
 
 void	prase_tokens(t_components *node, t_info *info, t_env *env)
 {
-	t_command		*command;
-	t_piped			*pipe_line;
+	t_command	*command;
+	t_piped		*pipe_line;
 
 	command = NULL;
 	pipe_line = NULL;
@@ -106,10 +106,11 @@ void	parser(t_components *tokens, t_info *info, t_env *env)
 	flag = 0;
 	if (tokens == NULL)
 		return ;
-	exit_status = handle_errors(tokens);
+	exit_status = handle_errors(tokens, info);
 	if (ft_strcmp(tokens->token, "exit") && exit_status)
 	{
 		free_components(tokens);
+		info->status_code = exit_status;
 		return ;
 	}
 	if (check_is_command(tokens) && check_is_redirection(tokens->token))

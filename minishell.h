@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/06 19:47:19 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 01:49:32 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <sys/stat.h>
 
 int					g_heredoc_flag;
 
@@ -61,7 +61,7 @@ int					is_redirect(t_command *command);
 int					check_is_built_in(char *cmd);
 char				*new_str(char *str, int count);
 int					includes(char car);
-int					handle_errors(t_components *tokens);
+int					handle_errors(t_components *tokens, t_info *info);
 void				free_things(char **spliting);
 int					check_command(char *command, t_env *env, t_info *info);
 void				execute_pipe(t_piped *pipe, t_info *info, t_env *env);
@@ -69,7 +69,7 @@ int					check_is_space(char *input);
 int					check_quotes(char *input);
 size_t				ft_strlen(const char *s);
 void				free_node(t_components *head);
-int					check_option(t_components *node);
+int					check_option(t_components *node, t_info *info);
 void				in(char **spliting, int *i, t_components **head,
 						t_info *info);
 void				out(char **spliting, int *i, t_components **head,
@@ -86,8 +86,8 @@ void				piped(t_piped *pipe_line, t_command *command, t_info *info,
 int					check_type(char *type);
 t_command			*init_command(t_command *command, char *str);
 int					open_in(t_command *command);
-void				addnodetofront(t_components **head, \
-					char *token, char *type);
+void				addnodetofront(t_components **head, char *token,
+						char *type);
 char				*ft_strdup(const char *s1);
 int					match_regex(t_regex *regex, const char *input);
 t_regex				*compile_regex(const char *pattern);
@@ -164,8 +164,9 @@ int					not_pipe(t_components *node);
 void				handler_heredoc(t_command **command, t_components *node);
 void				handle_append(t_command **command, int *fd,
 						t_components *node);
-void				handle_redirect(t_command **command,
-						t_components *node, int *fd, t_info *info);
+void				handle_redirect(t_command **command, t_components *node,
+						int *fd,
+						t_info *info);
 char				**found_args(t_components **node);
 void				free_heredoc(t_here_lst *lst_heredoc);
 void				free_pipe_line(t_piped *pipe_line);
@@ -244,4 +245,6 @@ void				wait_for_last_cmd(int i, t_piped *piping, int **fd,
 						t_info *info);
 int					count(char *str);
 int					check_is_dir(char *command);
+void				open_her(t_components *tokens, t_info *info);
+void				open_h(t_components *node, t_info *info);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 12:49:13 by aalami            #+#    #+#             */
-/*   Updated: 2023/05/19 13:56:28 by aalami           ###   ########.fr       */
+/*   Updated: 2023/06/07 01:36:12 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,44 @@ void	remove_variable(char *key, t_lst *lst)
 	}
 }
 
+int	handle_unset_error(char *arg, int i)
+{
+	if (ft_strlen(arg) != (unsigned int)i)
+	{
+		ft_putstr_fd("minshell: unset: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": not a valid identifier\n", 2);
+		return (0);
+	}
+	return (1);
+}
+
+int	check_valid_id(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (arg[i] == 95)
+		{
+			while ((arg[i] && arg[i] >= 95 && arg[i] <= 122) || (arg[i] >= 65
+					&& arg[i] <= 90) || (arg[i] >= 48 && arg[i] <= 57))
+				i++;
+			break ;
+		}
+		else
+		{
+			while ((arg[i] && arg[i] >= 95 && arg[i] <= 122) || (arg[i] >= 65
+					&& arg[i] <= 90))
+				i++;
+			break ;
+		}
+		i++;
+	}
+	return (handle_unset_error(arg, i));
+}
+
 int	ft_unset(t_command *cmd, t_env *env)
 {
 	int	i;
@@ -49,6 +87,8 @@ int	ft_unset(t_command *cmd, t_env *env)
 		i = 0;
 		while (cmd->args[i])
 		{
+			if (!check_valid_id(cmd->args[i]))
+				return (1);
 			remove_variable(cmd->args[i], env->exp);
 			remove_variable(cmd->args[i], env->env);
 			i++;

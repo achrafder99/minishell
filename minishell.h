@@ -6,7 +6,7 @@
 /*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:13:02 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/07 01:49:32 by aalami           ###   ########.fr       */
+/*   Updated: 2023/06/07 14:41:25 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,4 +247,9 @@ int					count(char *str);
 int					check_is_dir(char *command);
 void				open_her(t_components *tokens, t_info *info);
 void				open_h(t_components *node, t_info *info);
+void				ignore_qouted(char *input, int *i);
+void				count_double_greater_util(char *input, int *i,
+						int *count);
+void				count_double_less_util(char *input, int *i,
+						int *count);
 #endif

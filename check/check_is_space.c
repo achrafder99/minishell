@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_is_space.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adardour <adardour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 02:51:25 by adardour          #+#    #+#             */
-/*   Updated: 2023/06/07 13:56:52 by adardour         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:40:22 by aalami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,8 @@ int	countdoublegreaterthan(char *input)
 	i = -1;
 	while (input[++i] != '\0')
 	{
-		if ((input[i] == '>' && input[i + 1] == '>'))
-		{
-			if (input[i - 1] != ' ' && input[i + 2] == ' ' && i != 0 \
-			&& input[i + 2] != '\0')
-				count += 1;
-			else if (input[i - 1] == ' ' && input[i + 2] != ' ' && i != 0
-				&& input[i + 2] != '\0')
-				count += 1;
-			else if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0
-				&& input[i + 2] != '\0')
-				count += 2;
-			if (i == 0 && input[i] == '>' && input[i + 1] == '>' \
-			&& input[i + 2] != ' ')
-				count++;
-			i += 1;
-		}
+		ignore_qouted(input, &i);
+		count_double_greater_util(input, &i, &count);
 	}
 	return (count);
 }
@@ -85,22 +71,8 @@ int	countdoublelessthan(char *input)
 	i = -1;
 	while (input[++i] != '\0')
 	{
-		if ((input[i] == '<' && input[i + 1] == '<'))
-		{
-			if (input[i - 1] != ' ' && input[i + 2] == ' ' && i != 0 \
-			&& input[i + 2] != '\0')
-				count += 1;
-			else if (input[i - 1] == ' ' && input[i + 2] != ' ' && i != 0
-				&& input[i + 2] != '\0')
-				count += 1;
-			else if (input[i - 1] != ' ' && input[i + 2] != ' ' && i != 0
-				&& input[i + 2] != '\0')
-				count += 2;
-			if (i == 0 && input[i] == '<' && input[i + 1] == '<' \
-			&& input[i + 2] != ' ')
-				count++;
-			i += 1;
-		}
+		ignore_qouted(input, &i);
+		count_double_less_util(input, &i, &count);
 	}
 	return (count);
 }

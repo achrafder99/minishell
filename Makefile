@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adardour <adardour@student.42.fr>          +#+  +:+       +#+         #
+#    By: aalami <aalami@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 22:38:34 by adardour          #+#    #+#              #
-#    Updated: 2023/06/06 19:47:28 by adardour         ###   ########.fr        #
+#    Updated: 2023/06/07 14:39:27 by aalami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ includes.c \
 ./execute/simple_command.c ./execute/execute_built_in.c ./execute/get_cmd.c \
 ./execute/start_redirection.c  ./execute/execution_utils.c ./execute/redirection_utils.c ./execute/execute_pipes_utils.c ./execute/execute_pipes_utils2.c ./execute/execute_pipes_utils3.c \
 ./free/free_things.c ./free/free_node.c ./free/free_utils.c \
-./check/check_command.c ./check/check_is_space.c ./check/check_quotes.c ./check/check_option.c \
+./check/check_command.c ./check/check_is_space.c ./check/check_is_space_utils.c ./check/check_quotes.c ./check/check_option.c \
 ./check/check_redirection.c ./check/check_type.c ./check/is_qouted.c ./check/check_is_type_command.c \
 ./check/is_wildcard.c ./check/check_pipe.c ./check/check_command_pipe.c ./check/check_open_heredocs.c \
 ./execute/execute_pipe.c \
